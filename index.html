@@ -686,9 +686,9 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
   <!-- CONFIG -->
   <div class="sec-title">⚙️ Configuration</div>
   <div class="info-card">
-    <div class="info-title">🔥 Firebase (synchronisation temps réel)</div>
-    <div class="info-body">Synchronise notes et activités entre tous les téléphones.</div>
-    <button onclick="openFbModal()" style="margin-top:9px;background:var(--turq);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Configurer Firebase</button>
+    <div class="info-title">📊 Google Sheets (synchronisation)</div>
+    <div class="info-body">Notes et activités synchronisées automatiquement entre tous les téléphones via Google Sheets.</div>
+    <button onclick="gsLoad().then(()=>{renderDays(DATA.bangkok,'days-bkk','bkk');renderDays(DATA.chiangmai,'days-cm','cm');renderDays(DATA.kohtao,'days-kt','kt');renderDays(DATA.kohsamui,'days-ks','ks');toast('✅ Synchronisé !');}).catch(()=>toast('❌ Erreur de sync'))" style="margin-top:9px;background:var(--green);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔄 Synchroniser maintenant</button>
   </div>
   <div class="info-card" style="margin-top:7px">
     <div class="info-title">🔐 Code PIN</div>
@@ -1104,12 +1104,66 @@ function showMapDay(k,b){
 }
 
 // ═══ ACTIVITIES + NOTES ══════════════════════
+// ═══ GOOGLE SHEETS SYNC ══════════════════════
+const GS_URL='https://script.google.com/macros/s/AKfycbzkoXJ3BUbPBGSkZM8d8kBtPgDaj46qInSvU9n6aiXxf6bLd4QCZwI4to2GWhtauYFn/exec';
+const DEVICE=navigator.userAgent.includes('iPhone')?'iPhone':navigator.userAgent.includes('Android')?'Android':'Desktop';
+
+async function gsSave(type, key, value) {
+  try {
+    await fetch(GS_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type, key, value:String(value), device:DEVICE})
+    });
+  } catch(e) { console.warn('GS save error:', e); }
+}
+
+async function gsLoad() {
+  try {
+    const r = await fetch(GS_URL);
+    const d = await r.json();
+    if (!d.data) return;
+    const acts={}, notes={};
+    d.data.forEach(row => {
+      if (!row.key) return;
+      if (row.type==='activity') acts[row.key] = row.value==='true';
+      if (row.type==='note') notes[row.key] = row.value;
+    });
+    // Merge avec localStorage (le plus récent gagne)
+    const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
+    const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');
+    const mergedActs={...acts,...localActs};
+    const mergedNotes={...notes,...localNotes};
+    localStorage.setItem('activities',JSON.stringify(mergedActs));
+    localStorage.setItem('daynotes',JSON.stringify(mergedNotes));
+    console.log('GS sync ✓');
+  } catch(e) { console.warn('GS load error:', e); }
+}
+
 function getActs(){return JSON.parse(localStorage.getItem('activities')||'{}');}
-function saveActs(d){localStorage.setItem('activities',JSON.stringify(d));if(window._fbReady)window._fbSet(window._fbRef(window._fbDb,'activities'),d);}
+function saveActs(d){
+  localStorage.setItem('activities',JSON.stringify(d));
+}
 function getNotes(){return JSON.parse(localStorage.getItem('daynotes')||'{}');}
-function saveNotes(d){localStorage.setItem('daynotes',JSON.stringify(d));if(window._fbReady)window._fbSet(window._fbRef(window._fbDb,'notes'),d);}
-function toggleAct(key){const el=document.getElementById(key),saved=getActs();el.classList.toggle('done');saved[key]=el.classList.contains('done');saveActs(saved);}
-function saveNote(dk,i){const key=`note-${dk}-${i}`,val=document.getElementById(`ni-${dk}-${i}`).value,saved=getNotes();saved[key]=val;saveNotes(saved);const b=document.querySelector(`#card-${dk}-${i} .notes-save`);if(b){b.className='notes-saved';b.textContent='✓ Sauvegardé';setTimeout(()=>{b.className='notes-save';b.textContent='Sauvegarder';},2000);}}
+function saveNotes(d){
+  localStorage.setItem('daynotes',JSON.stringify(d));
+}
+function toggleAct(key){
+  const el=document.getElementById(key),saved=getActs();
+  el.classList.toggle('done');
+  saved[key]=el.classList.contains('done');
+  saveActs(saved);
+  gsSave('activity', key, saved[key]);
+}
+function saveNote(dk,i){
+  const key=`note-${dk}-${i}`,val=document.getElementById(`ni-${dk}-${i}`).value,saved=getNotes();
+  saved[key]=val;
+  saveNotes(saved);
+  gsSave('note', key, val);
+  const b=document.querySelector(`#card-${dk}-${i} .notes-save`);
+  if(b){b.className='notes-saved';b.textContent='✓ Sauvegardé';setTimeout(()=>{b.className='notes-save';b.textContent='Sauvegarder';},2000);}
+}
 
 // ═══ RENDER DAYS ═════════════════════════════
 const DC={bkk:"#E8734A",cm:"#5B8C5A",kt:"#2BBFB3",ks:"#D4A853"};
@@ -1210,7 +1264,7 @@ function initApp(){
   setInterval(updCdown,60000);setInterval(updThaiTime,30000);
   fetchWx('bkk');wxL['bkk']=true;
   fetchRates();
-  initFirebase();
+  gsLoad(); // Sync Google Sheets au démarrage
   schedNotifs();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
   setTimeout(()=>{const f=document.querySelector('.day-card');if(f)f.classList.add('open');},100);
