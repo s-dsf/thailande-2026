@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#E8734A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Thaïlande 2026">
+<title>Thaïlande 2026 — Guide Famille</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--coral:#E8734A;--coral-lt:#FAE4DB;--coral-dk:#C85A32;--turq:#2BBFB3;--turq-lt:#E5F9F8;--turq-dk:#1E9990;--gold:#D4A853;--gold-lt:#F5E6C0;--sand:#FFF8F0;--sand-mid:#F5EDDE;--brown:#3D2B1F;--brown-mid:#7A5C47;--green:#5B8C5A;--green-lt:#EAF4EA;--red:#C0392B;--white:#FFFFFF;--nav-h:64px;--top-h:56px;--r:12px;--rs:8px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--sand);color:var(--brown);min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:pointer;font:inherit}
+
+/* TOP BAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:var(--coral);display:flex;align-items:center;justify-content:space-between;padding:0 14px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.topbar-title{font-size:16px;font-weight:700;color:#fff}
+.topbar-sub{font-size:10px;color:var(--gold-lt)}
+.topbar-right{display:flex;align-items:center;gap:7px}
+.thai-time{background:rgba(0,0,0,.2);color:#fff;border-radius:12px;padding:3px 9px;font-size:12px;font-weight:700}
+.countdown-badge{background:var(--gold);color:var(--brown);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;height:var(--nav-h);background:#fff;display:flex;border-top:1px solid #eee;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.nav-btn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;color:var(--brown-mid);font-size:9px;font-weight:500;-webkit-tap-highlight-color:transparent}
+.nav-btn .ni{font-size:18px;line-height:1}
+.nav-btn.active{color:var(--coral)}
+.nav-btn.active .ni{transform:scale(1.1)}
+
+/* MAIN */
+.main{padding-top:calc(var(--top-h) + 12px);padding-bottom:calc(var(--nav-h) + 20px)}
+.tab{display:none;padding:0 15px}
+.tab.active{display:block}
+
+/* HERO */
+.hero{border-radius:var(--r);padding:18px 15px 15px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 60%)}
+.hero-em{font-size:30px;margin-bottom:5px;display:block}
+.hero-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.hero-dates{font-size:12px;color:rgba(255,255,255,.85);margin-top:3px}
+.hero-desc{font-size:12px;color:rgba(255,255,255,.9);margin-top:8px;line-height:1.5}
+
+/* DAY CARDS */
+.day-card{background:#fff;border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.day-card-hdr{padding:13px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.day-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.day-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--brown-mid)}
+.day-title{font-size:14px;font-weight:700;color:var(--brown);margin-top:1px}
+.day-chev{font-size:11px;color:var(--brown-mid);transition:transform .2s}
+.day-card.open .day-chev{transform:rotate(180deg)}
+.day-body{display:none;padding:0 14px 14px}
+.day-card.open .day-body{display:block}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:18px}
+.tl::before{content:'';position:absolute;left:5px;top:5px;bottom:0;width:1px;background:var(--sand-mid)}
+.tli{position:relative;margin-bottom:12px}
+.tli:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-15px;top:4px;width:8px;height:8px;border-radius:50%;border:2px solid #fff}
+.tl-time{font-size:10px;font-weight:700;color:var(--turq);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.tl-name{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:2px}
+.tl-desc{font-size:12px;color:var(--brown-mid);line-height:1.5}
+.tl-addr{font-size:11px;color:var(--turq-dk);margin-top:3px;font-style:italic}
+
+/* TIPS */
+.tip{border-radius:var(--rs);padding:9px 11px;margin:8px 0;display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5}
+.tip-gold{background:var(--gold-lt);border-left:3px solid var(--gold)}
+.tip-turq{background:var(--turq-lt);border-left:3px solid var(--turq)}
+.tip-red{background:#FDECEA;border-left:3px solid var(--red)}
+.tip-green{background:var(--green-lt);border-left:3px solid var(--green)}
+.tip-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+.tip-gold .tip-lbl{color:var(--gold)}.tip-turq .tip-lbl{color:var(--turq)}.tip-red .tip-lbl{color:var(--red)}.tip-green .tip-lbl{color:var(--green)}
+
+/* RESTO CHIP */
+.resto{display:inline-flex;align-items:center;gap:5px;background:var(--coral-lt);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--coral-dk);margin:3px 3px 0 0}
+
+/* MAPS BTN */
+.mbtn{display:inline-flex;align-items:center;gap:4px;background:var(--turq-lt);color:var(--turq-dk);border-radius:7px;padding:3px 8px;font-size:11px;font-weight:700;text-decoration:none;flex-shrink:0}
+
+/* ACTIVITIES */
+.act-section{margin-top:12px;border-top:1px solid var(--sand-mid);padding-top:10px}
+.act-title{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.act-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--rs);background:var(--sand);margin-bottom:4px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.act-item.done{background:var(--green-lt)}
+.act-check{width:18px;height:18px;border-radius:50%;border:2px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:10px}
+.act-item.done .act-check{background:var(--green);border-color:var(--green);color:#fff}
+.act-item.done .act-check::after{content:'✓'}
+.act-lbl{font-size:12px;color:var(--brown);flex:1;line-height:1.3}
+.act-item.done .act-lbl{text-decoration:line-through;color:var(--brown-mid)}
+
+/* NOTES */
+.notes-section{margin-top:9px}
+.notes-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.notes-input{width:100%;border:1.5px solid var(--sand-mid);border-radius:var(--rs);padding:9px 11px;font-size:12px;color:var(--brown);background:var(--sand);font-family:inherit;resize:none;outline:none;line-height:1.5;transition:border-color .2s}
+.notes-input:focus{border-color:var(--coral);background:#fff}
+.notes-input::placeholder{color:#bbb}
+.notes-save{margin-top:5px;float:right;background:var(--coral);color:#fff;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700}
+.notes-saved{margin-top:5px;float:right;background:var(--green-lt);color:var(--green);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700}
+.cf{clear:both}
+
+/* WEATHER */
+.wx{background:#fff;border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.wx-hdr{padding:9px 13px 5px;display:flex;align-items:center;justify-content:space-between}
+.wx-city{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px}
+.wx-upd{font-size:10px;color:#bbb}
+.wx-main{display:flex;align-items:center;gap:9px;padding:3px 13px 9px}
+.wx-icon{font-size:34px}
+.wx-temp{font-size:30px;font-weight:800;color:var(--brown);line-height:1}
+.wx-unit{font-size:15px;color:var(--brown-mid);font-weight:400}
+.wx-desc{font-size:11px;color:var(--brown-mid);margin-top:2px}
+.wx-details{display:flex;border-top:1px solid var(--sand-mid)}
+.wx-det{flex:1;text-align:center;padding:7px 3px;border-right:1px solid var(--sand-mid);font-size:10px;color:var(--brown-mid)}
+.wx-det:last-child{border-right:none}
+.wx-det-val{font-size:12px;font-weight:700;color:var(--brown);margin-bottom:1px}
+.wx-fc{display:flex;padding:7px 9px;border-top:1px solid var(--sand-mid);gap:4px}
+.wx-fc-day{flex:1;text-align:center;padding:5px 1px;background:var(--sand);border-radius:7px}
+.wx-fc-lbl{font-size:9px;color:var(--brown-mid);font-weight:600}
+.wx-fc-ico{font-size:14px;margin:2px 0}
+.wx-fc-tmp{font-size:10px;font-weight:700;color:var(--brown)}
+.wx-fc-rain{font-size:9px;color:var(--turq)}
+.wx-loading{padding:18px;text-align:center;color:var(--brown-mid);font-size:12px}
+
+/* SEA */
+.sea{background:var(--turq-lt);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;border-left:4px solid var(--turq)}
+.sea-title{font-size:11px;font-weight:700;color:var(--turq-dk);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
+.sea-stats{display:flex;gap:7px}
+.sea-stat{flex:1;background:#fff;border-radius:7px;padding:9px 7px;text-align:center}
+.sea-val{font-size:17px;font-weight:800;color:var(--turq)}
+.sea-lbl{font-size:10px;color:var(--brown-mid);margin-top:1px}
+
+/* CURRENCY */
+.cur-card{background:#fff;border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.cur-title{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:10px;text-align:center}
+.cur-tabs{display:flex;border-radius:7px;overflow:hidden;border:1.5px solid var(--sand-mid);margin-bottom:10px}
+.cur-tab{flex:1;padding:7px;font-size:12px;font-weight:700;text-align:center;background:#fff;color:var(--brown-mid);cursor:pointer}
+.cur-tab.active{background:var(--coral);color:#fff}
+.cur-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.cur-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:7px;padding:9px 10px;font-size:17px;font-weight:700;text-align:center;outline:none;font-family:inherit;color:var(--brown)}
+.cur-input:focus{border-color:var(--coral)}
+.cur-lbl{font-size:11px;font-weight:700;color:var(--brown-mid);width:36px;text-align:center}
+.cur-result{background:var(--gold-lt);border-radius:7px;padding:12px;text-align:center;margin-top:7px}
+.cur-result-val{font-size:26px;font-weight:800;color:var(--brown)}
+.cur-result-lbl{font-size:11px;color:var(--brown-mid);margin-top:3px}
+.cur-rate{font-size:10px;color:var(--brown-mid);text-align:center;margin-top:7px}
+
+/* MAP */
+.map-wrap{height:290px;border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+#lmap{height:100%;width:100%}
+.map-days{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.map-day-btn{padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;background:#fff;color:var(--brown-mid);border:1.5px solid var(--sand-mid);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.map-day-btn.active{background:var(--coral);color:#fff;border-color:var(--coral)}
+
+/* TRANSLATOR */
+.trans-card{background:#fff;border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.trans-tabs{display:flex;border-radius:7px;overflow:hidden;border:1.5px solid var(--sand-mid);margin-bottom:12px}
+.trans-tab{flex:1;padding:9px;font-size:12px;font-weight:700;text-align:center;background:#fff;color:var(--brown-mid);cursor:pointer}
+.trans-tab.active{background:var(--coral);color:#fff}
+.dir-row{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.dir-btn{flex:1;padding:7px;background:var(--sand-mid);border-radius:7px;font-size:12px;font-weight:700;text-align:center;cursor:pointer;transition:all .2s}
+.dir-btn.active{background:var(--coral);color:#fff}
+.dir-swap{font-size:17px;cursor:pointer;padding:3px}
+.trans-input{width:100%;border:1.5px solid var(--sand-mid);border-radius:7px;padding:10px;font-size:14px;font-family:inherit;outline:none;resize:none;color:var(--brown);background:var(--sand);transition:border-color .2s}
+.trans-input:focus{border-color:var(--coral);background:#fff}
+.trans-result{background:var(--turq-lt);border-radius:7px;padding:12px;margin-top:9px;min-height:55px;font-size:15px;font-weight:600;color:var(--brown);line-height:1.5}
+.trans-result.empty{color:var(--brown-mid);font-weight:400;font-style:italic;font-size:12px}
+.trans-actions{display:flex;gap:7px;margin-top:9px}
+.t-btn{flex:1;padding:9px;border-radius:7px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:5px}
+.t-translate{background:var(--coral);color:#fff}
+.t-speak{background:var(--turq-lt);color:var(--turq-dk)}
+.t-copy{background:var(--sand-mid);color:var(--brown)}
+.mic-btn{background:var(--coral);color:#fff;border-radius:50%;width:56px;height:56px;font-size:22px;display:flex;align-items:center;justify-content:center;margin:10px auto 0;transition:all .2s}
+.mic-btn.rec{background:var(--red);animation:pm 1s infinite}
+@keyframes pm{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.mic-status{text-align:center;font-size:11px;color:var(--brown-mid);margin-top:7px}
+
+/* AI */
+.ai-card{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:10px}
+.ai-hdr{background:linear-gradient(135deg,var(--brown),var(--brown-mid));padding:12px 14px;display:flex;align-items:center;gap:9px}
+.ai-hdr-title{font-size:14px;font-weight:700;color:#fff}
+.ai-hdr-sub{font-size:10px;color:rgba(255,255,255,.7)}
+.ai-msgs{height:210px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px;background:var(--sand)}
+.ai-msg{max-width:85%;padding:9px 12px;border-radius:11px;font-size:12px;line-height:1.5}
+.ai-msg.user{background:var(--coral);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.ai-msg.assistant{background:#fff;color:var(--brown);align-self:flex-start;border-bottom-left-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.ai-msg.typing{color:var(--brown-mid);font-style:italic}
+.ai-input-row{display:flex;gap:7px;padding:9px 11px;border-top:1px solid var(--sand-mid)}
+.ai-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:18px;padding:7px 12px;font-size:12px;outline:none;font-family:inherit;background:#fff}
+.ai-input:focus{border-color:var(--coral)}
+.ai-send{background:var(--coral);color:#fff;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ai-sugg{display:flex;gap:5px;padding:0 11px 9px;flex-wrap:wrap}
+.ai-s{background:var(--coral-lt);color:var(--coral-dk);border-radius:13px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* PHRASES */
+.ph-item{display:flex;align-items:center;background:#fff;border-radius:var(--rs);padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);gap:9px;margin-bottom:5px}
+.ph-fr{font-size:12px;color:var(--brown-mid);flex:1}
+.ph-th{font-size:13px;font-weight:700;color:var(--coral);flex:1}
+.ph-speak{background:var(--turq-lt);color:var(--turq-dk);border-radius:6px;padding:4px 7px;font-size:13px;cursor:pointer;flex-shrink:0}
+.ph-copy{background:var(--coral-lt);color:var(--coral-dk);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:background .15s}
+.ph-copy.copied{background:var(--green-lt);color:var(--green)}
+
+/* CHECKLIST */
+.bag-hdr{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border-radius:var(--r);padding:14px;margin-bottom:10px;text-align:center;color:#fff}
+.bag-w{font-size:28px;font-weight:800;margin:3px 0}
+.bag-bar-wrap{background:rgba(255,255,255,.2);border-radius:9px;height:7px;margin-top:9px}
+.bag-bar{background:var(--gold);border-radius:9px;height:7px;transition:width .3s}
+.ck-item{display:flex;align-items:flex-start;gap:10px;background:#fff;border-radius:var(--rs);padding:10px 12px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06);-webkit-tap-highlight-color:transparent;transition:opacity .2s;margin-bottom:5px}
+.ck-item.checked{opacity:.5}
+.ck-box{width:20px;height:20px;border-radius:5px;border:2px solid #ddd;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.ck-item.checked .ck-box{background:var(--green);border-color:var(--green);color:#fff}
+.ck-item.checked .ck-box::after{content:'✓';font-size:12px;font-weight:700}
+.ck-lbl{font-size:13px;color:var(--brown);line-height:1.4}
+.ck-item.checked .ck-lbl{text-decoration:line-through;color:var(--brown-mid)}
+.ck-cat{font-size:10px;color:var(--brown-mid);margin-top:1px}
+.ck-kg{font-size:9px;color:var(--gold);font-weight:700;margin-top:1px}
+
+/* EMERGENCIES */
+.em-card{background:#fff;border-radius:var(--rs);padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.em-name{font-size:13px;font-weight:700;color:var(--brown)}
+.em-note{font-size:11px;color:var(--brown-mid);margin-top:1px}
+.call-btn{background:var(--green);color:#fff;border-radius:18px;padding:7px 14px;font-size:13px;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+
+/* LOGEMENTS & VOLS */
+.accom-card{background:#fff;border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.accom-hdr{padding:12px 14px}
+.accom-dest{font-size:15px;font-weight:800;color:#fff}
+.accom-dates{font-size:10px;color:rgba(255,255,255,.85);margin-top:1px}
+.accom-body{padding:12px 14px}
+.accom-row{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px solid var(--sand-mid)}
+.accom-row:last-child{border-bottom:none}
+.accom-ri{font-size:16px;flex-shrink:0;margin-top:1px}
+.accom-rl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+.accom-rv{font-size:12px;color:var(--brown);line-height:1.5}
+.accom-rn{font-size:11px;color:var(--coral-dk);font-weight:600;margin-top:1px}
+.accom-maps{margin-top:7px;display:inline-flex;align-items:center;gap:5px;background:var(--turq);color:#fff;border-radius:7px;padding:7px 12px;font-size:12px;font-weight:700;text-decoration:none}
+.flight-card{background:#fff;border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.flight-hdr{padding:11px 14px}
+.flight-ht{font-size:13px;font-weight:700;color:#fff}
+.flight-hd{font-size:10px;color:rgba(255,255,255,.85);margin-top:1px}
+.flight-body{padding:12px 14px}
+.flight-route{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.flight-city{text-align:center;flex:1}
+.flight-code{font-size:20px;font-weight:800;color:var(--brown)}
+.flight-time{font-size:12px;color:var(--brown-mid);margin-top:1px}
+.flight-arrow{font-size:18px;color:var(--brown-mid);flex-shrink:0}
+.flight-tags{display:flex;gap:5px;flex-wrap:wrap}
+.ftag{background:var(--sand-mid);border-radius:7px;padding:4px 8px;font-size:11px;color:var(--brown-mid);font-weight:600}
+
+/* INFO CARD */
+.info-card{background:#fff;border-radius:var(--rs);padding:12px 14px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.info-title{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:3px}
+.info-body{font-size:12px;color:var(--brown-mid);line-height:1.5}
+.badge{display:inline-block;border-radius:10px;padding:2px 7px;font-size:10px;font-weight:700;margin-left:5px}
+.b-green{background:var(--green-lt);color:var(--green)}
+.b-orange{background:var(--coral-lt);color:var(--coral-dk)}
+.b-grey{background:var(--sand-mid);color:var(--brown-mid)}
+
+/* APP ITEMS */
+.app-item{background:#fff;border-radius:var(--rs);padding:11px 14px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:center;gap:12px;margin-bottom:7px}
+.app-icon{font-size:26px;flex-shrink:0}
+.app-name{font-size:13px;font-weight:700;color:var(--brown)}
+.app-desc{font-size:11px;color:var(--brown-mid);margin-top:1px}
+.app-bdg{font-size:9px;font-weight:700;padding:2px 6px;border-radius:9px;margin-top:3px;display:inline-block}
+.app-off{background:var(--green-lt);color:var(--green)}
+.app-on{background:var(--sand-mid);color:var(--brown-mid)}
+
+/* WEATHER GRID */
+.wx-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+.wx-sm{background:#fff;border-radius:var(--rs);padding:12px 10px;box-shadow:0 1px 3px rgba(0,0,0,.06);text-align:center}
+.wx-sm-dest{font-size:11px;font-weight:700;color:var(--brown);margin-bottom:3px}
+.wx-sm-ico{font-size:22px;margin-bottom:5px}
+.wx-sm-st{font-size:10px;color:var(--brown-mid);line-height:1.4}
+
+/* RECAP */
+.recap-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));color:#fff;font-size:15px;font-weight:700;margin-top:7px;display:flex;align-items:center;justify-content:center;gap:7px}
+
+/* PIN */
+.pin-overlay{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--coral),var(--coral-dk));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.pin-logo{font-size:44px;margin-bottom:7px}
+.pin-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:3px}
+.pin-sub{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:28px}
+.pin-dots{display:flex;gap:11px;margin-bottom:25px}
+.pin-dot{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.6);background:transparent;transition:all .2s}
+.pin-dot.filled{background:#fff;border-color:#fff}
+.pin-kp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:210px}
+.pin-key{background:rgba(255,255,255,.2);color:#fff;border-radius:11px;height:52px;font-size:19px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.pin-key:active{background:rgba(255,255,255,.4)}
+.pin-err{color:rgba(255,255,255,.9);font-size:12px;margin-top:10px;height:18px;text-align:center}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
+.modal.open{display:flex}
+.modal-sheet{background:#fff;border-radius:20px 20px 0 0;padding:22px 18px 40px;width:100%;max-height:80vh;overflow-y:auto;position:relative}
+.modal-title{font-size:17px;font-weight:800;color:var(--brown);margin-bottom:14px;text-align:center}
+.modal-close{position:absolute;top:14px;right:18px;font-size:21px;color:var(--brown-mid);cursor:pointer}
+.cfg-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin:11px 0 3px}
+.cfg-input{width:100%;border:1.5px solid var(--sand-mid);border-radius:7px;padding:9px 11px;font-size:12px;font-family:monospace;color:var(--brown);outline:none;background:#fff}
+.cfg-input:focus{border-color:var(--turq)}
+.cfg-save{width:100%;padding:13px;background:var(--turq);color:#fff;border-radius:11px;font-size:14px;font-weight:700;margin-top:14px}
+
+/* SECTION */
+.sec-title{font-size:15px;font-weight:800;color:var(--brown);margin:18px 0 9px;display:flex;align-items:center;gap:7px}
+.sec-title:first-child{margin-top:7px}
+.sec-note{font-size:12px;color:var(--brown-mid);line-height:1.6;margin-bottom:9px;font-style:italic}
+.divider{height:1px;background:var(--sand-mid);margin:14px 0}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:#fff;border-radius:18px;padding:9px 18px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- PIN -->
+<div class="pin-overlay" id="pin-overlay">
+  <div class="pin-logo">🇹🇭</div>
+  <div class="pin-title">Thaïlande 2026</div>
+  <div class="pin-sub">Entrez votre code PIN</div>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+    <div class="pin-dot"></div><div class="pin-dot"></div>
+  </div>
+  <div class="pin-kp">
+    <div class="pin-key" onclick="pk('1')">1</div><div class="pin-key" onclick="pk('2')">2</div><div class="pin-key" onclick="pk('3')">3</div>
+    <div class="pin-key" onclick="pk('4')">4</div><div class="pin-key" onclick="pk('5')">5</div><div class="pin-key" onclick="pk('6')">6</div>
+    <div class="pin-key" onclick="pk('7')">7</div><div class="pin-key" onclick="pk('8')">8</div><div class="pin-key" onclick="pk('9')">9</div>
+    <div class="pin-key" onclick="pk('del')">⌫</div><div class="pin-key" onclick="pk('0')">0</div><div class="pin-key" onclick="pk('ok')">OK</div>
+  </div>
+  <div class="pin-err" id="pin-err"></div>
+  <button onclick="skipPin()" style="color:rgba(255,255,255,.6);font-size:11px;margin-top:18px">Ignorer</button>
+</div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div><div class="topbar-title">🇹🇭 Thaïlande 2026</div><div class="topbar-sub">Guide Famille</div></div>
+  <div class="topbar-right">
+    <div class="thai-time" id="thai-time">--:--</div>
+    <div class="countdown-badge" id="countdown">J–?</div>
+  </div>
+</header>
+
+<main class="main">
+
+<!-- BANGKOK -->
+<div class="tab active" id="tab-bkk">
+  <div class="hero" style="background:linear-gradient(135deg,#E8734A,#C85A32)">
+    <span class="hero-em">🏙</span><div class="hero-title">Bangkok</div>
+    <div class="hero-dates">21 – 24 juillet 2026</div>
+    <div class="hero-desc">Capitale effervescente. Temples le matin, marchés le soir, bateaux pour tout relier.</div>
+  </div>
+  <div id="wx-bkk" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
+  <div id="days-bkk"></div>
+</div>
+
+<!-- CHIANG MAI -->
+<div class="tab" id="tab-cm">
+  <div class="hero" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)">
+    <span class="hero-em">🌿</span><div class="hero-title">Chiang Mai</div>
+    <div class="hero-dates">25 – 29 juillet 2026</div>
+    <div class="hero-desc">Plus calme, plus verte, plus fraîche. Éléphants, montagne, marchés nocturnes.</div>
+  </div>
+  <div id="wx-cm" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
+  <div id="days-cm"></div>
+</div>
+
+<!-- KOH TAO -->
+<div class="tab" id="tab-kt">
+  <div class="hero" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)">
+    <span class="hero-em">🐠</span><div class="hero-title">Koh Tao</div>
+    <div class="hero-dates">29 juillet – 1er août 2026</div>
+    <div class="hero-desc">La partie la plus forte pour le snorkeling. Tortues, coraux, eau cristalline.</div>
+  </div>
+  <div id="wx-kt" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
+  <div id="sea-kt"></div>
+  <div class="tip tip-turq"><span style="font-size:15px">🐢</span><div><div class="tip-lbl">Règle d'or</div>Mer plus plate le matin · Coraux mieux éclairés avant 11h · Tortues plus visibles tôt</div></div>
+  <div id="days-kt"></div>
+</div>
+
+<!-- KOH SAMUI -->
+<div class="tab" id="tab-ks">
+  <div class="hero" style="background:linear-gradient(135deg,#D4A853,#B8883A)">
+    <span class="hero-em">🌴</span><div class="hero-title">Koh Samui</div>
+    <div class="hero-dates">1 – 5 août 2026</div>
+    <div class="hero-desc">Phase détente. Plages calmes, couchers de soleil et bons restaurants avant le retour.</div>
+  </div>
+  <div id="wx-ks" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
+  <div id="days-ks"></div>
+</div>
+
+<!-- LOGEMENTS & VOLS -->
+<div class="tab" id="tab-lodge">
+  <div class="sec-title">🏠 Logements</div>
+
+  <div class="accom-card">
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="accom-dest">🏙 Bangkok</div><div class="accom-dates">21 – 24 juillet · Airbnb</div></div>
+    <div class="accom-body">
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🚕</span><div><div class="accom-rl">Transfert aéroport</div><div class="accom-rv">Taxi réservé par l'Airbnb</div><div class="accom-rn">⚠ 1 500 bahts — rien à payer au chauffeur · Régler au logement le lendemain</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in à partir de 14h · Check-out avant 11h</div></div></div>
+      <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
+    </div>
+  </div>
+
+  <div class="accom-card">
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="accom-dest">🌿 Chiang Mai</div><div class="accom-dates">25 – 28 juillet · Airbnb</div></div>
+    <div class="accom-body">
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🚕</span><div><div class="accom-rl">Transfert aéroport</div><div class="accom-rv">Taxi organisé par l'Airbnb</div><div class="accom-rn">💵 300 bahts en liquide directement au chauffeur</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🐘</span><div><div class="accom-rl">À régler à l'arrivée</div><div class="accom-rv">Sanctuaire d'éléphants : 13 600 THB</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 14h · Check-out avant 10h</div></div></div>
+      <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Ouvrir dans Maps</a>
+    </div>
+  </div>
+
+  <div class="accom-card">
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)"><div class="accom-dest">🐠 Koh Tao</div><div class="accom-dates">29 juillet – 1er août · Airbnb</div></div>
+    <div class="accom-body">
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🚢</span><div><div class="accom-rl">Arrivée ferry</div><div class="accom-rv">Transport organisé par l'Airbnb · 15 min</div><div class="accom-rn">📋 Chercher panneau avec votre nom dans le grand pavillon couvert</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 15h · Check-out avant 10h</div></div></div>
+      <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Ouvrir dans Maps</a>
+    </div>
+  </div>
+
+  <div class="accom-card">
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#D4A853,#B8883A)"><div class="accom-dest">🌴 Koh Samui</div><div class="accom-dates">1 – 5 août · Airbnb</div></div>
+    <div class="accom-body">
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🚢</span><div><div class="accom-rl">Arrivée ferry</div><div class="accom-rv">Bangrak Pier 13h · Transport organisé par l'Airbnb</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">À l'arrivée · Check-out avant 11h</div></div></div>
+      <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Ouvrir dans Maps</a>
+    </div>
+  </div>
+
+  <div class="accom-card">
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47)"><div class="accom-dest">🏨 Bangkok — Nuit retour</div><div class="accom-dates">5 – 6 août · Hôtel</div></div>
+    <div class="accom-body">
+      <div class="accom-row"><span class="accom-ri">🏨</span><div><div class="accom-rl">Hôtel</div><div class="accom-rv">Grand BS Airport Hotel Suvarnabhumi</div><div class="accom-rv" style="font-size:11px;color:var(--brown-mid)">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in</div><div class="accom-rv">14h · 2 chambres · Piscine l'après-midi</div></div></div>
+      <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:22px">✈ Vols & Transports</div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="flight-ht">✈ Paris CDG → Bangkok BKK</div><div class="flight-hd">Lundi 20 juillet 2026</div></div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">16h40</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+        <div class="flight-arrow">✈──</div>
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">09h15 +1j</div><div style="font-size:10px;color:var(--brown-mid)">Suvarnabhumi</div></div>
+      </div>
+      <div class="flight-tags"><span class="ftag">Vol direct</span><span class="ftag">~11h de vol</span><span class="ftag">Arrivée 21 juillet</span></div>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="flight-ht">✈ Bangkok DMK → Chiang Mai CNX</div><div class="flight-hd">Samedi 25 juillet 2026</div></div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="flight-city"><div class="flight-code">DMK</div><div class="flight-time">10h15</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2</div></div>
+        <div class="flight-arrow">──</div>
+        <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">11h25</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2</div></div>
+      </div>
+      <div class="flight-tags"><span class="ftag">AirAsia Move</span><span class="ftag">~1h10</span><span class="ftag">Check-out avant 11h</span></div>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)"><div class="flight-ht">✈🚢 Chiang Mai → Koh Tao</div><div class="flight-hd">Mercredi 29 juillet 2026</div></div>
+    <div class="flight-body">
+      <div style="margin-bottom:9px">
+        <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">✈ Vol CNX → Surat Thani</div>
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code" style="font-size:16px">CNX</div><div class="flight-time">10h40</div></div>
+          <div class="flight-arrow">──</div>
+          <div class="flight-city"><div class="flight-code" style="font-size:16px">URT</div><div class="flight-time">12h30</div></div>
+        </div>
+        <div class="flight-tags" style="margin-top:5px"><span class="ftag">AirAsia</span></div>
+      </div>
+      <div style="border-top:1px solid var(--sand-mid);padding-top:9px">
+        <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">🚢 Ferry Tapee Pier → Mae Haad</div>
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code" style="font-size:14px">Tapee</div><div class="flight-time">15h30</div></div>
+          <div class="flight-arrow">──</div>
+          <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">~18h00</div></div>
+        </div>
+        <div class="flight-tags" style="margin-top:5px"><span class="ftag">Direct Ferries</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#D4A853,#B8883A)"><div class="flight-ht">🚢 Ferry Koh Tao → Koh Samui</div><div class="flight-hd">Dimanche 1er août 2026</div></div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">11h30</div></div>
+        <div class="flight-arrow">🚢──</div>
+        <div class="flight-city"><div class="flight-code" style="font-size:14px">Bangrak</div><div class="flight-time">13h00</div></div>
+      </div>
+      <div class="flight-tags"><span class="ftag">Check-out avant 10h</span></div>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#7A5C47,#3D2B1F)"><div class="flight-ht">✈ Koh Samui → Bangkok BKK</div><div class="flight-hd">Mercredi 5 août 2026</div></div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="flight-city"><div class="flight-code">USM</div><div class="flight-time">14h30</div></div>
+        <div class="flight-arrow">──</div>
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">15h30</div></div>
+      </div>
+      <div class="flight-tags"><span class="ftag">Bangkok Airways</span><span class="ftag">Hôtel: Grand BS Airport</span></div>
+    </div>
+  </div>
+
+  <div class="flight-card">
+    <div class="flight-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="flight-ht">✈ Bangkok BKK → Paris CDG</div><div class="flight-hd">Jeudi 6 août 2026</div></div>
+    <div class="flight-body">
+      <div class="flight-route">
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">11h25</div><div style="font-size:10px;color:var(--brown-mid)">Suvarnabhumi</div></div>
+        <div class="flight-arrow">──</div>
+        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">19h00</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+      </div>
+      <div class="flight-tags"><span class="ftag">~11h de vol</span><span class="ftag">Arrivée Paris 6 août</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRATIQUE -->
+<div class="tab" id="tab-prat">
+  <div class="hero" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47);margin-bottom:14px">
+    <span class="hero-em">✈️</span>
+    <div class="hero-title" id="cdown-big">Chargement…</div>
+    <div class="hero-dates">Départ le 20 juillet 2026 à 16h40 · CDG Terminal 2E</div>
+    <div class="hero-desc" id="thai-time-big" style="margin-top:7px;font-size:15px;font-weight:700"></div>
+  </div>
+
+  <!-- CURRENCY -->
+  <div class="sec-title">💱 Convertisseur devises</div>
+  <div class="cur-card">
+    <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
+    <div class="cur-tabs">
+      <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
+      <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
+      <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
+    </div>
+    <div class="cur-row">
+      <div class="cur-lbl" id="cur-from">EUR</div>
+      <input class="cur-input" id="cur-in" type="number" placeholder="0" oninput="convertCur()">
+      <div class="cur-lbl">→</div>
+    </div>
+    <div class="cur-result">
+      <div class="cur-result-val" id="cur-res">—</div>
+      <div class="cur-result-lbl" id="cur-res-lbl">THB</div>
+    </div>
+    <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
+  </div>
+
+  <!-- TRANSLATOR -->
+  <div class="sec-title">🗣 Traducteur thaï ↔ français</div>
+  <div class="trans-card">
+    <div class="trans-tabs">
+      <div class="trans-tab active" onclick="setTransMode('text',this)">⌨️ Écrit</div>
+      <div class="trans-tab" onclick="setTransMode('voice',this)">🎤 Vocal</div>
+    </div>
+    <div class="dir-row">
+      <div class="dir-btn active" id="dir-fr" onclick="setDir('fr-th')">🇫🇷 Français</div>
+      <div class="dir-swap" onclick="swapDir()">⇄</div>
+      <div class="dir-btn" id="dir-th" onclick="setDir('th-fr')">🇹🇭 Thaï</div>
+    </div>
+    <div id="trans-text-mode">
+      <textarea class="trans-input" id="trans-in" rows="3" placeholder="Tapez votre texte ici…"></textarea>
+      <div class="trans-actions">
+        <button class="t-btn t-translate" onclick="doTranslate()">🔄 Traduire</button>
+        <button class="t-btn t-speak" onclick="speakTrans()">🔊 Écouter</button>
+      </div>
+      <div class="trans-result empty" id="trans-out">La traduction apparaîtra ici…</div>
+      <div class="trans-actions" style="margin-top:7px">
+        <button class="t-btn t-copy" onclick="copyTrans()">📋 Copier</button>
+        <button class="t-btn t-speak" onclick="speakTrans()">🔊 Réécouter</button>
+      </div>
+    </div>
+    <div id="trans-voice-mode" style="display:none">
+      <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
+      <div class="mic-status" id="mic-status">Appuyez pour parler</div>
+      <div class="trans-result empty" id="voice-out" style="margin-top:10px">Texte reconnu et traduit…</div>
+      <div class="trans-actions" style="margin-top:7px">
+        <button class="t-btn t-speak" onclick="speakVoice()">🔊 Répéter</button>
+        <button class="t-btn t-copy" onclick="copyVoice()">📋 Copier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI -->
+  <div class="sec-title">🤖 Assistant voyage</div>
+  <div class="ai-card">
+    <div class="ai-hdr">
+      <span style="font-size:20px">🤖</span>
+      <div><div class="ai-hdr-title">Assistant Thaïlande 2026</div><div class="ai-hdr-sub">Pose toutes tes questions sur le voyage</div></div>
+    </div>
+    <div class="ai-msgs" id="ai-msgs">
+      <div class="ai-msg assistant">Bonjour ! Je connais tout votre programme en Thaïlande. Posez-moi vos questions — météo, restaurant, logistique, plan B si il pleut… 🌴</div>
+    </div>
+    <div class="ai-sugg">
+      <div class="ai-s" onclick="aiAsk('Il pleut à Koh Tao, que faire ?')">🌧 Plan B pluie</div>
+      <div class="ai-s" onclick="aiAsk('Restaurant proche logement Chiang Mai ?')">🍜 Resto proche</div>
+      <div class="ai-s" onclick="aiAsk('Conseils snorkeling enfants Shark Bay ?')">🐠 Snorkeling</div>
+      <div class="ai-s" onclick=&quot;aiAsk('Que faire ce soir à Bangkok ?')&quot;>🌃 Soir Bangkok</div>
+    </div>
+    <div class="ai-input-row">
+      <input class="ai-input" id="ai-in" placeholder="Votre question…" onkeydown="if(event.key==='Enter')aiSend()">
+      <button class="ai-send" onclick="aiSend()">➤</button>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="sec-title">🗺 Carte interactive</div>
+  <div class="map-days" id="map-days"></div>
+  <div class="map-wrap"><div id="lmap"></div></div>
+
+  <!-- URGENCES -->
+  <div class="sec-title">🚨 Urgences</div>
+  <div id="emergencies"></div>
+
+  <!-- PHRASES -->
+  <div class="sec-title">🗣 Phrases utiles</div>
+  <p class="sec-note">Tap 🔊 pour écouter · « Copier » pour envoyer en message</p>
+  <div id="phrases"></div>
+
+  <!-- BAG CHECKLIST -->
+  <div class="sec-title">🧳 Check-list valise</div>
+  <div class="bag-hdr">
+    <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
+    <div class="bag-w">4,1 kg <span style="font-size:14px;font-weight:400">de contenu max</span></div>
+    <div style="font-size:11px;opacity:.8">Format cabine · Machines à laver dans tous les logements</div>
+    <div class="bag-bar-wrap"><div class="bag-bar" id="bag-bar" style="width:0%"></div></div>
+    <div style="font-size:11px;opacity:.8;margin-top:5px" id="bag-prog">0 / 0 cochés</div>
+  </div>
+  <div id="bag-list"></div>
+
+  <!-- VACCINS -->
+  <div class="sec-title">💉 Vaccins & santé</div>
+  <div id="vaccins"></div>
+  <div class="tip tip-red" style="margin-bottom:14px">
+    <span style="font-size:14px">🦟</span>
+    <div><div class="tip-lbl">Dengue — présente toute l'année</div>Répulsif DEET/Icaridine sur toute la famille, surtout au lever et coucher du soleil.</div>
+  </div>
+
+  <!-- DOCS -->
+  <div class="sec-title">📄 Documents à préparer</div>
+  <div class="tip tip-red" style="margin-bottom:10px">
+    <span style="font-size:14px">⚠️</span>
+    <div><div class="tip-lbl">Priorité absolue</div>Passeports valides jusqu'au 06/02/2027 minimum · Pas de visa requis pour la France &lt; 30 jours</div>
+  </div>
+  <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
+  <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage (rapatriement inclus) · Adresses logements imprimées</div></div>
+  <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
+
+  <!-- MÉTÉO PLAN B -->
+  <div class="sec-title">🌧 Météo & plan B</div>
+  <div class="wx-grid">
+    <div class="wx-sm"><div class="wx-sm-dest">Bangkok</div><div class="wx-sm-ico">🌦</div><div class="wx-sm-st">Pluies courtes · Peu d'impact</div></div>
+    <div class="wx-sm"><div class="wx-sm-dest">Chiang Mai</div><div class="wx-sm-ico">🌧</div><div class="wx-sm-st">Saison verte · Averses</div></div>
+    <div class="wx-sm"><div class="wx-sm-dest">Koh Tao</div><div class="wx-sm-ico">⛅</div><div class="wx-sm-st">Côte est protégée</div></div>
+    <div class="wx-sm"><div class="wx-sm-dest">Koh Samui</div><div class="wx-sm-ico">🌤</div><div class="wx-sm-st">Côte est · Variable</div></div>
+  </div>
+
+  <!-- APPS -->
+  <div class="sec-title">📱 Applis à télécharger</div>
+  <div id="apps"></div>
+
+  <!-- RECAP PDF -->
+  <div class="sec-title">📊 Récap voyage</div>
+  <p class="sec-note">Génère un PDF souvenir avec activités cochées et notes.</p>
+  <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
+
+  <!-- CONFIG -->
+  <div class="sec-title">⚙️ Configuration</div>
+  <div class="info-card">
+    <div class="info-title">🔥 Firebase (synchronisation temps réel)</div>
+    <div class="info-body">Synchronise notes et activités entre tous les téléphones.</div>
+    <button onclick="openFbModal()" style="margin-top:9px;background:var(--turq);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Configurer Firebase</button>
+  </div>
+  <div class="info-card" style="margin-top:7px">
+    <div class="info-title">🔐 Code PIN</div>
+    <button onclick="changePin()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Changer le PIN</button>
+  </div>
+</div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="goTab('bkk',this)"><span class="ni">🏙</span>Bangkok</button>
+  <button class="nav-btn" onclick="goTab('cm',this)"><span class="ni">🌿</span>Ch.Mai</button>
+  <button class="nav-btn" onclick="goTab('kt',this)"><span class="ni">🐠</span>Koh Tao</button>
+  <button class="nav-btn" onclick="goTab('ks',this)"><span class="ni">🌴</span>Samui</button>
+  <button class="nav-btn" onclick="goTab('lodge',this)"><span class="ni">🏠</span>Séjour</button>
+  <button class="nav-btn" onclick="goTab('prat',this)"><span class="ni">📋</span>Pratique</button>
+</nav>
+
+<!-- Firebase Modal -->
+<div class="modal" id="fb-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-sheet">
+    <button class="modal-close" onclick="document.getElementById('fb-modal').classList.remove('open')">✕</button>
+    <div class="modal-title">🔥 Configuration Firebase</div>
+    <p style="font-size:12px;color:var(--brown-mid);margin-bottom:14px;line-height:1.6">1. Créer un projet sur <b>firebase.google.com</b><br>2. Activer <b>Realtime Database</b><br>3. Copier la configuration ci-dessous</p>
+    <div class="cfg-lbl">Database URL</div><input class="cfg-input" id="fb-url" placeholder="https://xxx-default-rtdb.firebaseio.com">
+    <div class="cfg-lbl">API Key</div><input class="cfg-input" id="fb-key" placeholder="AIza...">
+    <div class="cfg-lbl">Project ID</div><input class="cfg-input" id="fb-pid" placeholder="mon-projet-thailande">
+    <div class="cfg-lbl">App ID</div><input class="cfg-input" id="fb-aid" placeholder="1:xxx:web:xxx">
+    <button class="cfg-save" onclick="saveFb()">💾 Enregistrer</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const DATA = {
+  depart:"2026-07-20T16:40:00",
+  bangkok:[
+    {date:"Mardi 21 juillet",title:"Arrivée douce & immersion progressive",
+     acts:[{l:"Arrivée BKK — Suvarnabhumi",m:"Suvarnabhumi Airport Bangkok"},{l:"Déjeuner Rooftop Avani+ Riverside",m:"Avani Riverside Bangkok Hotel"},{l:"Balade Chao Phraya",m:"Chao Phraya River Bangkok"}],
+     items:[
+       {t:"Matinée",n:"Arrivée BKK — Suvarnabhumi",d:"Transfert Airbnb 45–60 min. Check-in à partir de 14h. Taxi réservé par l'Airbnb — 1 500 bahts, rien à payer au chauffeur, payer au logement le lendemain.",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
+       {t:"Déjeuner",n:"🏙 Rooftop Avani+ Riverside Bangkok",d:"Taxi 28 min.",a:"Avani+ Riverside Bangkok Hotel"},
+       {t:"Après-midi",n:"🚤 Balade Chao Phraya",d:"Premier contact avec Bangkok. Bateaux, temples et skyline.",a:"Chao Phraya, Khlong San, Bangkok 10600 · À pied 7 min"},
+       {t:"Soir",n:"Dîner au logement",d:"Maintenir les enfants éveillés jusqu'à 20h pour recaler les rythmes."},
+     ],tip:{c:"turq",i:"💡",l:"Objectif du jour",t:"Récupérer du vol sans trop en faire. Décalage horaire : +5h en été."}},
+    {date:"Mercredi 22 juillet",title:"Temples majeurs & klongs",
+     acts:[{l:"Wat Pho — Bouddha couché",m:"Wat Pho Bangkok"},{l:"Grand Palais & Wat Phra Kaew",m:"Grand Palace Bangkok"},{l:"Déjeuner The Sixth 6th",m:"The Sixth Bangkok"},{l:"Long-tail boat klongs",m:"Tha Tien Pier Bangkok"},{l:"Asiatique Riverfront",m:"Asiatique The Riverfront Bangkok"}],
+     items:[
+       {t:"Matinée",n:"🛕 Wat Pho — Bouddha couché",d:"Bouddha de 46m. Bols en métal = dons symboliques.",a:"2 Sanam Chai Rd, Phra Nakhon, Bangkok 10200 · Taxi 25 min",al:"Épaules et genoux couverts obligatoirement."},
+       {t:"Matinée",n:"🏛 Grand Palais & Wat Phra Kaew",d:"Architecture la plus spectaculaire du pays.",a:"Na Phra Lan Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
+       {t:"Déjeuner",n:"The Sixth 6th",d:"",a:"6 Maharat Rd, Phra Nakhon, Bangkok 10200"},
+       {t:"Après-midi",n:"🚤 Long-tail boat klongs — 1h",d:"Départ Tha Tien Pier · Wat Arun · Bangkok Noi Canal · Bangkok Yai Canal · Artist's House · Poissons géants · Retour Tha Tien Pier."},
+       {t:"Soirée",n:"🌃 Asiatique Riverfront",d:"Grande roue · Street food · Pad thai · Poulet grillé.",a:"2194 Charoen Krung Rd, Bang Kho Laem, Bangkok 10120",r:["Asiatique Riverfront"]},
+     ],tip:{c:"red",i:"⚠️",l:"Dress code temples",t:"Épaules et genoux couverts obligatoirement. Prévoir un foulard léger."}},
+    {date:"Jeudi 23 juillet",title:"Excursion Ayutthaya — Ancienne capitale",
+     acts:[{l:"Wat Sri Sanphet + Wat Mahathad",m:"Ayutthaya Historical Park"},{l:"Wat Yai Chaimongkhol",m:"Wat Yai Chai Mongkhon Ayutthaya"},{l:"Musée Chao Sam Phraya",m:"Chao Sam Phraya Museum Ayutthaya"},{l:"Barge restaurant flottante",m:"Ayutthaya Boat Tour"},{l:"Bang Pa-In — Palais royal d'été",m:"Bang Pa-In Royal Palace"}],
+     items:[
+       {t:"08h00",n:"Départ guide francophone au logement",d:"Excursion déjà payée. Véhicule climatisé privé avec chauffeur."},
+       {t:"Matin",n:"🛕 Wat Sri Sanphet + Wat Mahathad",d:"En tuk-tuk. La tête de Bouddha dans les racines = site le plus photographié.",a:"Ayutthaya Historical Park"},
+       {t:"Matin",n:"🛕 Wat Yai Chaimongkhol",d:"L'un des plus grands chedi. Jardin magnifique.",a:"Ayutthaya"},
+       {t:"Midi",n:"🏛 Musée Chao Sam Phraya",d:"Entièrement climatisé. Fermé lun/mar.",al:"Vérifier l'ouverture — fermé lundi et mardi."},
+       {t:"Déjeuner",n:"🚢 Barge restaurant flottante",d:"Croisière 1h30 autour de l'île · Déjeuner à bord."},
+       {t:"Après-midi",n:"🏰 Bang Pa-In",d:"Résidence royale d'été. Architecture thaïe & européenne.",a:"Bang Pa-In Royal Palace, Ayutthaya"},
+       {t:"~17h00",n:"Retour Bangkok",d:"Soirée repos au logement."},
+     ],tip:{c:"gold",i:"🍬",l:"Spécialité locale",t:"Roti Sai Mai — barbe à papa enveloppée dans une crêpe sucrée. Incontournable à Ayutthaya !"}},
+    {date:"Vendredi 24 juillet",title:"Journée fun & Train Night Market",
+     acts:[{l:"Siam Amazing Park (Option A)",m:"Siam Amazing Park Bangkok"},{l:"ICONSIAM (Option B)",m:"ICONSIAM Bangkok"},{l:"Train Night Market Srinakarin",m:"Train Night Market Srinakarin Bangkok"}],
+     items:[
+       {t:"Matin",n:"🎢 Activité ludique",d:"Option A : Siam Amazing Park (parc aquatique) · Taxi 1h\nOption B : ICONSIAM · Marché flottant · Taxi 30 min"},
+       {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme."},
+       {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas."},
+     ]},
+  ],
+  chiangmai:[
+    {date:"Samedi 25 juillet",title:"Arrivée & installation",
+     acts:[{l:"Arrivée aéroport CNX",m:"Chiang Mai International Airport"},{l:"Wat Phra Singh",m:"Wat Phra Singh Chiang Mai"},{l:"Khao Soi Khun Yai",m:"Khao Soi Khun Yai Chiang Mai"}],
+     items:[
+       {t:"10h15",n:"✈ Vol Don Mueang T2 → Chiang Mai",d:"AirAsia Move. Check-out Bangkok avant 11h. Taxi aéroport Don Mueang : 30 min."},
+       {t:"11h25",n:"Arrivée CNX Terminal 2",d:"Taxi Airbnb organisé — 300 bahts en liquide. Check-in 14h.",a:"1 Chang Moi Road Soi 2, Chiang Mai 50300"},
+       {t:"Après-midi",n:"🛕 Wat Phra Singh",d:"Élégant et accessible. Observer les moines en robe safran.",a:"2 Samlarn Rd, Si Phum, Mueang Chiang Mai 50200 · À pied 22 min"},
+       {t:"Soirée",n:"🍜 Khao Soi Khun Yai",d:"LE plat du Nord : curry coco + nouilles croustillantes.",a:"Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200 · À pied 27 min",r:["Khao Soi Khun Yai"]},
+     ]},
+    {date:"Dimanche 26 juillet",title:"🐘 Sanctuaire d'éléphants — Full Day",
+     acts:[{l:"Sanctuaire éléphants + Sticky Waterfall",m:"Elephant Sanctuary Chiang Mai"},{l:"Dash! Restaurant and Bar",m:"Dash Restaurant Bar Chiang Mai"}],
+     items:[
+       {t:"08h00–17h00",n:"Full Day Elephants Care + Sticky Waterfall",d:"Nourrir les éléphants · Vitamin balls · Baignade · Sticky Waterfall (on remonte à pied !).\nÀ prendre : vêtements de rechange, serviettes, crème solaire, sandales, maillot, spray répulsif.\nInclus : transport, assurance, nourriture éléphants, eau, déjeuner thaï traditionnel."},
+       {t:"Soirée",n:"Dash! Restaurant and Bar",d:"Maison traditionnelle en bois, ambiance familiale.",a:"38/2 Moon Muang Road, Phra Sing, Mueang Chiang Mai 50200 · À pied 5 min",r:["Dash! Restaurant and Bar"]},
+     ],tip:{c:"red",i:"📌",l:"À régler dès l'arrivée au logement",t:"13 600 THB — Full Day 08h00–17h00. Chauffeur vient chercher et ramène."}},
+    {date:"Lundi 27 juillet",title:"Doi Suthep + Nimman + Night Bazaar",
+     acts:[{l:"Doi Suthep",m:"Doi Suthep Temple Chiang Mai"},{l:"No.39 Café (déjeuner)",m:"No.39 Cafe Chiang Mai"},{l:"Quartier Nimman + Cheevit Cheeva",m:"Nimman Road Chiang Mai"},{l:"Chiang Mai Night Bazaar",m:"Chiang Mai Night Bazaar"},{l:"The Riverside Bar & Restaurant",m:"The Riverside Bar Restaurant Chiang Mai"}],
+     items:[
+       {t:"Matinée tôt",n:"⛩ Doi Suthep",d:"Escalier serpent mythique · Vue panoramique sur Chiang Mai · En voiture 1h.",a:"Doi Suthep, Suthep, Mueang Chiang Mai 50200",al:"Arriver tôt. Épaules et genoux couverts."},
+       {t:"Déjeuner",n:"No.39 Café",d:"Cadre tropical · Pontons · Lac · Ambiance jungle · Les ados adorent.",a:"No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200"},
+       {t:"13h30–15h00",n:"🌿 Quartier Nimman",d:"Boutiques · Cafés · Glaces artisanales. Les ados aiment beaucoup.\nCheevit Cheeva — desserts et kakigori · Nimman Rd, Su Thep, Mueang Chiang Mai",a:"Nimman Road, Su Thep, Mueang Chiang Mai"},
+       {t:"Soirée",n:"🛍 Night Bazaar + Riverside",d:"À pied 15 min. Musique live, tables en plein air.",a:"Changklan Rd, Chang Moi, Mueang Chiang Mai 50100",r:["The Riverside Bar & Restaurant"]},
+     ]},
+    {date:"Mardi 28 juillet",title:"Grand Canyon Water Park — Journée fun",
+     acts:[{l:"Grand Canyon Water Park",m:"Grand Canyon Water Park Chiang Mai"},{l:"Ploen Ruedee Night Market",m:"Ploen Ruedee Night Market Chiang Mai"}],
+     items:[
+       {t:"Matin",n:"🛌 Matinée lente",d:"Repos après deux jours actifs."},
+       {t:"12h30",n:"🌊 Grand Canyon Water Park",d:"Ancienne carrière reconvertie · Parcours gonflables · 3–4h.",a:"202 Nam Phrae, Hang Dong, Chiang Mai 50230 · En voiture 30 min"},
+       {t:"Soirée",n:"Ploen Ruedee Night Market",d:"Food trucks · Pad thai · Brochettes · Riz frit.",a:"28/3-4 Changklan Rd, Chang Moi, Mueang Chiang Mai 50100 · À pied 15 min"},
+     ]},
+    {date:"Mercredi 29 juillet",title:"Trajet vers Koh Tao",
+     acts:[{l:"Aéroport CNX — départ",m:"Chiang Mai International Airport"}],
+     items:[
+       {t:"Matin",n:"Check-out avant 10h",d:"Taxi gratuit pris en charge par l'Airbnb.",a:"60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200 · 15 min"},
+       {t:"10h40",n:"✈ Vol CNX → Surat Thani",d:"AirAsia. Arrivée 12h30."},
+       {t:"15h30",n:"🚢 Ferry Tapee Pier → Mae Haad",d:"Direct Ferries. Arrivée ~18h. Chercher panneau avec votre nom dans le pavillon couvert.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
+     ]},
+  ],
+  kohtao:[
+    {date:"Jeudi 29 juillet",title:"Arrivée à Koh Tao",
+     acts:[{l:"Ferry Mae Haad — arrivée",m:"Mae Haad Pier Koh Tao"},{l:"Dîner au logement",m:"Ko Tao Surat Thani"}],
+     items:[
+       {t:"~18h00",n:"Arrivée Mae Haad Pier",d:"Taxi Airbnb · 15 min. Check-in 15h.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
+       {t:"Soirée",n:"Dîner au logement",d:"Repos après la longue journée de transport."},
+     ],tip:{c:"turq",i:"😴",l:"Objectif",t:"Dormir tôt pour profiter du premier matin snorkeling à Shark Bay."}},
+    {date:"Vendredi 30 juillet",title:"🐢 Shark Bay ⭐⭐⭐ — Les tortues",
+     acts:[{l:"Shark Bay — snorkeling tortues",m:"Shark Bay Koh Tao"},{l:"Restaurant Sai Daeng",m:"Sai Daeng Resort Koh Tao"},{l:"John Suwan Viewpoint",m:"John Suwan Viewpoint Koh Tao"},{l:"Haadtien Beach Club",m:"Haadtien Beach Club Koh Tao"}],
+     items:[
+       {t:"08h00",n:"🐢 SHARK BAY",d:"Herbiers marins = tortues. Entrée devant Sai Daeng Resort.",a:"Free beach to Shark Bay, Ko Tao, Surat Thani · En voiture 10 min",al:"Ne pas arriver à midi — tortues moins actives et beaucoup de monde."},
+       {t:"Midi",n:"Restaurant Sai Daeng",d:"Vue mer, accès direct plage.",a:"Sai Daeng Resort, 46/9 Moo 3, Sai Daeng Beach, Koh Tao · En voiture 7 min",r:["Restaurant Sai Daeng"]},
+       {t:"Après-midi",n:"John Suwan Viewpoint",d:"Vue spectaculaire sur deux baies.",a:"John-Suwan Viewpoint, Ko Tao · En voiture 10 min"},
+       {t:"Soirée",n:"Haadtien Beach Club",d:"Pieds dans le sable.",a:"Beach Club by Haadtien, Moo 3, Ko Tao · En voiture 10 min",r:["Haadtien Beach Club"]},
+     ]},
+    {date:"Samedi 31 juillet",title:"🌊 Ao Leuk Beach ⭐⭐⭐⭐⭐",
+     acts:[{l:"Ao Leuk Beach — snorkeling",m:"Ao Leuk Beach Koh Tao"},{l:"Pause smoothies — Aow Leuk 2",m:"Ao Leuk Koh Tao"},{l:"Barracuda Restaurant",m:"Barracuda Restaurant Koh Tao"}],
+     items:[
+       {t:"Matinée",n:"🌊 Ao Leuk Beach",d:"La plus belle plage familiale de Koh Tao. Eau calme, beaucoup de poissons, entrée facile.\nEntrer sur la partie droite — nager parallèlement à la plage.\nCe qu'on peut voir : 🐠 poissons-perroquets · 🐟 poissons-papillons · 🐡 poissons-ballons · 🌿 coraux",a:"Ao Leuk, Ko Tao, Surat Thani · En voiture 10 min"},
+       {t:"Fin matinée",n:"Pause smoothies — Aow Leuk 2",d:"Smoothie mangue · Smoothie pastèque."},
+       {t:"19h30",n:"🐟 Barracuda Restaurant",d:"Poisson grillé excellent.",a:"Barracuda Roof Top Restaurant, Koh Tao, Surat Thani · À pied 10 min",r:["Barracuda Restaurant"]},
+     ]},
+    {date:"Dimanche 1er août",title:"Snorkeling doux + départ ferry",
+     acts:[{l:"Ao Leuk — session courte",m:"Ao Leuk Beach Koh Tao"},{l:"Ferry Mae Haad → Koh Samui",m:"Mae Haad Pier Koh Tao"}],
+     items:[
+       {t:"Matin",n:"🌊 Session courte Ao Leuk",d:"Éviter la fatigue avant le bateau. Check-out avant 10h."},
+       {t:"11h30",n:"🚢 Ferry Mae Haad → Bangrak Pier",d:"Arrivée Koh Samui 13h."},
+     ],tip:{c:"turq",i:"🚢",l:"Ferry 11h30",t:"Départ Mae Haad Pier à 11h30 · Arrivée Bangrak Pier Koh Samui à 13h."}},
+  ],
+  kohsamui:[
+    {date:"Lundi 1er août",title:"Arrivée & Lipa Noi Beach",
+     acts:[{l:"Arrivée Bangrak Pier",m:"Bangrak Pier Koh Samui"},{l:"Lipa Noi Beach",m:"Lipa Noi Beach Koh Samui"},{l:"Think & Retro Cafe",m:"Think Retro Cafe Ko Samui"}],
+     items:[
+       {t:"13h00",n:"Arrivée Bangrak Pier",d:"Transport organisé par l'Airbnb.",a:"57/57 Moo 5 Anthong, Nathon, Surathani 84140"},
+       {t:"16h30–18h30",n:"🏖 Lipa Noi Beach ⭐⭐⭐⭐⭐",d:"Immense plage, eau peu profonde, très calme, idéale enfants. Superbe coucher de soleil.",a:"Lipa Noi Beach, Ko Samui, Surat Thani"},
+       {t:"19h00",n:"Think & Retro Cafe",d:"Ambiance familiale · Décoration originale · Cuisine simple.",a:"38/48 Lipa Noi, Ko Samui, Surat Thani 84140 · À pied 20 min",r:["Think & Retro Cafe"]},
+     ]},
+    {date:"Dimanche 2 août",title:"Silver Beach + Coco Tam's",
+     acts:[{l:"Silver Beach — snorkeling",m:"Silver Beach Koh Samui"},{l:"Café 69 (déjeuner)",m:"Cafe 69 Koh Samui"},{l:"Coco Tam's — spectacle de feu",m:"Coco Tams Koh Samui"}],
+     items:[
+       {t:"09h00–11h30",n:"🌊 Silver Beach ⭐⭐⭐⭐⭐",d:"Meilleur snorkeling de Samui. Arriver avant 10h.",a:"Silver Beach, 124/4 Maret, Ko Samui, Surat Thani 84310 · ~30 min de route",al:"Ne pas y aller en après-midi — l'eau devient agitée."},
+       {t:"Midi",n:"Café 69",d:"Cuisine créative, portions partageables.",r:["Café 69"]},
+       {t:"Soirée",n:"🔥 Coco Tam's — Spectacle de feu",d:"Vers 19h30. Les enfants adorent.",r:["Coco Tam's"]},
+     ]},
+    {date:"Lundi 3 août",title:"Big Buddha + Cascades + Secret Garden",
+     acts:[{l:"Big Buddha",m:"Big Buddha Koh Samui"},{l:"The Mother Restaurant",m:"The Mother Restaurant Koh Samui"},{l:"Cascades Na Muang",m:"Na Muang Waterfall Koh Samui"},{l:"Secret Buddha Garden",m:"Tarnim Magic Garden Koh Samui"}],
+     items:[
+       {t:"Matin",n:"🙏 Big Buddha",d:"Les enfants aiment les grandes statues, les poissons, les couleurs.",a:"Wat Phra Yai, Bo Put, Ko Samui District, Surat Thani 84320 · À pied 20 min"},
+       {t:"Déjeuner",n:"The Mother Restaurant",d:"Cuisine thaïlandaise simple, très bon rapport qualité-prix.",a:"The Mother Restaurant, Bo Put, Ko Samui 84320 · En voiture 10 min",r:["The Mother Restaurant"]},
+       {t:"Après-midi",n:"💧 Cascades Na Muang",d:"Baignade possible. À prévoir : baskets, serviettes, anti-moustique.",a:"Na Muang 2 Waterfall, Na Mueang, Ko Samui 84140 · En voiture 50 min"},
+       {t:"Après-midi",n:"🌿 Secret Buddha Garden",d:"Lieu caché dans la jungle. Très différent des plages.",a:"Tarnim Magic Garden, Na Mueang, Ko Samui 84140 · En voiture 20 min"},
+     ]},
+    {date:"Mardi 4 août",title:"Vraie journée de vacances",
+     acts:[{l:"Logement + piscine — journée libre",m:"57/57 Moo 5 Anthong Nathon Ko Samui"},{l:"The Road Less Travelled (dîner)",m:"The Road Less Travelled Cafe Ko Samui"}],
+     items:[
+       {t:"Journée",n:"🌴 Journée libre au logement",d:"Piscine, détente, lecture. Pas de programme imposé."},
+       {t:"Soirée",n:"The Road Less Travelled Samui",d:"",a:"11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140",r:["The Road Less Travelled"]},
+     ]},
+  ],
+  urgences:[
+    {n:"Police Touristique",num:"1155",note:"Français disponible"},
+    {n:"SAMU / Urgences",num:"1669",note:"Ambulance nationale"},
+    {n:"Pompiers",num:"199",note:""},
+    {n:"Police nationale",num:"191",note:""},
+    {n:"Urgences générales",num:"112",note:"Numéro européen"},
+    {n:"Ambassade France Bangkok",num:"+66265751000",note:"Perte passeport"},
+  ],
+  phrases:[
+    {c:"Essentiels",f:"Bonjour (homme)",t:"Sawasdee khrap"},
+    {c:"Essentiels",f:"Bonjour (femme)",t:"Sawasdee kha"},
+    {c:"Essentiels",f:"Merci",t:"Khop khun khrap/kha"},
+    {c:"Essentiels",f:"Oui / Non",t:"Chai / Mai chai"},
+    {c:"Essentiels",f:"Excusez-moi",t:"Khor thot"},
+    {c:"Restaurant",f:"Sans lait ⚠",t:"Mai sai nom"},
+    {c:"Restaurant",f:"Pas épicé",t:"Mai phet"},
+    {c:"Restaurant",f:"Un peu épicé",t:"Phet nit noi"},
+    {c:"Restaurant",f:"Eau plate",t:"Nam plao"},
+    {c:"Restaurant",f:"C'est délicieux !",t:"Aroi mak"},
+    {c:"Restaurant",f:"Une bière SVP 🍺",t:"Kho bia nueng khrap/kha"},
+    {c:"Taxi",f:"Combien ?",t:"Tao rai ?"},
+    {c:"Taxi",f:"Trop cher",t:"Phaeng pai"},
+    {c:"Taxi",f:"Nous sommes 7",t:"Rao jet khon"},
+    {c:"Plage",f:"Où snorkeler ?",t:"Snorkeling tee nai ?"},
+    {c:"Plage",f:"Des tortues ici ?",t:"Mee tao talay mai ?"},
+    {c:"Enfants",f:"Merci beaucoup",t:"Khop khun mak"},
+    {c:"Enfants",f:"C'est beau !",t:"Suay mak"},
+  ],
+  bagages:[
+    {l:"Rashguard anti-UV manches longues × personne",c:"Snorkeling",kg:"0.2"},
+    {l:"Masque + tuba (ou location sur place)",c:"Snorkeling",kg:"0.3"},
+    {l:"Palmes légères travel fins",c:"Snorkeling",kg:"0.4"},
+    {l:"Chaussures d'eau légères",c:"Snorkeling",kg:"0.2"},
+    {l:"Crème solaire reef-safe SPF50",c:"Soleil",kg:"0.2"},
+    {l:"Stick lèvres SPF + casquette à cordon",c:"Soleil",kg:"0.1"},
+    {l:"T-shirt UV",c:"Soleil",kg:"0.1"},
+    {l:"Serviette microfibre",c:"Plage",kg:"0.2"},
+    {l:"Sac étanche téléphone/passeports",c:"Plage",kg:"0.1"},
+    {l:"Gourde réutilisable",c:"Hydratation",kg:"0.2"},
+    {l:"Sandales légères",c:"Plage",kg:"0.3"},
+    {l:"2–3 t-shirts légers",c:"Vêtements",kg:"0.3"},
+    {l:"1 pantalon/jupe léger(e) (temples)",c:"Vêtements",kg:"0.2"},
+    {l:"Sous-vêtements × 4 (machines à laver dispo)",c:"Vêtements",kg:"0.2"},
+    {l:"Imodium + Smecta + sérum réhydratation",c:"Pharmacie",kg:"0.1"},
+    {l:"Paracétamol adultes + enfants",c:"Pharmacie",kg:"0.1"},
+    {l:"Répulsif DEET/Icaridine",c:"Pharmacie ⚠",kg:"0.1"},
+    {l:"Pansements waterproof + antiseptique",c:"Pharmacie",kg:"0.1"},
+    {l:"Chargeur + adaptateur universel",c:"Tech",kg:"0.2"},
+    {l:"Passeports + copies + livret de famille",c:"Docs",kg:"0.1"},
+    {l:"Autorisation sortie territoire (enfants)",c:"Docs",kg:"0.0"},
+  ],
+  vaccins:[
+    {n:"Hépatite A",r:"Fortement recommandé",s:"green"},
+    {n:"Typhoïde",r:"Recommandé",s:"green"},
+    {n:"Hépatite B",r:"Si pas à jour",s:"orange"},
+    {n:"DTP (Diphtérie-Tétanos-Polio)",r:"Rappel si > 10 ans",s:"orange"},
+    {n:"Rage",r:"Optionnel (voyage avec enfants)",s:"grey"},
+    {n:"Dengue 🦟",r:"Répulsif obligatoire — pas de vaccin curatif",s:"orange"},
+  ],
+  apps:[
+    {i:"🗺",n:"Google Maps",d:"Télécharger carte Thaïlande offline avant départ",off:true},
+    {i:"🚗",n:"Grab",d:"Taxi/VTC officiel — évite la négociation",off:false},
+    {i:"🈳",n:"Google Translate",d:"Photo pour lire les menus thaïs · Pack thaï offline",off:true},
+    {i:"💱",n:"XE Currency",d:"Taux de change THB/EUR en temps réel",off:false},
+    {i:"💬",n:"WhatsApp",d:"Contact logements, guides, famille",off:false},
+    {i:"⛴",n:"12GO Asia",d:"Billets ferry — vérification horaires",off:false},
+  ],
+  mapSpots:{
+    "bkk-0":[{lat:13.69,lng:100.75,n:"Suvarnabhumi Airport",c:"#E8734A"},{lat:13.7246,lng:100.5129,n:"Avani+ Riverside",c:"#E8734A"},{lat:13.7368,lng:100.5136,n:"Chao Phraya",c:"#E8734A"}],
+    "bkk-1":[{lat:13.7465,lng:100.493,n:"Wat Pho",c:"#E8734A"},{lat:13.75,lng:100.4913,n:"Grand Palais",c:"#E8734A"},{lat:13.7022,lng:100.5006,n:"Asiatique Riverfront",c:"#E8734A"}],
+    "bkk-2":[{lat:14.356,lng:100.5608,n:"Wat Sri Sanphet",c:"#E8734A"},{lat:14.3568,lng:100.5672,n:"Wat Mahathad",c:"#E8734A"},{lat:14.2342,lng:100.5784,n:"Bang Pa-In",c:"#E8734A"}],
+    "bkk-3":[{lat:13.801,lng:100.642,n:"Siam Amazing Park",c:"#E8734A"},{lat:13.6827,lng:100.6468,n:"Train Night Market",c:"#E8734A"}],
+    "cm-0":[{lat:18.7667,lng:98.9628,n:"Aéroport CNX",c:"#5B8C5A"},{lat:18.7883,lng:98.9856,n:"Wat Phra Singh",c:"#5B8C5A"}],
+    "cm-1":[{lat:19.05,lng:98.85,n:"Sanctuaire Éléphants",c:"#5B8C5A"}],
+    "cm-2":[{lat:18.8048,lng:98.9219,n:"Doi Suthep",c:"#5B8C5A"},{lat:18.7884,lng:98.996,n:"Nimman Road",c:"#5B8C5A"},{lat:18.7884,lng:98.9987,n:"Night Bazaar",c:"#5B8C5A"}],
+    "cm-3":[{lat:18.702,lng:98.943,n:"Grand Canyon Water Park",c:"#5B8C5A"}],
+    "cm-4":[{lat:18.7667,lng:98.9628,n:"Aéroport CNX — départ",c:"#5B8C5A"}],
+    "kt-0":[{lat:10.0956,lng:99.8408,n:"Mae Haad Pier",c:"#2BBFB3"}],
+    "kt-1":[{lat:10.0713,lng:99.8452,n:"Shark Bay 🐢",c:"#2BBFB3"},{lat:10.07,lng:99.846,n:"John Suwan Viewpoint",c:"#2BBFB3"}],
+    "kt-2":[{lat:10.084,lng:99.857,n:"Ao Leuk Beach ⭐⭐⭐⭐⭐",c:"#2BBFB3"}],
+    "kt-3":[{lat:10.084,lng:99.857,n:"Ao Leuk — session courte",c:"#2BBFB3"},{lat:10.0956,lng:99.8408,n:"Ferry Mae Haad",c:"#2BBFB3"}],
+    "ks-0":[{lat:9.556,lng:100.0614,n:"Bangrak Pier",c:"#D4A853"},{lat:9.478,lng:100.013,n:"Lipa Noi Beach",c:"#D4A853"}],
+    "ks-1":[{lat:9.499,lng:100.056,n:"Silver Beach",c:"#D4A853"}],
+    "ks-2":[{lat:9.5424,lng:100.0611,n:"Big Buddha",c:"#D4A853"},{lat:9.4726,lng:100.0195,n:"Cascades Na Muang",c:"#D4A853"},{lat:9.471,lng:100.029,n:"Secret Buddha Garden",c:"#D4A853"}],
+    "ks-3":[{lat:9.478,lng:100.013,n:"Logement Samui",c:"#D4A853"}],
+  },
+};
+
+// ═══ PIN ═══════════════════════════════════
+const DEF_PIN="2026"; let pinE="";
+function pk(k){
+  if(k==='del'){pinE=pinE.slice(0,-1);}
+  else if(k==='ok'){chkPin();return;}
+  else if(pinE.length<4){pinE+=k;}
+  updDots();
+  if(pinE.length===4)setTimeout(chkPin,200);
+}
+function updDots(){document.querySelectorAll('.pin-dot').forEach((d,i)=>d.classList.toggle('filled',i<pinE.length));}
+function chkPin(){
+  const stored=localStorage.getItem('app_pin')||DEF_PIN;
+  if(pinE===stored){document.getElementById('pin-overlay').style.display='none';initApp();}
+  else{document.getElementById('pin-err').textContent='Code incorrect';pinE='';updDots();setTimeout(()=>document.getElementById('pin-err').textContent='',1500);}
+}
+function skipPin(){document.getElementById('pin-overlay').style.display='none';initApp();}
+function changePin(){const p=prompt('Nouveau PIN (4 chiffres) :');if(p&&/^\d{4}$/.test(p)){localStorage.setItem('app_pin',p);toast('✅ PIN mis à jour');}}
+
+// ═══ COUNTDOWN & THAI TIME ══════════════════
+function updCdown(){
+  const dep=new Date(DATA.depart),now=new Date(),diff=dep-now;
+  let t,b;
+  if(diff<=0){const d=Math.floor((now-dep)/(864e5));t=d===0?'🎉 Bon vol!':'Jour '+d;b=d===0?"Départ aujourd'hui !":`Jour ${d} du voyage`;}
+  else{const d=Math.floor(diff/864e5);t=d===0?'Départ!':'J – '+d;b=d===0?"Départ aujourd'hui !":d+' jours avant le départ';}
+  document.getElementById('countdown').textContent=t;
+  const B=document.getElementById('cdown-big');if(B)B.textContent=b;
+}
+function updThaiTime(){
+  const t=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
+  document.getElementById('thai-time').textContent='🇹🇭 '+t;
+  const B=document.getElementById('thai-time-big');if(B)B.textContent='🕐 Heure en Thaïlande : '+t;
+}
+
+// ═══ WEATHER ════════════════════════════════
+const WL={bkk:{lat:13.75,lon:100.52,n:"Bangkok"},cm:{lat:18.79,lon:98.98,n:"Chiang Mai"},kt:{lat:10.1,lon:99.84,n:"Koh Tao"},ks:{lat:9.54,lon:100.06,n:"Koh Samui"}};
+const WI={0:'☀️',1:'🌤',2:'⛅',3:'☁️',45:'🌫',51:'🌦',53:'🌦',55:'🌧',61:'🌧',63:'🌧',65:'🌧',80:'🌦',81:'🌧',82:'⛈',95:'⛈'};
+const WD={0:'Ciel dégagé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine légère',53:'Bruine',61:'Pluie légère',63:'Pluie',65:'Pluie forte',80:'Averses légères',81:'Averses',82:'Averses fortes',95:'Orage'};
+const DFR=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+const wxL={};
+async function fetchWx(k){
+  const el=document.getElementById('wx-'+k);if(!el)return;
+  try{
+    const l=WL[k],r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${l.lat}&longitude=${l.lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FBangkok&forecast_days=5`),d=await r.json(),c=d.current,fc=d.daily,wc=c.weather_code;
+    const t=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
+    const fcH=fc.time.slice(0,5).map((dt,i)=>{const dy=new Date(dt);return`<div class="wx-fc-day"><div class="wx-fc-lbl">${i===0?'Auj.':DFR[dy.getDay()]}</div><div class="wx-fc-ico">${WI[fc.weather_code[i]]||'🌡'}</div><div class="wx-fc-tmp">${Math.round(fc.temperature_2m_max[i])}°/${Math.round(fc.temperature_2m_min[i])}°</div><div class="wx-fc-rain">${fc.precipitation_probability_max[i]}%💧</div></div>`;}).join('');
+    el.innerHTML=`<div class="wx-hdr"><div class="wx-city">📍 ${l.n}</div><div class="wx-upd">Mis à jour ${t}</div></div><div class="wx-main"><div class="wx-icon">${WI[wc]||'🌡'}</div><div><div class="wx-temp">${Math.round(c.temperature_2m)}<span class="wx-unit">°C</span></div><div class="wx-desc">${WD[wc]||''} · Ressenti ${Math.round(c.apparent_temperature)}°</div></div></div><div class="wx-details"><div class="wx-det"><div class="wx-det-val">${Math.round(c.relative_humidity_2m)}%</div>Humidité</div><div class="wx-det"><div class="wx-det-val">${Math.round(c.wind_speed_10m)}km/h</div>Vent</div><div class="wx-det"><div class="wx-det-val">${Math.round(fc.temperature_2m_max[0])}°</div>Max auj.</div><div class="wx-det"><div class="wx-det-val">${fc.precipitation_probability_max[0]}%</div>Pluie</div></div><div class="wx-fc">${fcH}</div>`;
+  }catch(e){el.innerHTML='<div style="padding:10px 13px;font-size:11px;color:var(--brown-mid);font-style:italic">⚠ Météo indisponible hors connexion</div>';}
+}
+
+// ═══ SEA CONDITIONS ══════════════════════════
+async function fetchSea(){
+  const el=document.getElementById('sea-kt');if(!el)return;
+  try{
+    const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=10.10&longitude=99.84&current=wave_height,wind_wave_height&timezone=Asia%2FBangkok'),d=await r.json();
+    const wh=d.current.wave_height,ww=d.current.wind_wave_height;
+    const cond=wh<0.5?'🟢 Mer calme':wh<1.0?'🟡 Mer légère':wh<1.5?'🟠 Mer modérée':'🔴 Mer agitée';
+    const adv=wh<0.5?'Idéal pour le snorkeling':wh<1.0?'Bonnes conditions':wh<1.5?'Snorkeling avec prudence':'Éviter les excursions bateau';
+    el.innerHTML=`<div class="sea"><div class="sea-title">🌊 Conditions mer — Koh Tao</div><div class="sea-stats"><div class="sea-stat"><div class="sea-val">${wh.toFixed(1)}m</div><div class="sea-lbl">Hauteur vagues</div></div><div class="sea-stat"><div class="sea-val">${ww.toFixed(1)}m</div><div class="sea-lbl">Vagues vent</div></div><div class="sea-stat"><div class="sea-val" style="font-size:13px">${cond}</div><div class="sea-lbl">${adv}</div></div></div></div>`;
+  }catch(e){el.innerHTML='<div class="sea"><div class="sea-title">🌊 Conditions mer — Koh Tao</div><div style="font-size:11px;color:var(--brown-mid)">Données indisponibles hors connexion</div></div>';}
+}
+
+// ═══ CURRENCY ════════════════════════════════
+let curRates={EUR:35.5,USD:33.0},curMode='EUR';
+async function fetchRates(){
+  try{const r=await fetch('https://api.exchangerate-api.com/v4/latest/THB'),d=await r.json();curRates.EUR=1/d.rates.EUR;curRates.USD=1/d.rates.USD;document.getElementById('cur-rate').textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;}
+  catch(e){document.getElementById('cur-rate').textContent=`Taux indicatifs : 1 EUR ≈ ${curRates.EUR} THB · 1 USD ≈ ${curRates.USD} THB`;}
+}
+function setCur(m,b){curMode=m;document.querySelectorAll('.cur-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const rl={EUR:'EUR',USD:'USD',THB:'THB'},rr={EUR:'THB',USD:'THB',THB:'EUR'};document.getElementById('cur-from').textContent=rl[m];document.getElementById('cur-res-lbl').textContent=rr[m];convertCur();}
+function convertCur(){const v=parseFloat(document.getElementById('cur-in').value)||0;let res;if(curMode==='EUR')res=v*curRates.EUR;else if(curMode==='USD')res=v*curRates.USD;else res=v/curRates.EUR;document.getElementById('cur-res').textContent=res>0?Math.round(res).toLocaleString('fr-FR'):'—';}
+
+// ═══ TRANSLATOR ══════════════════════════════
+let tMode='text',tDir='fr-th',lastTrans='',lastVoice='',recog=null,isRec=false;
+function setTransMode(m,b){tMode=m;document.querySelectorAll('.trans-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('trans-text-mode').style.display=m==='text'?'block':'none';document.getElementById('trans-voice-mode').style.display=m==='voice'?'block':'none';if(isRec)stopRec();}
+function setDir(d){tDir=d;document.getElementById('dir-fr').classList.toggle('active',d==='fr-th');document.getElementById('dir-th').classList.toggle('active',d==='th-fr');}
+function swapDir(){setDir(tDir==='fr-th'?'th-fr':'fr-th');}
+async function doTranslate(){
+  const txt=document.getElementById('trans-in').value.trim();if(!txt)return;
+  const el=document.getElementById('trans-out');el.className='trans-result typing';el.textContent='Traduction en cours…';
+  try{
+    const src=tDir==='fr-th'?'français':'thaï',tgt=tDir==='fr-th'?'thaï':'français';
+    const rsp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. Réponds UNIQUEMENT avec la traduction.\n\n${txt}`}]})});
+    const data=await rsp.json();lastTrans=data.content[0].text.trim();el.className='trans-result';el.textContent=lastTrans;
+  }catch(e){el.className='trans-result empty';el.textContent='Erreur — vérifiez votre connexion';}
+}
+function speakTrans(){if(!lastTrans)return;const u=new SpeechSynthesisUtterance(lastTrans);u.lang=tDir==='fr-th'?'th-TH':'fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
+function copyTrans(){if(!lastTrans)return;navigator.clipboard.writeText(lastTrans).then(()=>toast('✅ Copié !'));}
+function speakVoice(){if(!lastVoice)return;const u=new SpeechSynthesisUtterance(lastVoice);u.lang=tDir==='fr-th'?'th-TH':'fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
+function copyVoice(){if(!lastVoice)return;navigator.clipboard.writeText(lastVoice).then(()=>toast('✅ Copié !'));}
+function toggleMic(){isRec?stopRec():startRec();}
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('❌ Non supporté sur ce navigateur');return;}
+  recog=new SR();recog.lang=tDir==='fr-th'?'fr-FR':'th-TH';recog.continuous=false;recog.interimResults=false;
+  recog.onresult=async e=>{
+    const spoken=e.results[0][0].transcript;
+    const el=document.getElementById('voice-out');el.className='trans-result typing';el.textContent=`"${spoken}" — Traduction…`;
+    try{
+      const src=tDir==='fr-th'?'français':'thaï',tgt=tDir==='fr-th'?'thaï':'français';
+      const rsp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:300,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. UNIQUEMENT la traduction.\n\n${spoken}`}]})});
+      const data=await rsp.json();lastVoice=data.content[0].text.trim();el.className='trans-result';el.innerHTML=`<div style="font-size:10px;color:var(--brown-mid);margin-bottom:5px">Reconnu : "${spoken}"</div>${lastVoice}`;speakVoice();
+    }catch(e){el.textContent='Erreur de traduction';}
+    stopRec();
+  };
+  recog.onerror=()=>stopRec();recog.onend=()=>{if(isRec)stopRec();};recog.start();isRec=true;
+  document.getElementById('mic-btn').classList.add('rec');document.getElementById('mic-status').textContent='🔴 Écoute en cours…';
+}
+function stopRec(){if(recog)recog.stop();isRec=false;document.getElementById('mic-btn').classList.remove('rec');document.getElementById('mic-status').textContent='Appuyez pour parler';}
+
+// ═══ AI ══════════════════════════════════════
+const AI_SYS=`Tu es l'assistant personnel pour un voyage en famille en Thaïlande du 20 juillet au 6 août 2026.
+Destinations : Bangkok (21-24 juil, Airbnb Soi Palakun), Chiang Mai (25-28 juil, 1 Chang Moi Road Soi 2), Koh Tao (29 juil-1er août, 13/35 Moo 2), Koh Samui (1-5 août, 57/57 Moo 5 Anthong).
+Programme : Wat Pho, Grand Palais, Ayutthaya, Asiatique, sanctuaire éléphants (13600 THB), Doi Suthep, Nimman, Grand Canyon Water Park, Shark Bay (tortues), Ao Leuk Beach, Silver Beach, Big Buddha, cascades Na Muang.
+Famille : 7 personnes avec enfants. Intolérance au lactose ("mai sai nom"). Valises 7kg max, cabine uniquement.
+Réponds en français, concis et pratique.`;
+let aiHist=[];
+async function aiSend(){
+  const inp=document.getElementById('ai-in'),msg=inp.value.trim();if(!msg)return;inp.value='';
+  addAiMsg(msg,'user');aiHist.push({role:'user',content:msg});addAiMsg('…','assistant typing');
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:AI_SYS,messages:aiHist})});
+    const d=await r.json(),reply=d.content[0].text;aiHist.push({role:'assistant',content:reply});
+    document.getElementById('ai-msgs').lastChild.remove();addAiMsg(reply,'assistant');
+  }catch(e){document.getElementById('ai-msgs').lastChild.remove();addAiMsg('Erreur de connexion.','assistant');}
+}
+function addAiMsg(t,type){const m=document.getElementById('ai-msgs'),d=document.createElement('div');d.className='ai-msg '+type;d.textContent=t;m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function aiAsk(q){document.getElementById('ai-in').value=q;aiSend();goTab('prat',document.querySelectorAll('.nav-btn')[5]);}
+
+// ═══ MAP ══════════════════════════════════════
+let lmap=null,lmarkers=[];
+function initMap(){if(lmap)return;lmap=L.map('lmap',{zoomControl:true}).setView([13.75,100.52],6);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(lmap);}
+function buildMapDays(){
+  const all=[
+    ...DATA.bangkok.map((d,i)=>({key:`bkk-${i}`,l:`🏙 ${d.date.split(' ').slice(0,2).join(' ')}`})),
+    ...DATA.chiangmai.map((d,i)=>({key:`cm-${i}`,l:`🌿 ${d.date.split(' ').slice(0,2).join(' ')}`})),
+    ...DATA.kohtao.map((d,i)=>({key:`kt-${i}`,l:`🐠 ${d.date.split(' ').slice(0,2).join(' ')}`})),
+    ...DATA.kohsamui.map((d,i)=>({key:`ks-${i}`,l:`🌴 ${d.date.split(' ').slice(0,2).join(' ')}`})),
+  ];
+  document.getElementById('map-days').innerHTML=all.map(d=>`<div class="map-day-btn" onclick="showMapDay('${d.key}',this)">${d.l}</div>`).join('');
+}
+function showMapDay(k,b){
+  document.querySelectorAll('.map-day-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  initMap();lmarkers.forEach(m=>m.remove());lmarkers=[];
+  const spots=DATA.mapSpots[k]||[];if(!spots.length)return;
+  const bounds=[];
+  spots.forEach(s=>{
+    const ico=L.divIcon({className:'',html:`<div style="background:${s.c};color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.3)">📍</div>`,iconSize:[28,28]});
+    const m=L.marker([s.lat,s.lng],{icon:ico}).addTo(lmap).bindPopup(`<b>${s.n}</b>`);
+    lmarkers.push(m);bounds.push([s.lat,s.lng]);
+  });
+  if(bounds.length)lmap.fitBounds(bounds,{padding:[30,30]});
+}
+
+// ═══ ACTIVITIES + NOTES ══════════════════════
+function getActs(){return JSON.parse(localStorage.getItem('activities')||'{}');}
+function saveActs(d){localStorage.setItem('activities',JSON.stringify(d));if(window._fbReady)window._fbSet(window._fbRef(window._fbDb,'activities'),d);}
+function getNotes(){return JSON.parse(localStorage.getItem('daynotes')||'{}');}
+function saveNotes(d){localStorage.setItem('daynotes',JSON.stringify(d));if(window._fbReady)window._fbSet(window._fbRef(window._fbDb,'notes'),d);}
+function toggleAct(key){const el=document.getElementById(key),saved=getActs();el.classList.toggle('done');saved[key]=el.classList.contains('done');saveActs(saved);}
+function saveNote(dk,i){const key=`note-${dk}-${i}`,val=document.getElementById(`ni-${dk}-${i}`).value,saved=getNotes();saved[key]=val;saveNotes(saved);const b=document.querySelector(`#card-${dk}-${i} .notes-save`);if(b){b.className='notes-saved';b.textContent='✓ Sauvegardé';setTimeout(()=>{b.className='notes-save';b.textContent='Sauvegarder';},2000);}}
+
+// ═══ RENDER DAYS ═════════════════════════════
+const DC={bkk:"#E8734A",cm:"#5B8C5A",kt:"#2BBFB3",ks:"#D4A853"};
+function renderDays(days,cid,dk){
+  const color=DC[dk],c=document.getElementById(cid),aS=getActs(),nS=getNotes();
+  c.innerHTML=days.map((day,i)=>{
+    const cid2=`card-${dk}-${i}`,nk=`note-${dk}-${i}`,sn=nS[nk]||'';
+    const actsH=(day.acts&&day.acts.length)?`<div class="act-section"><div class="act-title">✅ Ce qu'on a fait</div>${day.acts.map((a,ai)=>{const ak=`act-${dk}-${i}-${ai}`,done=aS[ak]?'done':'',mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.m)}`;return`<div class="act-item ${done}" id="${ak}" onclick="toggleAct('${ak}')"><div class="act-check"></div><div class="act-lbl">${a.l}</div><a class="mbtn" href="${mu}" target="_blank" onclick="event.stopPropagation()">🗺 Maps</a></div>`;}).join('')}</div>`:'';
+    const notesH=`<div class="notes-section"><div class="notes-lbl">📝 Notes & souvenirs</div><textarea class="notes-input" id="ni-${dk}-${i}" rows="3" placeholder="On a aussi découvert… le resto était… les enfants ont adoré…">${sn}</textarea><button class="notes-save" onclick="saveNote('${dk}',${i})">Sauvegarder</button><div class="cf"></div></div>`;
+    return`<div class="day-card" id="${cid2}"><div class="day-card-hdr" onclick="this.parentElement.classList.toggle('open')"><div style="display:flex;align-items:center;gap:9px"><div class="day-dot" style="background:${color}"></div><div><div class="day-date">${day.date}</div><div class="day-title">${day.title}</div></div></div><span class="day-chev">▼</span></div><div class="day-body"><div class="tl">${day.items.map(it=>`<div class="tli"><div class="tl-dot" style="background:${color};box-shadow:0 0 0 1px ${color}"></div>${it.t?`<div class="tl-time">${it.t}</div>`:''}<div class="tl-name">${it.n}</div>${it.d?`<div class="tl-desc">${it.d.replace(/\n/g,'<br>')}</div>`:''} ${it.a?`<div class="tl-addr">📍 ${it.a}</div>`:''} ${it.al?`<div class="tip tip-red" style="margin-top:6px"><span style="font-size:13px">⚠️</span><div><div class="tip-text">${it.al}</div></div></div>`:''} ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}</div>`).join('')}</div>${day.tip?`<div class="tip tip-${day.tip.c}" style="margin-top:10px"><span style="font-size:14px">${day.tip.i}</span><div><div class="tip-lbl">${day.tip.l}</div><div>${day.tip.t}</div></div></div>`:''} ${actsH} ${notesH}</div></div>`;
+  }).join('');
+}
+
+// ═══ RENDER PRATIQUE ═════════════════════════
+function renderPrat(){
+  // Urgences
+  document.getElementById('emergencies').innerHTML=DATA.urgences.map(u=>`<div class="em-card"><div><div class="em-name">${u.n}</div>${u.note?`<div class="em-note">${u.note}</div>`:''}</div><a class="call-btn" href="tel:${u.num}">📞 ${u.num}</a></div>`).join('');
+  // Phrases
+  const cats=[...new Set(DATA.phrases.map(p=>p.c))];
+  document.getElementById('phrases').innerHTML=cats.map(cat=>`<div style="margin-bottom:3px"><div style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${cat}</div>${DATA.phrases.filter(p=>p.c===cat).map(p=>`<div class="ph-item"><div class="ph-fr">${p.f}</div><div class="ph-th">${p.t}</div><button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button><button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button></div>`).join('')}</div>`).join('');
+  // Bag
+  const bs=JSON.parse(localStorage.getItem('bag_checks')||'{}');
+  document.getElementById('bag-list').innerHTML=DATA.bagages.map((it,i)=>{const k=`bag-${i}`,ch=bs[k]?'checked':'';return`<div class="ck-item ${ch}" onclick="toggleBag(this,'${k}')"><div class="ck-box"></div><div><div class="ck-lbl">${it.l}</div><div class="ck-cat">${it.c}</div>${parseFloat(it.kg)>0?`<div class="ck-kg">~${it.kg} kg</div>`:''}</div></div>`;}).join('');
+  updBagProg();
+  // Vaccins
+  document.getElementById('vaccins').innerHTML=DATA.vaccins.map(v=>`<div class="info-card"><div class="info-title">${v.n}<span class="badge ${v.s==='green'?'b-green':v.s==='grey'?'b-grey':'b-orange'}">${v.s==='green'?'Recommandé':v.s==='grey'?'Optionnel':'À vérifier'}</span></div><div class="info-body">${v.r}</div></div>`).join('');
+  // Apps
+  document.getElementById('apps').innerHTML=DATA.apps.map(a=>`<div class="app-item"><div class="app-icon">${a.i}</div><div><div class="app-name">${a.n}</div><div class="app-desc">${a.d}</div><span class="app-bdg ${a.off?'app-off':'app-on'}">${a.off?'✓ Offline':'Connexion requise'}</span></div></div>`).join('');
+}
+
+// ═══ BAG ══════════════════════════════════════
+function toggleBag(el,k){el.classList.toggle('checked');const s=JSON.parse(localStorage.getItem('bag_checks')||'{}');s[k]=el.classList.contains('checked');localStorage.setItem('bag_checks',JSON.stringify(s));updBagProg();}
+function updBagProg(){const s=JSON.parse(localStorage.getItem('bag_checks')||'{}'),tot=DATA.bagages.length,done=Object.values(s).filter(Boolean).length,pct=tot>0?Math.round(done/tot*100):0;const b=document.getElementById('bag-bar'),p=document.getElementById('bag-prog');if(b)b.style.width=pct+'%';if(p)p.textContent=`${done} / ${tot} cochés`;}
+
+// ═══ PHRASES ══════════════════════════════════
+function spkPhrase(t){const u=new SpeechSynthesisUtterance(t);u.lang='th-TH';u.rate=0.8;speechSynthesis.speak(u);}
+function cpyPhrase(b,t){navigator.clipboard.writeText(t).then(()=>{b.textContent='✓ Copié';b.classList.add('copied');setTimeout(()=>{b.textContent='Copier';b.classList.remove('copied');},1500)});}
+
+// ═══ NOTIFICATIONS ════════════════════════════
+function schedNotifs(){
+  if(!('Notification' in window))return;
+  Notification.requestPermission().then(p=>{
+    if(p!=='granted')return;
+    [{d:'2026-07-25T08:30:00',m:'✈ Aujourd\'hui : vol Bangkok → Chiang Mai à 10h15. Check-out avant 11h !'},{d:'2026-07-26T07:30:00',m:'🐘 Aujourd\'hui : sanctuaire d\'éléphants ! 08h00.'},{d:'2026-07-29T08:00:00',m:'✈ Aujourd\'hui : vol CNX → Surat Thani à 10h40. Check-out avant 10h !'},{d:'2026-07-30T07:00:00',m:'🐢 Ce matin : Shark Bay ! Partir avant 08h pour voir les tortues.'},{d:'2026-08-01T09:00:00',m:'🚢 Aujourd\'hui : ferry Mae Haad → Koh Samui à 11h30. Check-out avant 10h !'},{d:'2026-08-05T12:00:00',m:'✈ Aujourd\'hui : vol Koh Samui → Bangkok à 14h30.'},{d:'2026-08-06T08:00:00',m:'✈ Aujourd\'hui : vol retour Bangkok → Paris CDG à 11h25 !'}]
+    .forEach(r=>{const t=new Date(r.d)-new Date();if(t>0)setTimeout(()=>new Notification('🇹🇭 Thaïlande 2026',{body:r.m}),t);});
+  });
+}
+
+// ═══ PDF RECAP ════════════════════════════════
+function makeRecap(){
+  const{jsPDF}=window.jspdf,doc=new jsPDF(),acts=getActs(),notes=getNotes();
+  doc.setFontSize(20);doc.setTextColor(232,115,74);doc.text('Thaïlande 2026 — Récap du voyage',20,25);
+  doc.setFontSize(10);doc.setTextColor(120,120,120);doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`,20,33);
+  let y=45;
+  const all=[...DATA.bangkok.map((d,i)=>({...d,key:`bkk-${i}`})),...DATA.chiangmai.map((d,i)=>({...d,key:`cm-${i}`})),...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`})),...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`}))];
+  all.forEach(day=>{
+    if(y>260){doc.addPage();y=20;}
+    doc.setFontSize(12);doc.setTextColor(232,115,74);doc.text(`${day.date} — ${day.title}`,20,y);y+=7;
+    (day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]).forEach(a=>{doc.setFontSize(10);doc.setTextColor(91,140,90);doc.text(`✓ ${a.l}`,25,y);y+=5;});
+    const n=notes[`note-${day.key}`];if(n){doc.setFontSize(10);doc.setTextColor(60,60,60);doc.splitTextToSize(n,165).forEach(l=>{doc.text(l,25,y);y+=5;});}
+    y+=3;
+  });
+  doc.save('Thailande2026_recap.pdf');toast('✅ PDF généré !');
+}
+
+// ═══ FIREBASE ═════════════════════════════════
+function openFbModal(){document.getElementById('fb-url').value=localStorage.getItem('fb_databaseURL')||'';document.getElementById('fb-key').value=localStorage.getItem('fb_apiKey')||'';document.getElementById('fb-pid').value=localStorage.getItem('fb_projectId')||'';document.getElementById('fb-aid').value=localStorage.getItem('fb_appId')||'';document.getElementById('fb-modal').classList.add('open');}
+function saveFb(){['databaseURL','apiKey','projectId','appId'].forEach((k,i)=>{const v=[document.getElementById('fb-url'),document.getElementById('fb-key'),document.getElementById('fb-pid'),document.getElementById('fb-aid')][i].value.trim();localStorage.setItem('fb_'+k,v);});localStorage.setItem('fb_authDomain',document.getElementById('fb-pid').value.trim()+'.firebaseapp.com');toast('✅ Firebase configuré — rechargement…');setTimeout(()=>location.reload(),1500);}
+function syncFb(){if(!window._fbReady)return;window._fbOnValue(window._fbRef(window._fbDb,'activities'),s=>{if(s.val())localStorage.setItem('activities',JSON.stringify(s.val()));});window._fbOnValue(window._fbRef(window._fbDb,'notes'),s=>{if(s.val())localStorage.setItem('daynotes',JSON.stringify(s.val()));});}
+
+// Firebase init (si configuré)
+async function initFirebase(){
+  const cfg={apiKey:localStorage.getItem('fb_apiKey')||'',authDomain:localStorage.getItem('fb_authDomain')||'',databaseURL:localStorage.getItem('fb_databaseURL')||'',projectId:localStorage.getItem('fb_projectId')||''};
+  if(!cfg.databaseURL)return;
+  try{
+    const{initializeApp}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+    const{getDatabase,ref,set,onValue}=await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+    const app=initializeApp(cfg);const db=getDatabase(app);
+    window._fbDb=db;window._fbRef=ref;window._fbSet=set;window._fbOnValue=onValue;window._fbReady=true;
+    syncFb();console.log('Firebase ✓');
+  }catch(e){console.warn('Firebase:',e.message);}
+}
+
+// ═══ NAV ══════════════════════════════════════
+function goTab(k,b){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+k).classList.add('active');b.classList.add('active');window.scrollTo(0,0);if(['bkk','cm','kt','ks'].includes(k)&&!wxL[k]){wxL[k]=true;fetchWx(k);if(k==='kt')fetchSea();}if(k==='prat'&&!lmap){setTimeout(()=>{initMap();buildMapDays();},300);}}
+
+// ═══ TOAST ════════════════════════════════════
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// ═══ INIT ══════════════════════════════════════
+function initApp(){
+  renderDays(DATA.bangkok,'days-bkk','bkk');
+  renderDays(DATA.chiangmai,'days-cm','cm');
+  renderDays(DATA.kohtao,'days-kt','kt');
+  renderDays(DATA.kohsamui,'days-ks','ks');
+  renderPrat();
+  updCdown();updThaiTime();
+  setInterval(updCdown,60000);setInterval(updThaiTime,30000);
+  fetchWx('bkk');wxL['bkk']=true;
+  fetchRates();
+  initFirebase();
+  schedNotifs();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+  setTimeout(()=>{const f=document.querySelector('.day-card');if(f)f.classList.add('open');},100);
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const pin=localStorage.getItem('app_pin')||DEF_PIN;
+  if(!pin)initApp();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#E8734A">
+<title>Thaïlande 2026 — Suivre le voyage</title>
+<style>
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --coral:     #E8734A;
+  --coral-lt:  #FAE4DB;
+  --coral-dk:  #C85A32;
+  --turq:      #2BBFB3;
+  --turq-lt:   #E5F9F8;
+  --gold:      #D4A853;
+  --gold-lt:   #F5E6C0;
+  --sand:      #FFF8F0;
+  --sand-mid:  #F5EDDE;
+  --brown:     #3D2B1F;
+  --brown-mid: #7A5C47;
+  --green:     #5B8C5A;
+  --green-lt:  #EAF4EA;
+  --white:     #FFFFFF;
+  --grey:      #AAAAAA;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--sand);
+  color: var(--brown);
+  min-height: 100vh;
+}
+button { border: none; cursor: pointer; font: inherit; }
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+.header {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dk) 100%);
+  padding: 28px 20px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.header-flag { font-size: 36px; margin-bottom: 8px; }
+.header-title { font-size: 26px; font-weight: 800; color: var(--white); letter-spacing: -.3px; }
+.header-sub { font-size: 13px; color: rgba(255,255,255,.8); margin-top: 4px; }
+.header-countdown {
+  display: inline-block;
+  background: var(--gold); color: var(--brown);
+  border-radius: 20px; padding: 6px 16px;
+  font-size: 13px; font-weight: 700;
+  margin-top: 14px;
+}
+
+/* ═══════════════════════════════════════
+   CURRENT DESTINATION BANNER
+═══════════════════════════════════════ */
+.current-banner {
+  margin: 16px 16px 0;
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.1);
+}
+.current-banner-icon { font-size: 32px; flex-shrink: 0; }
+.current-banner-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; opacity: .8; color: var(--white); }
+.current-banner-dest { font-size: 20px; font-weight: 800; color: var(--white); margin-top: 2px; }
+.current-banner-dates { font-size: 12px; color: rgba(255,255,255,.85); margin-top: 2px; }
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #4AE88A; margin-left: auto; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(74,232,138,.3);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(74,232,138,.3); }
+  50% { box-shadow: 0 0 0 6px rgba(74,232,138,.1); }
+}
+
+/* ═══════════════════════════════════════
+   MAIN
+═══════════════════════════════════════ */
+.main { padding: 16px 16px 40px; }
+
+/* ═══════════════════════════════════════
+   DESTINATION SECTION
+═══════════════════════════════════════ */
+.dest-section { margin-bottom: 24px; }
+.dest-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px; padding: 0 4px;
+}
+.dest-header-dot {
+  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+}
+.dest-header-name { font-size: 17px; font-weight: 800; color: var(--brown); }
+.dest-header-dates { font-size: 12px; color: var(--brown-mid); margin-top: 1px; }
+.dest-status-badge {
+  margin-left: auto; font-size: 10px; font-weight: 700;
+  padding: 3px 10px; border-radius: 10px; white-space: nowrap;
+}
+.badge-past    { background: var(--sand-mid); color: var(--grey); }
+.badge-current { background: var(--green-lt); color: var(--green); }
+.badge-future  { background: var(--coral-lt); color: var(--coral-dk); }
+
+/* ═══════════════════════════════════════
+   DAY ROW
+═══════════════════════════════════════ */
+.day-row { margin-bottom: 10px; }
+.day-label {
+  font-size: 11px; font-weight: 700; color: var(--brown-mid);
+  text-transform: uppercase; letter-spacing: .4px;
+  margin-bottom: 6px; padding: 0 2px;
+}
+
+/* ═══════════════════════════════════════
+   PHOTO GRID
+═══════════════════════════════════════ */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.photo-grid.one   { grid-template-columns: 1fr; }
+.photo-grid.two   { grid-template-columns: 1fr 1fr; }
+
+.photo-cell {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--sand-mid);
+  overflow: hidden;
+  cursor: pointer;
+}
+.photo-cell img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .3s;
+}
+.photo-cell:hover img { transform: scale(1.04); }
+
+.photo-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,.55));
+  color: white; font-size: 10px; padding: 16px 8px 6px;
+  line-height: 1.3;
+}
+.photo-count-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 22px; font-weight: 800;
+}
+
+/* Empty day placeholder */
+.day-empty {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  color: var(--grey);
+  font-size: 13px;
+  border: 1.5px dashed #e0d6cc;
+}
+.day-empty-icon { font-size: 24px; margin-bottom: 6px; opacity: .5; }
+
+/* ═══════════════════════════════════════
+   LIGHTBOX
+═══════════════════════════════════════ */
+.lightbox {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,.92);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lightbox-img {
+  max-width: 100%; max-height: 75vh;
+  object-fit: contain; border-radius: 8px;
+}
+.lightbox-caption {
+  color: white; font-size: 14px; margin-top: 14px;
+  text-align: center; padding: 0 24px; line-height: 1.5;
+}
+.lightbox-date {
+  color: rgba(255,255,255,.5); font-size: 12px; margin-top: 6px; text-align: center;
+}
+.lightbox-close {
+  position: absolute; top: 16px; right: 20px;
+  color: white; font-size: 28px; background: none; line-height: 1;
+}
+.lightbox-nav {
+  display: flex; gap: 24px; margin-top: 20px;
+}
+.lightbox-nav button {
+  background: rgba(255,255,255,.15); color: white;
+  border-radius: 50%; width: 44px; height: 44px;
+  font-size: 18px; display: flex; align-items: center; justify-content: center;
+}
+.lightbox-counter {
+  color: rgba(255,255,255,.5); font-size: 12px;
+  text-align: center; margin-top: 10px;
+}
+
+/* ═══════════════════════════════════════
+   ADMIN PANEL (caché pour les proches)
+═══════════════════════════════════════ */
+.admin-toggle {
+  position: fixed; bottom: 24px; right: 20px; z-index: 100;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--coral); color: white; font-size: 22px;
+  box-shadow: 0 4px 16px rgba(232,115,74,.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.admin-panel {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.6);
+  display: none; align-items: flex-end;
+}
+.admin-panel.open { display: flex; }
+.admin-sheet {
+  background: var(--white);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 40px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.admin-title {
+  font-size: 18px; font-weight: 800; color: var(--brown);
+  margin-bottom: 20px; text-align: center;
+}
+.admin-section-label {
+  font-size: 11px; font-weight: 700; color: var(--brown-mid);
+  text-transform: uppercase; letter-spacing: .5px;
+  margin-bottom: 8px; margin-top: 16px;
+}
+
+/* Destination selector */
+.dest-pills {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
+}
+.dest-pill {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 2px solid transparent; background: var(--sand-mid); color: var(--brown-mid);
+  transition: all .15s;
+}
+.dest-pill.selected { border-color: var(--coral); background: var(--coral-lt); color: var(--coral-dk); }
+
+/* Day selector */
+.day-pills {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
+}
+.day-pill {
+  padding: 5px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;
+  border: 2px solid transparent; background: var(--sand-mid); color: var(--brown-mid);
+  transition: all .15s;
+}
+.day-pill.selected { border-color: var(--turq); background: var(--turq-lt); color: var(--turq); }
+
+/* Upload zone */
+.upload-zone {
+  border: 2.5px dashed #d0c4b8;
+  border-radius: 14px; padding: 28px 20px;
+  text-align: center; cursor: pointer;
+  background: var(--sand); transition: all .2s;
+  margin-bottom: 12px;
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--coral); background: var(--coral-lt);
+}
+.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-zone-text { font-size: 14px; color: var(--brown-mid); }
+.upload-zone-sub { font-size: 12px; color: var(--grey); margin-top: 4px; }
+input[type=file] { display: none; }
+
+/* Caption input */
+.caption-input {
+  width: 100%; border: 1.5px solid #e0d6cc;
+  border-radius: 10px; padding: 12px 14px;
+  font-size: 14px; color: var(--brown);
+  background: var(--white); outline: none;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.caption-input:focus { border-color: var(--coral); }
+
+/* Upload preview */
+.upload-previews {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.upload-preview {
+  position: relative; width: 70px; height: 70px;
+  border-radius: 8px; overflow: hidden;
+}
+.upload-preview img { width: 100%; height: 100%; object-fit: cover; }
+.upload-preview-remove {
+  position: absolute; top: 2px; right: 2px;
+  background: rgba(0,0,0,.55); color: white;
+  border-radius: 50%; width: 18px; height: 18px;
+  font-size: 11px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* Publish btn */
+.publish-btn {
+  width: 100%; padding: 15px; border-radius: 14px;
+  background: var(--coral); color: white;
+  font-size: 16px; font-weight: 700;
+  margin-top: 16px;
+  transition: background .15s;
+}
+.publish-btn:disabled { background: var(--grey); }
+.publish-btn:not(:disabled):hover { background: var(--coral-dk); }
+
+/* Cloudinary config */
+.config-box {
+  background: var(--sand-mid); border-radius: 10px;
+  padding: 14px; margin-bottom: 12px;
+}
+.config-label { font-size: 12px; font-weight: 700; color: var(--brown-mid); margin-bottom: 6px; }
+.config-input {
+  width: 100%; border: 1.5px solid #e0d6cc;
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 13px; font-family: monospace;
+  background: var(--white); outline: none; color: var(--brown);
+  margin-bottom: 6px;
+}
+.config-input:focus { border-color: var(--turq); }
+.config-save {
+  background: var(--turq); color: white; border-radius: 8px;
+  padding: 8px 16px; font-size: 13px; font-weight: 700;
+  width: 100%;
+}
+
+/* Manage existing photos */
+.existing-photo {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--sand-mid);
+}
+.existing-photo img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+.existing-photo-info { flex: 1; }
+.existing-photo-day { font-size: 12px; font-weight: 700; color: var(--brown); }
+.existing-photo-cap { font-size: 11px; color: var(--brown-mid); }
+.existing-photo-del {
+  background: #FDECEA; color: #C0392B;
+  border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700;
+}
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--brown); color: white; border-radius: 20px;
+  padding: 10px 20px; font-size: 13px; font-weight: 600;
+  opacity: 0; transition: all .3s; pointer-events: none; z-index: 999;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Loading spinner */
+.spinner {
+  display: inline-block; width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Tabs for admin */
+.admin-tabs { display: flex; gap: 0; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e0d6cc; }
+.admin-tab { flex: 1; padding: 10px; font-size: 13px; font-weight: 700; text-align: center; background: var(--white); color: var(--brown-mid); }
+.admin-tab.active { background: var(--coral); color: white; }
+
+.admin-content { display: none; }
+.admin-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-flag">🇹🇭</div>
+  <div class="header-title">Thaïlande 2026</div>
+  <div class="header-sub">Bangkok · Chiang Mai · Koh Tao · Koh Samui</div>
+  <div class="header-countdown" id="countdown">Chargement…</div>
+</header>
+
+<!-- CURRENT DESTINATION -->
+<div id="current-banner"></div>
+
+<!-- MAIN TIMELINE -->
+<main class="main" id="timeline"></main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img class="lightbox-img" id="lb-img" src="" alt="">
+  <div class="lightbox-caption" id="lb-caption"></div>
+  <div class="lightbox-date" id="lb-date"></div>
+  <div class="lightbox-nav">
+    <button onclick="lbNav(-1)">←</button>
+    <button onclick="lbNav(1)">→</button>
+  </div>
+  <div class="lightbox-counter" id="lb-counter"></div>
+</div>
+
+<!-- ADMIN TOGGLE (bouton 📷 en bas à droite) -->
+<button class="admin-toggle" id="admin-toggle" onclick="toggleAdmin()" title="Ajouter des photos">📷</button>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="admin-panel" onclick="closeAdminOutside(event)">
+  <div class="admin-sheet">
+    <div class="admin-title">📷 Gérer les photos</div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('add',this)">Ajouter</button>
+      <button class="admin-tab" onclick="switchAdminTab('manage',this)">Gérer</button>
+      <button class="admin-tab" onclick="switchAdminTab('config',this)">Config</button>
+    </div>
+
+    <!-- ADD TAB -->
+    <div class="admin-content active" id="admin-add">
+      <div class="admin-section-label">Destination</div>
+      <div class="dest-pills" id="dest-pills"></div>
+
+      <div class="admin-section-label">Journée</div>
+      <div class="day-pills" id="day-pills">
+        <span style="font-size:13px;color:var(--brown-mid)">← Choisir une destination d'abord</span>
+      </div>
+
+      <div class="admin-section-label">Photos</div>
+      <div class="upload-previews" id="upload-previews"></div>
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
+           ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('dragover')">
+        <div class="upload-zone-icon">🖼</div>
+        <div class="upload-zone-text">Appuyer pour choisir des photos</div>
+        <div class="upload-zone-sub">ou glisser-déposer · JPG, PNG, HEIC</div>
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+
+      <div class="admin-section-label">Légende (optionnel)</div>
+      <textarea class="caption-input" id="caption-input" rows="2"
+        placeholder="Ex: Vue depuis Doi Suthep au lever du soleil…"></textarea>
+
+      <button class="publish-btn" id="publish-btn" onclick="publishPhotos()" disabled>
+        Publier les photos
+      </button>
+    </div>
+
+    <!-- MANAGE TAB -->
+    <div class="admin-content" id="admin-manage">
+      <div id="manage-list">
+        <div style="text-align:center;color:var(--brown-mid);padding:30px;font-size:14px">
+          Chargement…
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIG TAB -->
+    <div class="admin-content" id="admin-config">
+      <div class="config-box">
+        <div class="config-label">🔑 Cloudinary Cloud Name</div>
+        <input class="config-input" id="cfg-cloud" placeholder="ex: dxabcdef1" type="text">
+        <div class="config-label">🔑 Upload Preset (unsigned)</div>
+        <input class="config-input" id="cfg-preset" placeholder="ex: thailand_2026" type="text">
+        <button class="config-save" onclick="saveConfig()">Enregistrer la configuration</button>
+      </div>
+      <div style="font-size:12px;color:var(--brown-mid);line-height:1.6">
+        <b>Comment configurer Cloudinary :</b><br>
+        1. Créer un compte gratuit sur <b>cloudinary.com</b><br>
+        2. Copier ton <b>Cloud Name</b> (tableau de bord)<br>
+        3. Aller dans Settings → Upload → Add upload preset<br>
+        4. Choisir <b>Unsigned</b>, donner un nom (ex: thailand_2026)<br>
+        5. Coller ici et enregistrer<br><br>
+        <b>Quota gratuit :</b> 25 Go de stockage · Largement suffisant pour un voyage famille.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIG CLOUDINARY — à remplir dans l'onglet Config
+//  ou directement ici si tu préfères
+// ═══════════════════════════════════════════════════════
+let CLOUD_NAME   = localStorage.getItem('cld_cloud')  || '';
+let UPLOAD_PRESET= localStorage.getItem('cld_preset') || '';
+
+// ═══════════════════════════════════════════════════════
+//  VOYAGE DATA
+// ═══════════════════════════════════════════════════════
+const DEPART = new Date('2026-07-20T16:40:00');
+
+const DESTINATIONS = [
+  {
+    key: 'bkk', emoji: '🏙', name: 'Bangkok',
+    color: '#E8734A', colorLt: '#FAE4DB',
+    dates: '21 – 24 juillet',
+    start: new Date('2026-07-21'), end: new Date('2026-07-25'),
+    days: [
+      { key: 'bkk-1', label: 'Mar 21 juillet', short: '21 juil.' },
+      { key: 'bkk-2', label: 'Mer 22 juillet', short: '22 juil.' },
+      { key: 'bkk-3', label: 'Jeu 23 juillet — Ayutthaya', short: '23 juil.' },
+      { key: 'bkk-4', label: 'Ven 24 juillet', short: '24 juil.' },
+    ]
+  },
+  {
+    key: 'cm', emoji: '🌿', name: 'Chiang Mai',
+    color: '#5B8C5A', colorLt: '#EAF4EA',
+    dates: '25 – 28 juillet',
+    start: new Date('2026-07-25'), end: new Date('2026-07-29'),
+    days: [
+      { key: 'cm-1', label: 'Sam 25 juillet', short: '25 juil.' },
+      { key: 'cm-2', label: 'Dim 26 juillet — Éléphants 🐘', short: '26 juil.' },
+      { key: 'cm-3', label: 'Lun 27 juillet — Doi Suthep', short: '27 juil.' },
+      { key: 'cm-4', label: 'Mar 28 juillet — Water Park', short: '28 juil.' },
+    ]
+  },
+  {
+    key: 'kt', emoji: '🐠', name: 'Koh Tao',
+    color: '#2BBFB3', colorLt: '#E5F9F8',
+    dates: '29 juillet – 1er août',
+    start: new Date('2026-07-29'), end: new Date('2026-08-01'),
+    days: [
+      { key: 'kt-1', label: 'Jeu 29 juillet', short: '29 juil.' },
+      { key: 'kt-2', label: 'Ven 30 juillet — Shark Bay 🐢', short: '30 juil.' },
+      { key: 'kt-3', label: 'Sam 31 juillet — Koh Nang Yuan', short: '31 juil.' },
+      { key: 'kt-4', label: 'Dim 1er août', short: '1er août' },
+    ]
+  },
+  {
+    key: 'ks', emoji: '🌴', name: 'Koh Samui',
+    color: '#D4A853', colorLt: '#F5E6C0',
+    dates: '1 – 5 août',
+    start: new Date('2026-08-01'), end: new Date('2026-08-06'),
+    days: [
+      { key: 'ks-1', label: 'Lun 1er août', short: '1er août' },
+      { key: 'ks-2', label: 'Mar 2 août — Silver Beach', short: '2 août' },
+      { key: 'ks-3', label: 'Mer 3 août — Tour de l\'île', short: '3 août' },
+      { key: 'ks-4', label: 'Jeu 4 août — Plage', short: '4 août' },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+//  PHOTO STORAGE — localStorage (remplacer par API plus tard)
+//  Format: { url, caption, destKey, dayKey, uploadedAt }
+// ═══════════════════════════════════════════════════════
+function getPhotos() {
+  return JSON.parse(localStorage.getItem('trip_photos') || '[]');
+}
+function savePhotos(photos) {
+  localStorage.setItem('trip_photos', JSON.stringify(photos));
+}
+
+// ═══════════════════════════════════════════════════════
+//  COUNTDOWN
+// ═══════════════════════════════════════════════════════
+function updateCountdown() {
+  const now = new Date();
+  const diff = DEPART - now;
+  let text;
+  if (diff <= 0) {
+    const daysSince = Math.floor((now - DEPART) / (1000*60*60*24));
+    text = daysSince === 0 ? '✈ Départ aujourd\'hui !' : `Jour ${daysSince} du voyage`;
+  } else {
+    const days = Math.floor(diff / (1000*60*60*24));
+    text = days === 0 ? 'Départ dans quelques heures !' : `J – ${days} avant le départ`;
+  }
+  document.getElementById('countdown').textContent = text;
+}
+
+// ═══════════════════════════════════════════════════════
+//  CURRENT DESTINATION BANNER
+// ═══════════════════════════════════════════════════════
+function renderCurrentBanner() {
+  const now = new Date();
+  let current = null;
+  for (const d of DESTINATIONS) {
+    if (now >= d.start && now < d.end) { current = d; break; }
+  }
+  const banner = document.getElementById('current-banner');
+  if (!current) {
+    if (now < DEPART) {
+      banner.innerHTML = `<div class="current-banner" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47);margin-bottom:0">
+        <span class="current-banner-icon">✈️</span>
+        <div><div class="current-banner-label">Prochain départ</div>
+        <div class="current-banner-dest">Paris → Bangkok</div>
+        <div class="current-banner-dates">20 juillet 2026 · 16h40 CDG</div></div>
+      </div>`;
+    }
+    return;
+  }
+  banner.innerHTML = `<div class="current-banner" style="background:linear-gradient(135deg,${current.color},${current.color}cc);margin-bottom:0">
+    <span class="current-banner-icon">${current.emoji}</span>
+    <div>
+      <div class="current-banner-label">En ce moment</div>
+      <div class="current-banner-dest">${current.name}</div>
+      <div class="current-banner-dates">${current.dates}</div>
+    </div>
+    <div class="live-dot"></div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  RENDER TIMELINE
+// ═══════════════════════════════════════════════════════
+function getStatus(dest) {
+  const now = new Date();
+  if (now >= dest.end) return 'past';
+  if (now >= dest.start) return 'current';
+  return 'future';
+}
+
+function renderTimeline() {
+  const photos = getPhotos();
+  const now = new Date();
+  const timeline = document.getElementById('timeline');
+
+  timeline.innerHTML = DESTINATIONS.map(dest => {
+    const status = getStatus(dest);
+    const statusLabel = status === 'past' ? 'Visité' : status === 'current' ? '📍 En cours' : 'À venir';
+    const statusClass = `badge-${status}`;
+
+    const daysHtml = dest.days.map(day => {
+      const dayPhotos = photos.filter(p => p.dayKey === day.key);
+
+      if (dayPhotos.length === 0) {
+        const isPast = now > new Date(dest.end);
+        return `<div class="day-row">
+          <div class="day-label">${day.label}</div>
+          <div class="day-empty">
+            <div class="day-empty-icon">${isPast ? '📷' : '🗓'}</div>
+            ${isPast ? 'Aucune photo pour cette journée' : 'Photos à venir…'}
+          </div>
+        </div>`;
+      }
+
+      // Grid layout based on count
+      const count = dayPhotos.length;
+      const gridClass = count === 1 ? 'one' : count === 2 ? 'two' : '';
+      const shown = Math.min(count, 5);
+      const extra = count - shown;
+
+      const cells = dayPhotos.slice(0, shown).map((p, i) => {
+        const isLast = i === shown - 1 && extra > 0;
+        return `<div class="photo-cell" onclick="openLightbox('${day.key}',${i})">
+          <img src="${p.url}" alt="${p.caption || ''}" loading="lazy">
+          ${p.caption && i === 0 ? `<div class="photo-caption">${p.caption}</div>` : ''}
+          ${isLast ? `<div class="photo-count-overlay">+${extra + 1}</div>` : ''}
+        </div>`;
+      }).join('');
+
+      return `<div class="day-row">
+        <div class="day-label">${day.label}</div>
+        <div class="photo-grid ${gridClass}">${cells}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="dest-section">
+      <div class="dest-header">
+        <div class="dest-header-dot" style="background:${dest.color}"></div>
+        <div>
+          <div class="dest-header-name">${dest.emoji} ${dest.name}</div>
+          <div class="dest-header-dates">${dest.dates}</div>
+        </div>
+        <span class="dest-status-badge ${statusClass}">${statusLabel}</span>
+      </div>
+      ${daysHtml}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  LIGHTBOX
+// ═══════════════════════════════════════════════════════
+let lbPhotos = [], lbIndex = 0;
+
+function openLightbox(dayKey, startIndex) {
+  const photos = getPhotos().filter(p => p.dayKey === dayKey);
+  if (!photos.length) return;
+  lbPhotos = photos;
+  lbIndex = startIndex;
+  showLbPhoto();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function showLbPhoto() {
+  const p = lbPhotos[lbIndex];
+  document.getElementById('lb-img').src = p.url;
+  document.getElementById('lb-caption').textContent = p.caption || '';
+  document.getElementById('lb-date').textContent = p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '';
+  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${lbPhotos.length}`;
+}
+
+function lbNav(dir) {
+  lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length;
+  showLbPhoto();
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+});
+
+// Swipe support
+let touchStartX = 0;
+document.getElementById('lightbox').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.getElementById('lightbox').addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) lbNav(diff > 0 ? 1 : -1);
+});
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN — TOGGLE & TABS
+// ═══════════════════════════════════════════════════════
+function toggleAdmin() {
+  const panel = document.getElementById('admin-panel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    loadConfig();
+    renderManageList();
+  }
+}
+
+function closeAdminOutside(e) {
+  if (e.target === document.getElementById('admin-panel')) {
+    document.getElementById('admin-panel').classList.remove('open');
+  }
+}
+
+function switchAdminTab(tab, btn) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('admin-' + tab).classList.add('active');
+  if (tab === 'manage') renderManageList();
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN — DESTINATION & DAY SELECTOR
+// ═══════════════════════════════════════════════════════
+let selectedDest = null, selectedDay = null, pendingFiles = [];
+
+function renderDestPills() {
+  document.getElementById('dest-pills').innerHTML = DESTINATIONS.map(d => `
+    <button class="dest-pill ${selectedDest === d.key ? 'selected' : ''}"
+      onclick="selectDest('${d.key}')">${d.emoji} ${d.name}</button>
+  `).join('');
+}
+
+function selectDest(key) {
+  selectedDest = key;
+  selectedDay = null;
+  renderDestPills();
+  renderDayPills();
+  updatePublishBtn();
+}
+
+function renderDayPills() {
+  if (!selectedDest) return;
+  const dest = DESTINATIONS.find(d => d.key === selectedDest);
+  document.getElementById('day-pills').innerHTML = dest.days.map(day => `
+    <button class="day-pill ${selectedDay === day.key ? 'selected' : ''}"
+      onclick="selectDay('${day.key}')">${day.short}</button>
+  `).join('');
+}
+
+function selectDay(key) {
+  selectedDay = key;
+  renderDayPills();
+  updatePublishBtn();
+}
+
+function updatePublishBtn() {
+  const btn = document.getElementById('publish-btn');
+  btn.disabled = !(selectedDest && selectedDay && pendingFiles.length > 0);
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN — FILE HANDLING
+// ═══════════════════════════════════════════════════════
+function handleFiles(files) {
+  for (const f of files) {
+    if (f.type.startsWith('image/')) pendingFiles.push(f);
+  }
+  renderPreviews();
+  updatePublishBtn();
+}
+
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+}
+
+function renderPreviews() {
+  const container = document.getElementById('upload-previews');
+  container.innerHTML = pendingFiles.map((f, i) => {
+    const url = URL.createObjectURL(f);
+    return `<div class="upload-preview">
+      <img src="${url}" alt="">
+      <div class="upload-preview-remove" onclick="removeFile(${i})">✕</div>
+    </div>`;
+  }).join('');
+}
+
+function removeFile(i) {
+  pendingFiles.splice(i, 1);
+  renderPreviews();
+  updatePublishBtn();
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN — PUBLISH (Cloudinary upload)
+// ═══════════════════════════════════════════════════════
+async function publishPhotos() {
+  if (!CLOUD_NAME || !UPLOAD_PRESET) {
+    showToast('⚙️ Configure Cloudinary dans l\'onglet Config');
+    switchAdminTab('config', document.querySelectorAll('.admin-tab')[2]);
+    return;
+  }
+
+  const btn = document.getElementById('publish-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Envoi en cours…';
+
+  const caption = document.getElementById('caption-input').value.trim();
+  const photos = getPhotos();
+
+  try {
+    for (const file of pendingFiles) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      formData.append('folder', 'thailande2026');
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+        method: 'POST', body: formData
+      });
+
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json();
+
+      photos.push({
+        url: data.secure_url,
+        caption,
+        destKey: selectedDest,
+        dayKey: selectedDay,
+        uploadedAt: new Date().toISOString(),
+        publicId: data.public_id,
+      });
+    }
+
+    savePhotos(photos);
+    showToast(`✅ ${pendingFiles.length} photo${pendingFiles.length > 1 ? 's' : ''} publiée${pendingFiles.length > 1 ? 's' : ''} !`);
+
+    // Reset
+    pendingFiles = [];
+    document.getElementById('caption-input').value = '';
+    renderPreviews();
+    updatePublishBtn();
+    renderTimeline();
+    document.getElementById('admin-panel').classList.remove('open');
+
+  } catch (err) {
+    showToast('❌ Erreur d\'upload — vérifie la configuration');
+    btn.disabled = false;
+    btn.textContent = 'Publier les photos';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN — MANAGE LIST
+// ═══════════════════════════════════════════════════════
+function renderManageList() {
+  const photos = getPhotos();
+  const container = document.getElementById('manage-list');
+
+  if (photos.length === 0) {
+    container.innerHTML = `<div style="text-align:center;color:var(--brown-mid);padding:30px;font-size:14px">
+      Aucune photo publiée pour l'instant
+    </div>`;
+    return;
+  }
+
+  // Group by dest
+  let html = '';
+  for (const dest of DESTINATIONS) {
+    const destPhotos = photos.filter(p => p.destKey === dest.key);
+    if (!destPhotos.length) continue;
+    html += `<div style="font-size:13px;font-weight:700;color:${dest.color};margin:16px 0 8px">${dest.emoji} ${dest.name}</div>`;
+    html += destPhotos.map((p, globalIdx) => {
+      const idx = photos.indexOf(p);
+      const dayLabel = DESTINATIONS.flatMap(d => d.days).find(d => d.key === p.dayKey)?.label || p.dayKey;
+      return `<div class="existing-photo">
+        <img src="${p.url}" alt="">
+        <div class="existing-photo-info">
+          <div class="existing-photo-day">${dayLabel}</div>
+          <div class="existing-photo-cap">${p.caption || '(sans légende)'}</div>
+        </div>
+        <button class="existing-photo-del" onclick="deletePhoto(${idx})">Suppr.</button>
+      </div>`;
+    }).join('');
+  }
+  container.innerHTML = html;
+}
+
+function deletePhoto(idx) {
+  const photos = getPhotos();
+  photos.splice(idx, 1);
+  savePhotos(photos);
+  renderTimeline();
+  renderManageList();
+  showToast('Photo supprimée');
+}
+
+// ═══════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════
+function loadConfig() {
+  document.getElementById('cfg-cloud').value  = localStorage.getItem('cld_cloud')  || '';
+  document.getElementById('cfg-preset').value = localStorage.getItem('cld_preset') || '';
+}
+
+function saveConfig() {
+  CLOUD_NAME    = document.getElementById('cfg-cloud').value.trim();
+  UPLOAD_PRESET = document.getElementById('cfg-preset').value.trim();
+  localStorage.setItem('cld_cloud',  CLOUD_NAME);
+  localStorage.setItem('cld_preset', UPLOAD_PRESET);
+  showToast('✅ Configuration enregistrée');
+}
+
+// ═══════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+updateCountdown();
+setInterval(updateCountdown, 60000);
+renderCurrentBanner();
+renderTimeline();
+renderDestPills();
+
+// Keyboard: escape closes lightbox/panel
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeLightbox();
+    document.getElementById('admin-panel').classList.remove('open');
+  }
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+</script>
+</body>
+</html>
