@@ -4,990 +4,556 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#E8734A">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Thaïlande 2026 — Suivre le voyage</title>
 <style>
-/* ═══════════════════════════════════════
-   TOKENS
-═══════════════════════════════════════ */
-:root {
-  --coral:     #E8734A;
-  --coral-lt:  #FAE4DB;
-  --coral-dk:  #C85A32;
-  --turq:      #2BBFB3;
-  --turq-lt:   #E5F9F8;
-  --gold:      #D4A853;
-  --gold-lt:   #F5E6C0;
-  --sand:      #FFF8F0;
-  --sand-mid:  #F5EDDE;
-  --brown:     #3D2B1F;
-  --brown-mid: #7A5C47;
-  --green:     #5B8C5A;
-  --green-lt:  #EAF4EA;
-  --white:     #FFFFFF;
-  --grey:      #AAAAAA;
+:root{
+  --coral:#E8734A;--coral-lt:#FAE4DB;--coral-dk:#C85A32;
+  --turq:#2BBFB3;--turq-lt:#E5F9F8;--turq-dk:#1E9990;
+  --gold:#D4A853;--gold-lt:#F5E6C0;
+  --sand:#FFF8F0;--sand-mid:#F5EDDE;
+  --brown:#3D2B1F;--brown-mid:#7A5C47;
+  --green:#5B8C5A;--green-lt:#EAF4EA;
+  --white:#FFFFFF;--grey:#AAAAAA;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--sand);
-  color: var(--brown);
-  min-height: 100vh;
-}
-button { border: none; cursor: pointer; font: inherit; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--sand);color:var(--brown);min-height:100vh}
+button{border:none;cursor:pointer;font:inherit}
+a{color:inherit;text-decoration:none}
 
-/* ═══════════════════════════════════════
-   HEADER
-═══════════════════════════════════════ */
-.header {
-  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-dk) 100%);
-  padding: 28px 20px 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.header::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.header-flag { font-size: 36px; margin-bottom: 8px; }
-.header-title { font-size: 26px; font-weight: 800; color: var(--white); letter-spacing: -.3px; }
-.header-sub { font-size: 13px; color: rgba(255,255,255,.8); margin-top: 4px; }
-.header-countdown {
-  display: inline-block;
-  background: var(--gold); color: var(--brown);
-  border-radius: 20px; padding: 6px 16px;
-  font-size: 13px; font-weight: 700;
-  margin-top: 14px;
-}
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--coral),var(--coral-dk));padding:28px 20px 22px;text-align:center;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.header-title{font-size:28px;font-weight:800;color:var(--white);letter-spacing:-.3px;position:relative}
+.header-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:5px;position:relative}
+.header-times{display:flex;gap:8px;justify-content:center;margin-top:12px;position:relative}
+.htime{background:rgba(0,0,0,.2);color:var(--white);border-radius:12px;padding:4px 12px;font-size:12px;font-weight:700}
+.header-cdown{display:inline-block;background:var(--gold);color:var(--brown);border-radius:20px;padding:6px 18px;font-size:14px;font-weight:700;margin-top:14px;position:relative}
 
-/* ═══════════════════════════════════════
-   CURRENT DESTINATION BANNER
-═══════════════════════════════════════ */
-.current-banner {
-  margin: 16px 16px 0;
-  border-radius: 14px;
-  padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,.1);
-}
-.current-banner-icon { font-size: 32px; flex-shrink: 0; }
-.current-banner-label { font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .6px; opacity: .8; color: var(--white); }
-.current-banner-dest { font-size: 20px; font-weight: 800; color: var(--white); margin-top: 2px; }
-.current-banner-dates { font-size: 12px; color: rgba(255,255,255,.85); margin-top: 2px; }
-.live-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #4AE88A; margin-left: auto; flex-shrink: 0;
-  box-shadow: 0 0 0 3px rgba(74,232,138,.3);
-  animation: pulse 2s infinite;
-}
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(74,232,138,.3); }
-  50% { box-shadow: 0 0 0 6px rgba(74,232,138,.1); }
-}
+/* CURRENT DEST BANNER */
+.current-banner{margin:16px 16px 0;border-radius:14px;padding:15px 16px;display:flex;align-items:center;gap:13px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.current-banner-icon{font-size:30px;flex-shrink:0}
+.current-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;opacity:.8;color:var(--white)}
+.current-dest{font-size:19px;font-weight:800;color:var(--white);margin-top:2px}
+.current-dates{font-size:11px;color:rgba(255,255,255,.85);margin-top:2px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#4AE88A;margin-left:auto;flex-shrink:0;box-shadow:0 0 0 3px rgba(74,232,138,.3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(74,232,138,.3)}50%{box-shadow:0 0 0 6px rgba(74,232,138,.1)}}
 
-/* ═══════════════════════════════════════
-   MAIN
-═══════════════════════════════════════ */
-.main { padding: 16px 16px 40px; }
+/* MAIN */
+.main{padding:14px 16px 40px}
 
-/* ═══════════════════════════════════════
-   DESTINATION SECTION
-═══════════════════════════════════════ */
-.dest-section { margin-bottom: 24px; }
-.dest-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 12px; padding: 0 4px;
-}
-.dest-header-dot {
-  width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
-}
-.dest-header-name { font-size: 17px; font-weight: 800; color: var(--brown); }
-.dest-header-dates { font-size: 12px; color: var(--brown-mid); margin-top: 1px; }
-.dest-status-badge {
-  margin-left: auto; font-size: 10px; font-weight: 700;
-  padding: 3px 10px; border-radius: 10px; white-space: nowrap;
-}
-.badge-past    { background: var(--sand-mid); color: var(--grey); }
-.badge-current { background: var(--green-lt); color: var(--green); }
-.badge-future  { background: var(--coral-lt); color: var(--coral-dk); }
+/* TRANSPORT CARD */
+.transport-card{background:linear-gradient(135deg,var(--brown),var(--brown-mid));border-radius:14px;padding:14px 16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.transport-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.6);margin-bottom:6px}
+.transport-route{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.transport-city{font-size:18px;font-weight:800;color:var(--white)}
+.transport-arrow{font-size:16px;color:rgba(255,255,255,.5)}
+.transport-details{display:flex;flex-direction:column;gap:3px}
+.transport-row{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.85)}
+.transport-row span{color:rgba(255,255,255,.5);font-size:10px}
+.transport-company{display:inline-block;background:rgba(255,255,255,.15);border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--white);margin-top:5px}
 
-/* ═══════════════════════════════════════
-   DAY ROW
-═══════════════════════════════════════ */
-.day-row { margin-bottom: 10px; }
-.day-label {
-  font-size: 11px; font-weight: 700; color: var(--brown-mid);
-  text-transform: uppercase; letter-spacing: .4px;
-  margin-bottom: 6px; padding: 0 2px;
-}
+/* DEST SECTION */
+.dest-section{margin-bottom:8px}
+.dest-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:0 2px}
+.dest-header-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.dest-header-name{font-size:16px;font-weight:800;color:var(--brown)}
+.dest-header-dates{font-size:11px;color:var(--brown-mid);margin-top:1px}
+.dest-status{margin-left:auto;font-size:10px;font-weight:700;padding:3px 9px;border-radius:9px;white-space:nowrap}
+.s-past{background:var(--sand-mid);color:var(--grey)}
+.s-current{background:var(--green-lt);color:var(--green)}
+.s-future{background:var(--coral-lt);color:var(--coral-dk)}
 
-/* ═══════════════════════════════════════
-   PHOTO GRID
-═══════════════════════════════════════ */
-.photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
-  border-radius: 12px;
-  overflow: hidden;
-}
-.photo-grid.one   { grid-template-columns: 1fr; }
-.photo-grid.two   { grid-template-columns: 1fr 1fr; }
+/* AIRBNB INFO */
+.airbnb-card{background:var(--white);border-radius:10px;padding:11px 14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:flex-start;gap:10px}
+.airbnb-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.airbnb-label{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.airbnb-addr{font-size:12px;color:var(--brown);line-height:1.4}
+.airbnb-note{font-size:11px;color:var(--coral-dk);font-weight:600;margin-top:2px}
+.airbnb-maps{display:inline-flex;align-items:center;gap:4px;background:var(--turq);color:var(--white);border-radius:7px;padding:4px 10px;font-size:11px;font-weight:700;margin-top:6px;text-decoration:none}
 
-.photo-cell {
-  position: relative;
-  aspect-ratio: 1;
-  background: var(--sand-mid);
-  overflow: hidden;
-  cursor: pointer;
-}
-.photo-cell img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform .3s;
-}
-.photo-cell:hover img { transform: scale(1.04); }
+/* DAY ROW */
+.day-row{margin-bottom:8px}
+.day-date-label{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;padding:0 2px;margin-bottom:5px}
 
-.photo-caption {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,.55));
-  color: white; font-size: 10px; padding: 16px 8px 6px;
-  line-height: 1.3;
-}
-.photo-count-overlay {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,.45);
-  display: flex; align-items: center; justify-content: center;
-  color: white; font-size: 22px; font-weight: 800;
-}
+/* PHOTO GRID */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:10px;overflow:hidden}
+.photo-grid.one{grid-template-columns:1fr}
+.photo-grid.two{grid-template-columns:1fr 1fr}
+.photo-cell{position:relative;aspect-ratio:1;background:var(--sand-mid);overflow:hidden;cursor:pointer}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.photo-cell:hover img{transform:scale(1.04)}
+.photo-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:10px;padding:18px 7px 6px;line-height:1.3}
+.photo-count-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800}
+.day-empty{background:var(--white);border-radius:10px;padding:22px;text-align:center;color:var(--grey);font-size:12px;border:1.5px dashed #e0d6cc}
+.day-empty-icon{font-size:22px;margin-bottom:5px;opacity:.4}
 
-/* Empty day placeholder */
-.day-empty {
-  background: var(--white);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  color: var(--grey);
-  font-size: 13px;
-  border: 1.5px dashed #e0d6cc;
-}
-.day-empty-icon { font-size: 24px; margin-bottom: 6px; opacity: .5; }
+/* REACTIONS */
+.reactions-bar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--white);border-radius:0 0 10px 10px;margin-top:-3px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.reaction-btn{display:flex;align-items:center;gap:4px;background:var(--sand-mid);border-radius:14px;padding:4px 10px;font-size:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.reaction-btn.liked{background:var(--coral-lt);color:var(--coral-dk)}
+.reaction-count{font-size:11px;font-weight:700;color:var(--brown-mid)}
+.comment-input-row{display:flex;gap:7px;flex:1}
+.comment-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:18px;padding:5px 12px;font-size:12px;outline:none;font-family:inherit;background:var(--sand);color:var(--brown)}
+.comment-input:focus{border-color:var(--coral)}
+.comment-send{background:var(--coral);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
 
-/* ═══════════════════════════════════════
-   LIGHTBOX
-═══════════════════════════════════════ */
-.lightbox {
-  position: fixed; inset: 0; z-index: 999;
-  background: rgba(0,0,0,.92);
-  display: none; flex-direction: column;
-  align-items: center; justify-content: center;
-}
-.lightbox.open { display: flex; }
-.lightbox-img {
-  max-width: 100%; max-height: 75vh;
-  object-fit: contain; border-radius: 8px;
-}
-.lightbox-caption {
-  color: white; font-size: 14px; margin-top: 14px;
-  text-align: center; padding: 0 24px; line-height: 1.5;
-}
-.lightbox-date {
-  color: rgba(255,255,255,.5); font-size: 12px; margin-top: 6px; text-align: center;
-}
-.lightbox-close {
-  position: absolute; top: 16px; right: 20px;
-  color: white; font-size: 28px; background: none; line-height: 1;
-}
-.lightbox-nav {
-  display: flex; gap: 24px; margin-top: 20px;
-}
-.lightbox-nav button {
-  background: rgba(255,255,255,.15); color: white;
-  border-radius: 50%; width: 44px; height: 44px;
-  font-size: 18px; display: flex; align-items: center; justify-content: center;
-}
-.lightbox-counter {
-  color: rgba(255,255,255,.5); font-size: 12px;
-  text-align: center; margin-top: 10px;
-}
+/* COMMENTS */
+.comments-list{padding:8px 12px;background:var(--white);border-top:1px solid var(--sand-mid)}
+.comment-item{display:flex;gap:7px;margin-bottom:6px;align-items:flex-start}
+.comment-item:last-child{margin-bottom:0}
+.comment-author{font-size:11px;font-weight:700;color:var(--coral);flex-shrink:0}
+.comment-text{font-size:12px;color:var(--brown);line-height:1.4}
+.comment-time{font-size:10px;color:var(--grey);margin-top:1px}
 
-/* ═══════════════════════════════════════
-   ADMIN PANEL (caché pour les proches)
-═══════════════════════════════════════ */
-.admin-toggle {
-  position: fixed; bottom: 24px; right: 20px; z-index: 100;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--coral); color: white; font-size: 22px;
-  box-shadow: 0 4px 16px rgba(232,115,74,.4);
-  display: flex; align-items: center; justify-content: center;
-}
-.admin-panel {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.6);
-  display: none; align-items: flex-end;
-}
-.admin-panel.open { display: flex; }
-.admin-sheet {
-  background: var(--white);
-  border-radius: 20px 20px 0 0;
-  padding: 24px 20px 40px;
-  width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-}
-.admin-title {
-  font-size: 18px; font-weight: 800; color: var(--brown);
-  margin-bottom: 20px; text-align: center;
-}
-.admin-section-label {
-  font-size: 11px; font-weight: 700; color: var(--brown-mid);
-  text-transform: uppercase; letter-spacing: .5px;
-  margin-bottom: 8px; margin-top: 16px;
-}
+/* LIGHTBOX */
+.lb{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.93);display:none;flex-direction:column;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb-img{max-width:100%;max-height:72vh;object-fit:contain;border-radius:8px}
+.lb-cap{color:#fff;font-size:13px;margin-top:11px;text-align:center;padding:0 20px;line-height:1.5}
+.lb-close{position:absolute;top:14px;right:18px;color:#fff;font-size:25px;cursor:pointer;background:none;border:none}
+.lb-nav{display:flex;gap:18px;margin-top:14px}
+.lb-nav button{background:rgba(255,255,255,.15);color:#fff;border-radius:50%;width:40px;height:40px;font-size:16px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
+.lb-count{color:rgba(255,255,255,.5);font-size:11px;margin-top:7px}
 
-/* Destination selector */
-.dest-pills {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
-}
-.dest-pill {
-  padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
-  border: 2px solid transparent; background: var(--sand-mid); color: var(--brown-mid);
-  transition: all .15s;
-}
-.dest-pill.selected { border-color: var(--coral); background: var(--coral-lt); color: var(--coral-dk); }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:#fff;border-radius:20px;padding:10px 20px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Day selector */
-.day-pills {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
-}
-.day-pill {
-  padding: 5px 12px; border-radius: 16px; font-size: 12px; font-weight: 600;
-  border: 2px solid transparent; background: var(--sand-mid); color: var(--brown-mid);
-  transition: all .15s;
-}
-.day-pill.selected { border-color: var(--turq); background: var(--turq-lt); color: var(--turq); }
-
-/* Upload zone */
-.upload-zone {
-  border: 2.5px dashed #d0c4b8;
-  border-radius: 14px; padding: 28px 20px;
-  text-align: center; cursor: pointer;
-  background: var(--sand); transition: all .2s;
-  margin-bottom: 12px;
-}
-.upload-zone:hover, .upload-zone.dragover {
-  border-color: var(--coral); background: var(--coral-lt);
-}
-.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
-.upload-zone-text { font-size: 14px; color: var(--brown-mid); }
-.upload-zone-sub { font-size: 12px; color: var(--grey); margin-top: 4px; }
-input[type=file] { display: none; }
-
-/* Caption input */
-.caption-input {
-  width: 100%; border: 1.5px solid #e0d6cc;
-  border-radius: 10px; padding: 12px 14px;
-  font-size: 14px; color: var(--brown);
-  background: var(--white); outline: none;
-  font-family: inherit;
-  transition: border-color .2s;
-}
-.caption-input:focus { border-color: var(--coral); }
-
-/* Upload preview */
-.upload-previews {
-  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
-}
-.upload-preview {
-  position: relative; width: 70px; height: 70px;
-  border-radius: 8px; overflow: hidden;
-}
-.upload-preview img { width: 100%; height: 100%; object-fit: cover; }
-.upload-preview-remove {
-  position: absolute; top: 2px; right: 2px;
-  background: rgba(0,0,0,.55); color: white;
-  border-radius: 50%; width: 18px; height: 18px;
-  font-size: 11px; display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-
-/* Publish btn */
-.publish-btn {
-  width: 100%; padding: 15px; border-radius: 14px;
-  background: var(--coral); color: white;
-  font-size: 16px; font-weight: 700;
-  margin-top: 16px;
-  transition: background .15s;
-}
-.publish-btn:disabled { background: var(--grey); }
-.publish-btn:not(:disabled):hover { background: var(--coral-dk); }
-
-/* Cloudinary config */
-.config-box {
-  background: var(--sand-mid); border-radius: 10px;
-  padding: 14px; margin-bottom: 12px;
-}
-.config-label { font-size: 12px; font-weight: 700; color: var(--brown-mid); margin-bottom: 6px; }
-.config-input {
-  width: 100%; border: 1.5px solid #e0d6cc;
-  border-radius: 8px; padding: 8px 12px;
-  font-size: 13px; font-family: monospace;
-  background: var(--white); outline: none; color: var(--brown);
-  margin-bottom: 6px;
-}
-.config-input:focus { border-color: var(--turq); }
-.config-save {
-  background: var(--turq); color: white; border-radius: 8px;
-  padding: 8px 16px; font-size: 13px; font-weight: 700;
-  width: 100%;
-}
-
-/* Manage existing photos */
-.existing-photo {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid var(--sand-mid);
-}
-.existing-photo img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
-.existing-photo-info { flex: 1; }
-.existing-photo-day { font-size: 12px; font-weight: 700; color: var(--brown); }
-.existing-photo-cap { font-size: 11px; color: var(--brown-mid); }
-.existing-photo-del {
-  background: #FDECEA; color: #C0392B;
-  border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700;
-}
-
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
-.toast {
-  position: fixed; bottom: 90px; left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--brown); color: white; border-radius: 20px;
-  padding: 10px 20px; font-size: 13px; font-weight: 600;
-  opacity: 0; transition: all .3s; pointer-events: none; z-index: 999;
-  white-space: nowrap;
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* Loading spinner */
-.spinner {
-  display: inline-block; width: 18px; height: 18px;
-  border: 2px solid rgba(255,255,255,.3);
-  border-top-color: white; border-radius: 50%;
-  animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* Tabs for admin */
-.admin-tabs { display: flex; gap: 0; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1.5px solid #e0d6cc; }
-.admin-tab { flex: 1; padding: 10px; font-size: 13px; font-weight: 700; text-align: center; background: var(--white); color: var(--brown-mid); }
-.admin-tab.active { background: var(--coral); color: white; }
-
-.admin-content { display: none; }
-.admin-content.active { display: block; }
+/* LOADING */
+.loading{text-align:center;padding:40px 20px;color:var(--brown-mid);font-size:14px}
+.loading-spinner{width:32px;height:32px;border:3px solid var(--sand-mid);border-top-color:var(--coral);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <header class="header">
-  <div class="header-flag">🇹🇭</div>
-  <div class="header-title">Thaïlande 2026</div>
+  <div class="header-title">🇹🇭 Thaïlande 2026</div>
   <div class="header-sub">Bangkok · Chiang Mai · Koh Tao · Koh Samui</div>
-  <div class="header-countdown" id="countdown">Chargement…</div>
+  <div class="header-times">
+    <div class="htime" id="htime-th">🇹🇭 --:--</div>
+    <div class="htime" id="htime-fr">🇫🇷 --:--</div>
+  </div>
+  <div class="header-cdown" id="cdown">Chargement…</div>
 </header>
 
-<!-- CURRENT DESTINATION -->
+<!-- CURRENT DEST -->
 <div id="current-banner"></div>
 
-<!-- MAIN TIMELINE -->
-<main class="main" id="timeline"></main>
+<!-- MAIN -->
+<main class="main" id="timeline">
+  <div class="loading">
+    <div class="loading-spinner"></div>
+    Chargement du voyage…
+  </div>
+</main>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img class="lightbox-img" id="lb-img" src="" alt="">
-  <div class="lightbox-caption" id="lb-caption"></div>
-  <div class="lightbox-date" id="lb-date"></div>
-  <div class="lightbox-nav">
+<div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <div class="lb-cap" id="lb-cap"></div>
+  <div class="lb-nav">
     <button onclick="lbNav(-1)">←</button>
     <button onclick="lbNav(1)">→</button>
   </div>
-  <div class="lightbox-counter" id="lb-counter"></div>
-</div>
-
-<!-- ADMIN TOGGLE (bouton 📷 en bas à droite) -->
-<button class="admin-toggle" id="admin-toggle" onclick="toggleAdmin()" title="Ajouter des photos">📷</button>
-
-<!-- ADMIN PANEL -->
-<div class="admin-panel" id="admin-panel" onclick="closeAdminOutside(event)">
-  <div class="admin-sheet">
-    <div class="admin-title">📷 Gérer les photos</div>
-
-    <div class="admin-tabs">
-      <button class="admin-tab active" onclick="switchAdminTab('add',this)">Ajouter</button>
-      <button class="admin-tab" onclick="switchAdminTab('manage',this)">Gérer</button>
-      <button class="admin-tab" onclick="switchAdminTab('config',this)">Config</button>
-    </div>
-
-    <!-- ADD TAB -->
-    <div class="admin-content active" id="admin-add">
-      <div class="admin-section-label">Destination</div>
-      <div class="dest-pills" id="dest-pills"></div>
-
-      <div class="admin-section-label">Journée</div>
-      <div class="day-pills" id="day-pills">
-        <span style="font-size:13px;color:var(--brown-mid)">← Choisir une destination d'abord</span>
-      </div>
-
-      <div class="admin-section-label">Photos</div>
-      <div class="upload-previews" id="upload-previews"></div>
-      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()"
-           ondragover="handleDragOver(event)" ondrop="handleDrop(event)" ondragleave="this.classList.remove('dragover')">
-        <div class="upload-zone-icon">🖼</div>
-        <div class="upload-zone-text">Appuyer pour choisir des photos</div>
-        <div class="upload-zone-sub">ou glisser-déposer · JPG, PNG, HEIC</div>
-      </div>
-      <input type="file" id="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
-
-      <div class="admin-section-label">Légende (optionnel)</div>
-      <textarea class="caption-input" id="caption-input" rows="2"
-        placeholder="Ex: Vue depuis Doi Suthep au lever du soleil…"></textarea>
-
-      <button class="publish-btn" id="publish-btn" onclick="publishPhotos()" disabled>
-        Publier les photos
-      </button>
-    </div>
-
-    <!-- MANAGE TAB -->
-    <div class="admin-content" id="admin-manage">
-      <div id="manage-list">
-        <div style="text-align:center;color:var(--brown-mid);padding:30px;font-size:14px">
-          Chargement…
-        </div>
-      </div>
-    </div>
-
-    <!-- CONFIG TAB -->
-    <div class="admin-content" id="admin-config">
-      <div class="config-box">
-        <div class="config-label">🔑 Cloudinary Cloud Name</div>
-        <input class="config-input" id="cfg-cloud" placeholder="ex: dxabcdef1" type="text">
-        <div class="config-label">🔑 Upload Preset (unsigned)</div>
-        <input class="config-input" id="cfg-preset" placeholder="ex: thailand_2026" type="text">
-        <button class="config-save" onclick="saveConfig()">Enregistrer la configuration</button>
-      </div>
-      <div style="font-size:12px;color:var(--brown-mid);line-height:1.6">
-        <b>Comment configurer Cloudinary :</b><br>
-        1. Créer un compte gratuit sur <b>cloudinary.com</b><br>
-        2. Copier ton <b>Cloud Name</b> (tableau de bord)<br>
-        3. Aller dans Settings → Upload → Add upload preset<br>
-        4. Choisir <b>Unsigned</b>, donner un nom (ex: thailand_2026)<br>
-        5. Coller ici et enregistrer<br><br>
-        <b>Quota gratuit :</b> 25 Go de stockage · Largement suffisant pour un voyage famille.
-      </div>
-    </div>
-
-  </div>
+  <div class="lb-count" id="lb-count"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  CONFIG CLOUDINARY — à remplir dans l'onglet Config
-//  ou directement ici si tu préfères
-// ═══════════════════════════════════════════════════════
-let CLOUD_NAME   = localStorage.getItem('cld_cloud')  || '';
-let UPLOAD_PRESET= localStorage.getItem('cld_preset') || '';
+// ═══════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════
+const GS_URL='https://script.google.com/macros/s/AKfycbzkoXJ3BUbPBGSkZM8d8kBtPgDaj46qInSvU9n6aiXxf6bLd4QCZwI4to2GWhtauYFn/exec';
+const DEPART=new Date('2026-07-20T16:40:00');
 
-// ═══════════════════════════════════════════════════════
-//  VOYAGE DATA
-// ═══════════════════════════════════════════════════════
-const DEPART = new Date('2026-07-20T16:40:00');
-
-const DESTINATIONS = [
-  {
-    key: 'bkk', emoji: '🏙', name: 'Bangkok',
-    color: '#E8734A', colorLt: '#FAE4DB',
-    dates: '21 – 24 juillet',
-    start: new Date('2026-07-21'), end: new Date('2026-07-25'),
-    days: [
-      { key: 'bkk-1', label: 'Mar 21 juillet', short: '21 juil.' },
-      { key: 'bkk-2', label: 'Mer 22 juillet', short: '22 juil.' },
-      { key: 'bkk-3', label: 'Jeu 23 juillet — Ayutthaya', short: '23 juil.' },
-      { key: 'bkk-4', label: 'Ven 24 juillet', short: '24 juil.' },
-    ]
-  },
-  {
-    key: 'cm', emoji: '🌿', name: 'Chiang Mai',
-    color: '#5B8C5A', colorLt: '#EAF4EA',
-    dates: '25 – 28 juillet',
-    start: new Date('2026-07-25'), end: new Date('2026-07-29'),
-    days: [
-      { key: 'cm-1', label: 'Sam 25 juillet', short: '25 juil.' },
-      { key: 'cm-2', label: 'Dim 26 juillet — Éléphants 🐘', short: '26 juil.' },
-      { key: 'cm-3', label: 'Lun 27 juillet — Doi Suthep', short: '27 juil.' },
-      { key: 'cm-4', label: 'Mar 28 juillet — Water Park', short: '28 juil.' },
-    ]
-  },
-  {
-    key: 'kt', emoji: '🐠', name: 'Koh Tao',
-    color: '#2BBFB3', colorLt: '#E5F9F8',
-    dates: '29 juillet – 1er août',
-    start: new Date('2026-07-29'), end: new Date('2026-08-01'),
-    days: [
-      { key: 'kt-1', label: 'Jeu 29 juillet', short: '29 juil.' },
-      { key: 'kt-2', label: 'Ven 30 juillet — Shark Bay 🐢', short: '30 juil.' },
-      { key: 'kt-3', label: 'Sam 31 juillet — Koh Nang Yuan', short: '31 juil.' },
-      { key: 'kt-4', label: 'Dim 1er août', short: '1er août' },
-    ]
-  },
-  {
-    key: 'ks', emoji: '🌴', name: 'Koh Samui',
-    color: '#D4A853', colorLt: '#F5E6C0',
-    dates: '1 – 5 août',
-    start: new Date('2026-08-01'), end: new Date('2026-08-06'),
-    days: [
-      { key: 'ks-1', label: 'Lun 1er août', short: '1er août' },
-      { key: 'ks-2', label: 'Mar 2 août — Silver Beach', short: '2 août' },
-      { key: 'ks-3', label: 'Mer 3 août — Tour de l\'île', short: '3 août' },
-      { key: 'ks-4', label: 'Jeu 4 août — Plage', short: '4 août' },
-    ]
-  },
+// ═══════════════════════════════════════════
+//  DESTINATIONS
+// ═══════════════════════════════════════════
+const DESTINATIONS=[
+  {key:'bkk',emoji:'🏙',name:'Bangkok',color:'#E8734A',
+   dates:'21 – 24 juillet',start:new Date('2026-07-21'),end:new Date('2026-07-25'),
+   airbnb:{addr:'Soi Palakun, Khet Bang Phlat, Bangkok 10700',note:'Taxi réservé par l\'Airbnb — 1 500 bahts, rien à payer au chauffeur',maps:'Soi+Palakun+Khet+Bang+Phlat+Bangkok'},
+   days:[
+     {key:'bkk-0',date:'Mar 21 juillet'},
+     {key:'bkk-1',date:'Mer 22 juillet'},
+     {key:'bkk-2',date:'Jeu 23 juillet'},
+     {key:'bkk-3',date:'Ven 24 juillet'},
+   ]},
+  {key:'cm',emoji:'🌿',name:'Chiang Mai',color:'#5B8C5A',
+   dates:'25 – 28 juillet',start:new Date('2026-07-25'),end:new Date('2026-07-29'),
+   airbnb:{addr:'1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300',note:'Taxi Airbnb — 300 bahts en liquide au chauffeur',maps:'1+Chang+Moi+Road+Soi+2+Chiang+Mai'},
+   days:[
+     {key:'cm-0',date:'Sam 25 juillet'},
+     {key:'cm-1',date:'Dim 26 juillet'},
+     {key:'cm-2',date:'Lun 27 juillet'},
+     {key:'cm-3',date:'Mar 28 juillet'},
+   ]},
+  {key:'kt',emoji:'🐠',name:'Koh Tao',color:'#2BBFB3',
+   dates:'29 juillet – 1er août',start:new Date('2026-07-29'),end:new Date('2026-08-01'),
+   airbnb:{addr:'13/35 Moo 2, Ko Tao, Surat Thani 84360',note:'Transport Airbnb depuis le ferry — chercher panneau avec votre nom',maps:'Ko+Tao+Surat+Thani+84360'},
+   days:[
+     {key:'kt-0',date:'Jeu 29 juillet'},
+     {key:'kt-1',date:'Ven 30 juillet'},
+     {key:'kt-2',date:'Sam 31 juillet'},
+     {key:'kt-3',date:'Dim 1er août'},
+   ]},
+  {key:'ks',emoji:'🌴',name:'Koh Samui',color:'#D4A853',
+   dates:'1 – 5 août',start:new Date('2026-08-01'),end:new Date('2026-08-06'),
+   airbnb:{addr:'57/57 Moo 5 Anthong, Nathon, Surathani 84140',note:'Transport Airbnb depuis le ferry Bangrak Pier',maps:'57+Moo+5+Anthong+Nathon+Ko+Samui'},
+   days:[
+     {key:'ks-0',date:'Lun 1er août'},
+     {key:'ks-1',date:'Mar 2 août'},
+     {key:'ks-2',date:'Mer 3 août'},
+     {key:'ks-3',date:'Jeu 4 août'},
+   ]},
 ];
 
-// ═══════════════════════════════════════════════════════
-//  PHOTO STORAGE — localStorage (remplacer par API plus tard)
-//  Format: { url, caption, destKey, dayKey, uploadedAt }
-// ═══════════════════════════════════════════════════════
-function getPhotos() {
-  return JSON.parse(localStorage.getItem('trip_photos') || '[]');
-}
-function savePhotos(photos) {
-  localStorage.setItem('trip_photos', JSON.stringify(photos));
+// Décalage horaire TH/FR : +5h en été (heure d'été française)
+function thToFr(hhmm){
+  const[h,m]=hhmm.split(':').map(Number);
+  let fh=h-5;if(fh<0)fh+=24;
+  return`${String(fh).padStart(2,'0')}h${String(m).padStart(2,'0')}`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  COUNTDOWN
-// ═══════════════════════════════════════════════════════
-function updateCountdown() {
-  const now = new Date();
-  const diff = DEPART - now;
-  let text;
-  if (diff <= 0) {
-    const daysSince = Math.floor((now - DEPART) / (1000*60*60*24));
-    text = daysSince === 0 ? '✈ Départ aujourd\'hui !' : `Jour ${daysSince} du voyage`;
-  } else {
-    const days = Math.floor(diff / (1000*60*60*24));
-    text = days === 0 ? 'Départ dans quelques heures !' : `J – ${days} avant le départ`;
-  }
-  document.getElementById('countdown').textContent = text;
+// ═══════════════════════════════════════════
+//  TRANSPORTS ENTRE DESTINATIONS
+// ═══════════════════════════════════════════
+const TRANSPORTS=[
+  {after:'bkk',type:'✈ Vol',from:'Bangkok Don Mueang',to:'Chiang Mai',
+   date:'Sam 25 juillet',company:'AirAsia Move',
+   dep:'10h15',arr:'11h25'},
+  {after:'cm',type:'✈ Vol + 🚢 Ferry',from:'Chiang Mai',to:'Koh Tao',
+   date:'Mer 29 juillet',company:'AirAsia + Direct Ferries',
+   details:[
+     {label:'Vol CNX → Surat Thani',dep:'10h40',arr:'12h30'},
+     {label:'Ferry Tapee Pier → Mae Haad',dep:'15h30',arr:'~18h00'},
+   ]},
+  {after:'kt',type:'🚢 Ferry',from:'Koh Tao',to:'Koh Samui',
+   date:'Dim 1er août',company:'Lomprayah',
+   dep:'11h30',arr:'13h00'},
+  {after:'ks',type:'✈ Vol + ✈ Vol',from:'Koh Samui',to:'Paris CDG',
+   date:'Mer 5 – Jeu 6 août',company:'Bangkok Airways + Vol international',
+   details:[
+     {label:'Vol Koh Samui → Bangkok BKK',dep:'14h30',arr:'15h30'},
+     {label:'Nuit à l\'hôtel Grand BS Airport Suvarnabhumi','dep':'','arr':''},
+     {label:'Vol Bangkok → Paris CDG T2E',dep:'11h25',arr:'19h00 (heure fr)'},
+   ]},
+];
+
+// ═══════════════════════════════════════════
+//  COUNTDOWN & TIMES
+// ═══════════════════════════════════════════
+function updateTimes(){
+  const now=new Date();
+  const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
+  const fr=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(now);
+  document.getElementById('htime-th').textContent='🇹🇭 '+th;
+  document.getElementById('htime-fr').textContent='🇫🇷 '+fr;
+  const diff=DEPART-now;
+  let t;
+  if(diff<=0){const d=Math.floor((now-DEPART)/864e5);t=d===0?'🎉 Bon voyage !':'Jour '+d+' du voyage';}
+  else{const d=Math.floor(diff/864e5);t=d===0?'Départ aujourd\'hui !':'J – '+d+' avant le départ';}
+  document.getElementById('cdown').textContent=t;
 }
 
-// ═══════════════════════════════════════════════════════
-//  CURRENT DESTINATION BANNER
-// ═══════════════════════════════════════════════════════
-function renderCurrentBanner() {
-  const now = new Date();
-  let current = null;
-  for (const d of DESTINATIONS) {
-    if (now >= d.start && now < d.end) { current = d; break; }
-  }
-  const banner = document.getElementById('current-banner');
-  if (!current) {
-    if (now < DEPART) {
-      banner.innerHTML = `<div class="current-banner" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47);margin-bottom:0">
+// ═══════════════════════════════════════════
+//  CURRENT BANNER
+// ═══════════════════════════════════════════
+function renderCurrentBanner(){
+  const now=new Date(),banner=document.getElementById('current-banner');
+  let current=null;
+  for(const d of DESTINATIONS){if(now>=d.start&&now<d.end){current=d;break;}}
+  if(!current){
+    if(now<DEPART){
+      banner.innerHTML=`<div class="current-banner" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47);margin-bottom:0">
         <span class="current-banner-icon">✈️</span>
-        <div><div class="current-banner-label">Prochain départ</div>
-        <div class="current-banner-dest">Paris → Bangkok</div>
-        <div class="current-banner-dates">20 juillet 2026 · 16h40 CDG</div></div>
+        <div><div class="current-label">Prochain départ</div>
+        <div class="current-dest">Paris → Bangkok</div>
+        <div class="current-dates">20 juillet 2026 · 16h40 CDG</div></div>
       </div>`;
     }
     return;
   }
-  banner.innerHTML = `<div class="current-banner" style="background:linear-gradient(135deg,${current.color},${current.color}cc);margin-bottom:0">
+  banner.innerHTML=`<div class="current-banner" style="background:linear-gradient(135deg,${current.color},${current.color}cc);margin-bottom:0">
     <span class="current-banner-icon">${current.emoji}</span>
-    <div>
-      <div class="current-banner-label">En ce moment</div>
-      <div class="current-banner-dest">${current.name}</div>
-      <div class="current-banner-dates">${current.dates}</div>
-    </div>
+    <div><div class="current-label">En ce moment</div>
+    <div class="current-dest">${current.name}</div>
+    <div class="current-dates">${current.dates}</div></div>
     <div class="live-dot"></div>
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  RENDER TIMELINE
-// ═══════════════════════════════════════════════════════
-function getStatus(dest) {
-  const now = new Date();
-  if (now >= dest.end) return 'past';
-  if (now >= dest.start) return 'current';
-  return 'future';
+// ═══════════════════════════════════════════
+//  LOAD PHOTOS FROM GOOGLE SHEETS
+// ═══════════════════════════════════════════
+async function loadPhotos(){
+  try{
+    const r=await fetch(GS_URL);
+    const d=await r.json();
+    if(!d.data)return{};
+    const photos={};
+    d.data.forEach(row=>{
+      if(row.type==='photo'&&row.key&&row.value){
+        try{
+          const p=JSON.parse(row.value);
+          // Afficher uniquement photos "all" ou "both"
+          if(p.diff==='priv')return;
+          const dayKey=p.dayKey||row.key.split('-').slice(0,2).join('-');
+          if(!photos[dayKey])photos[dayKey]=[];
+          photos[dayKey].push(p);
+        }catch(e){}
+      }
+    });
+    return photos;
+  }catch(e){return{};}
 }
 
-function renderTimeline() {
-  const photos = getPhotos();
-  const now = new Date();
-  const timeline = document.getElementById('timeline');
-
-  timeline.innerHTML = DESTINATIONS.map(dest => {
-    const status = getStatus(dest);
-    const statusLabel = status === 'past' ? 'Visité' : status === 'current' ? '📍 En cours' : 'À venir';
-    const statusClass = `badge-${status}`;
-
-    const daysHtml = dest.days.map(day => {
-      const dayPhotos = photos.filter(p => p.dayKey === day.key);
-
-      if (dayPhotos.length === 0) {
-        const isPast = now > new Date(dest.end);
-        return `<div class="day-row">
-          <div class="day-label">${day.label}</div>
-          <div class="day-empty">
-            <div class="day-empty-icon">${isPast ? '📷' : '🗓'}</div>
-            ${isPast ? 'Aucune photo pour cette journée' : 'Photos à venir…'}
-          </div>
-        </div>`;
+// ═══════════════════════════════════════════
+//  REACTIONS & COMMENTS (via Google Sheets)
+// ═══════════════════════════════════════════
+async function loadReactions(){
+  try{
+    const r=await fetch(GS_URL);
+    const d=await r.json();
+    if(!d.data)return{likes:{},comments:{}};
+    const likes={},comments={};
+    d.data.forEach(row=>{
+      if(row.type==='like'&&row.key){likes[row.key]=(likes[row.key]||0)+1;}
+      if(row.type==='comment'&&row.key&&row.value){
+        if(!comments[row.key])comments[row.key]=[];
+        try{comments[row.key].push(JSON.parse(row.value));}catch(e){}
       }
+    });
+    return{likes,comments};
+  }catch(e){return{likes:{},comments:{}};}
+}
 
-      // Grid layout based on count
-      const count = dayPhotos.length;
-      const gridClass = count === 1 ? 'one' : count === 2 ? 'two' : '';
-      const shown = Math.min(count, 5);
-      const extra = count - shown;
+async function sendReaction(type,key,value=''){
+  try{
+    await fetch(GS_URL,{method:'POST',mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type,key,value,device:'Proche'})
+    });
+  }catch(e){}
+}
 
-      const cells = dayPhotos.slice(0, shown).map((p, i) => {
-        const isLast = i === shown - 1 && extra > 0;
-        return `<div class="photo-cell" onclick="openLightbox('${day.key}',${i})">
-          <img src="${p.url}" alt="${p.caption || ''}" loading="lazy">
-          ${p.caption && i === 0 ? `<div class="photo-caption">${p.caption}</div>` : ''}
-          ${isLast ? `<div class="photo-count-overlay">+${extra + 1}</div>` : ''}
-        </div>`;
-      }).join('');
-
-      return `<div class="day-row">
-        <div class="day-label">${day.label}</div>
-        <div class="photo-grid ${gridClass}">${cells}</div>
-      </div>`;
+// ═══════════════════════════════════════════
+//  RENDER TRANSPORT CARD
+// ═══════════════════════════════════════════
+function renderTransport(t){
+  if(t.details){
+    const rows=t.details.map(d=>{
+      if(!d.dep&&!d.arr)return`<div class="transport-row">🏨 ${d.label}</div>`;
+      const frDep=d.dep&&d.dep.includes('h')?` (${thToFr(d.dep.replace('h',':')+'00').replace(':','h')}🇫🇷)`:'';
+      const frArr=d.arr&&d.arr.includes('h')&&!d.arr.includes('heure')?` (${thToFr(d.arr.replace('~','').replace('h',':')+'00').replace(':','h')}🇫🇷)`:'';
+      return`<div class="transport-row">• ${d.label}${d.dep?` · Dép. <b>${d.dep}</b>${frDep}`:''} ${d.arr?`→ Arr. <b>${d.arr}</b>${frArr}`:''}</div>`;
     }).join('');
+    return`<div class="transport-card">
+      <div class="transport-type">${t.type} · ${t.date}</div>
+      <div class="transport-route">
+        <span class="transport-city">${t.from}</span>
+        <span class="transport-arrow">→</span>
+        <span class="transport-city">${t.to}</span>
+      </div>
+      <div class="transport-details">${rows}</div>
+      <span class="transport-company">${t.company}</span>
+    </div>`;
+  }
+  const frDep=t.dep?` (${thToFr(t.dep.replace('h',':')+'00').replace(':','h')}🇫🇷)`:'';
+  const frArr=t.arr?` (${thToFr(t.arr.replace('~','').replace('h',':')+'00').replace(':','h')}🇫🇷)`:'';
+  return`<div class="transport-card">
+    <div class="transport-type">${t.type} · ${t.date}</div>
+    <div class="transport-route">
+      <span class="transport-city">${t.from}</span>
+      <span class="transport-arrow">→</span>
+      <span class="transport-city">${t.to}</span>
+    </div>
+    <div class="transport-details">
+      <div class="transport-row">Départ <b>${t.dep}</b>${frDep} → Arrivée <b>${t.arr}</b>${frArr}</div>
+    </div>
+    <span class="transport-company">${t.company}</span>
+  </div>`;
+}
 
-    return `<div class="dest-section">
+// ═══════════════════════════════════════════
+//  RENDER TIMELINE
+// ═══════════════════════════════════════════
+async function renderTimeline(){
+  const [photos,reactions]=await Promise.all([loadPhotos(),loadReactions()]);
+  const now=new Date();
+  const timeline=document.getElementById('timeline');
+
+  let html='';
+
+  DESTINATIONS.forEach(dest=>{
+    const status=now>=dest.end?'past':now>=dest.start?'current':'future';
+    const statusLabel=status==='past'?'Visité':status==='current'?'📍 En cours':'À venir';
+    const statusClass=status==='past'?'s-past':status==='current'?'s-current':'s-future';
+
+    html+=`<div class="dest-section">
       <div class="dest-header">
         <div class="dest-header-dot" style="background:${dest.color}"></div>
         <div>
           <div class="dest-header-name">${dest.emoji} ${dest.name}</div>
           <div class="dest-header-dates">${dest.dates}</div>
         </div>
-        <span class="dest-status-badge ${statusClass}">${statusLabel}</span>
+        <span class="dest-status ${statusClass}">${statusLabel}</span>
       </div>
-      ${daysHtml}
-    </div>`;
-  }).join('');
-}
 
-// ═══════════════════════════════════════════════════════
-//  LIGHTBOX
-// ═══════════════════════════════════════════════════════
-let lbPhotos = [], lbIndex = 0;
-
-function openLightbox(dayKey, startIndex) {
-  const photos = getPhotos().filter(p => p.dayKey === dayKey);
-  if (!photos.length) return;
-  lbPhotos = photos;
-  lbIndex = startIndex;
-  showLbPhoto();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function showLbPhoto() {
-  const p = lbPhotos[lbIndex];
-  document.getElementById('lb-img').src = p.url;
-  document.getElementById('lb-caption').textContent = p.caption || '';
-  document.getElementById('lb-date').textContent = p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '';
-  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${lbPhotos.length}`;
-}
-
-function lbNav(dir) {
-  lbIndex = (lbIndex + dir + lbPhotos.length) % lbPhotos.length;
-  showLbPhoto();
-}
-
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.getElementById('lightbox').addEventListener('click', e => {
-  if (e.target === document.getElementById('lightbox')) closeLightbox();
-});
-
-// Swipe support
-let touchStartX = 0;
-document.getElementById('lightbox').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-document.getElementById('lightbox').addEventListener('touchend', e => {
-  const diff = touchStartX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) lbNav(diff > 0 ? 1 : -1);
-});
-
-// ═══════════════════════════════════════════════════════
-//  ADMIN — TOGGLE & TABS
-// ═══════════════════════════════════════════════════════
-function toggleAdmin() {
-  const panel = document.getElementById('admin-panel');
-  panel.classList.toggle('open');
-  if (panel.classList.contains('open')) {
-    loadConfig();
-    renderManageList();
-  }
-}
-
-function closeAdminOutside(e) {
-  if (e.target === document.getElementById('admin-panel')) {
-    document.getElementById('admin-panel').classList.remove('open');
-  }
-}
-
-function switchAdminTab(tab, btn) {
-  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('admin-' + tab).classList.add('active');
-  if (tab === 'manage') renderManageList();
-}
-
-// ═══════════════════════════════════════════════════════
-//  ADMIN — DESTINATION & DAY SELECTOR
-// ═══════════════════════════════════════════════════════
-let selectedDest = null, selectedDay = null, pendingFiles = [];
-
-function renderDestPills() {
-  document.getElementById('dest-pills').innerHTML = DESTINATIONS.map(d => `
-    <button class="dest-pill ${selectedDest === d.key ? 'selected' : ''}"
-      onclick="selectDest('${d.key}')">${d.emoji} ${d.name}</button>
-  `).join('');
-}
-
-function selectDest(key) {
-  selectedDest = key;
-  selectedDay = null;
-  renderDestPills();
-  renderDayPills();
-  updatePublishBtn();
-}
-
-function renderDayPills() {
-  if (!selectedDest) return;
-  const dest = DESTINATIONS.find(d => d.key === selectedDest);
-  document.getElementById('day-pills').innerHTML = dest.days.map(day => `
-    <button class="day-pill ${selectedDay === day.key ? 'selected' : ''}"
-      onclick="selectDay('${day.key}')">${day.short}</button>
-  `).join('');
-}
-
-function selectDay(key) {
-  selectedDay = key;
-  renderDayPills();
-  updatePublishBtn();
-}
-
-function updatePublishBtn() {
-  const btn = document.getElementById('publish-btn');
-  btn.disabled = !(selectedDest && selectedDay && pendingFiles.length > 0);
-}
-
-// ═══════════════════════════════════════════════════════
-//  ADMIN — FILE HANDLING
-// ═══════════════════════════════════════════════════════
-function handleFiles(files) {
-  for (const f of files) {
-    if (f.type.startsWith('image/')) pendingFiles.push(f);
-  }
-  renderPreviews();
-  updatePublishBtn();
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.add('dragover');
-}
-
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('dragover');
-  handleFiles(e.dataTransfer.files);
-}
-
-function renderPreviews() {
-  const container = document.getElementById('upload-previews');
-  container.innerHTML = pendingFiles.map((f, i) => {
-    const url = URL.createObjectURL(f);
-    return `<div class="upload-preview">
-      <img src="${url}" alt="">
-      <div class="upload-preview-remove" onclick="removeFile(${i})">✕</div>
-    </div>`;
-  }).join('');
-}
-
-function removeFile(i) {
-  pendingFiles.splice(i, 1);
-  renderPreviews();
-  updatePublishBtn();
-}
-
-// ═══════════════════════════════════════════════════════
-//  ADMIN — PUBLISH (Cloudinary upload)
-// ═══════════════════════════════════════════════════════
-async function publishPhotos() {
-  if (!CLOUD_NAME || !UPLOAD_PRESET) {
-    showToast('⚙️ Configure Cloudinary dans l\'onglet Config');
-    switchAdminTab('config', document.querySelectorAll('.admin-tab')[2]);
-    return;
-  }
-
-  const btn = document.getElementById('publish-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Envoi en cours…';
-
-  const caption = document.getElementById('caption-input').value.trim();
-  const photos = getPhotos();
-
-  try {
-    for (const file of pendingFiles) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', UPLOAD_PRESET);
-      formData.append('folder', 'thailande2026');
-
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
-        method: 'POST', body: formData
-      });
-
-      if (!res.ok) throw new Error('Upload failed');
-      const data = await res.json();
-
-      photos.push({
-        url: data.secure_url,
-        caption,
-        destKey: selectedDest,
-        dayKey: selectedDay,
-        uploadedAt: new Date().toISOString(),
-        publicId: data.public_id,
-      });
-    }
-
-    savePhotos(photos);
-    showToast(`✅ ${pendingFiles.length} photo${pendingFiles.length > 1 ? 's' : ''} publiée${pendingFiles.length > 1 ? 's' : ''} !`);
-
-    // Reset
-    pendingFiles = [];
-    document.getElementById('caption-input').value = '';
-    renderPreviews();
-    updatePublishBtn();
-    renderTimeline();
-    document.getElementById('admin-panel').classList.remove('open');
-
-  } catch (err) {
-    showToast('❌ Erreur d\'upload — vérifie la configuration');
-    btn.disabled = false;
-    btn.textContent = 'Publier les photos';
-  }
-}
-
-// ═══════════════════════════════════════════════════════
-//  ADMIN — MANAGE LIST
-// ═══════════════════════════════════════════════════════
-function renderManageList() {
-  const photos = getPhotos();
-  const container = document.getElementById('manage-list');
-
-  if (photos.length === 0) {
-    container.innerHTML = `<div style="text-align:center;color:var(--brown-mid);padding:30px;font-size:14px">
-      Aucune photo publiée pour l'instant
-    </div>`;
-    return;
-  }
-
-  // Group by dest
-  let html = '';
-  for (const dest of DESTINATIONS) {
-    const destPhotos = photos.filter(p => p.destKey === dest.key);
-    if (!destPhotos.length) continue;
-    html += `<div style="font-size:13px;font-weight:700;color:${dest.color};margin:16px 0 8px">${dest.emoji} ${dest.name}</div>`;
-    html += destPhotos.map((p, globalIdx) => {
-      const idx = photos.indexOf(p);
-      const dayLabel = DESTINATIONS.flatMap(d => d.days).find(d => d.key === p.dayKey)?.label || p.dayKey;
-      return `<div class="existing-photo">
-        <img src="${p.url}" alt="">
-        <div class="existing-photo-info">
-          <div class="existing-photo-day">${dayLabel}</div>
-          <div class="existing-photo-cap">${p.caption || '(sans légende)'}</div>
+      <!-- Adresse Airbnb -->
+      <div class="airbnb-card">
+        <span class="airbnb-icon">🏠</span>
+        <div style="flex:1">
+          <div class="airbnb-label">Logement</div>
+          <div class="airbnb-addr">${dest.airbnb.addr}</div>
+          <div class="airbnb-note">${dest.airbnb.note}</div>
+          <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.airbnb.maps}" target="_blank">🗺 Maps</a>
         </div>
-        <button class="existing-photo-del" onclick="deletePhoto(${idx})">Suppr.</button>
       </div>`;
-    }).join('');
-  }
-  container.innerHTML = html;
+
+    // Photos par journée
+    dest.days.forEach(day=>{
+      const dayPhotos=photos[day.key]||[];
+      const dayLikes=reactions.likes[day.key]||0;
+      const dayComments=reactions.comments[day.key]||[];
+
+      html+=`<div class="day-row"><div class="day-date-label">${day.date}</div>`;
+
+      if(dayPhotos.length===0){
+        const isPast=now>dest.end;
+        html+=`<div class="day-empty">
+          <div class="day-empty-icon">${isPast?'📷':'🗓'}</div>
+          ${isPast?'Aucune photo pour cette journée':'Photos à venir…'}
+        </div>`;
+      } else {
+        const count=dayPhotos.length;
+        const gridClass=count===1?'one':count===2?'two':'';
+        const shown=Math.min(count,6);
+        const extra=count-shown;
+
+        html+=`<div class="photo-grid ${gridClass}">`;
+        dayPhotos.slice(0,shown).forEach((p,i)=>{
+          const isLast=i===shown-1&&extra>0;
+          html+=`<div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
+            <img src="${p.url}" alt="${p.caption||''}" loading="lazy">
+            ${p.caption&&i===0?`<div class="photo-caption">${p.caption}</div>`:''}
+            ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
+          </div>`;
+        });
+        html+=`</div>`;
+
+        // Réactions + commentaires
+        const commentsHtml=dayComments.map(c=>`
+          <div class="comment-item">
+            <div>
+              <span class="comment-author">${c.author||'Proche'}</span>
+              <span class="comment-text"> ${c.text}</span>
+              <div class="comment-time">${c.time||''}</div>
+            </div>
+          </div>`).join('');
+
+        html+=`
+          ${commentsHtml?`<div class="comments-list">${commentsHtml}</div>`:''}
+          <div class="reactions-bar">
+            <button class="reaction-btn" onclick="sendLike('${day.key}',this)">
+              ❤️ <span class="reaction-count">${dayLikes>0?dayLikes:''}</span>
+            </button>
+            <div class="comment-input-row">
+              <input class="comment-input" id="ci-${day.key}" placeholder="Un commentaire…" maxlength="100">
+              <button class="comment-send" onclick="sendComment('${day.key}')">➤</button>
+            </div>
+          </div>`;
+      }
+      html+=`</div>`;
+    });
+
+    html+=`</div>`;
+
+    // Transport après cette destination
+    const transport=TRANSPORTS.find(t=>t.after===dest.key);
+    if(transport)html+=renderTransport(transport);
+  });
+
+  // Retour Paris final
+  html+=`<div style="text-align:center;padding:24px 0 16px">
+    <div style="font-size:22px;margin-bottom:6px">🏡</div>
+    <div style="font-size:15px;font-weight:700;color:var(--brown)">Retour à Paris</div>
+    <div style="font-size:12px;color:var(--brown-mid);margin-top:3px">Jeudi 6 août 2026 · CDG Terminal 2E · 19h00</div>
+    <div style="font-size:11px;color:var(--brown-mid);margin-top:2px">(14h00 🇫🇷 heure locale)</div>
+  </div>`;
+
+  timeline.innerHTML=html;
 }
 
-function deletePhoto(idx) {
-  const photos = getPhotos();
-  photos.splice(idx, 1);
-  savePhotos(photos);
-  renderTimeline();
-  renderManageList();
-  showToast('Photo supprimée');
+// ═══════════════════════════════════════════
+//  LIGHTBOX
+// ═══════════════════════════════════════════
+let lbPhotos=[],lbIdx=0;
+
+function openLb(dayKey,idx,photos){
+  lbPhotos=photos;lbIdx=idx;
+  showLb();
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function showLb(){
+  const p=lbPhotos[lbIdx];
+  document.getElementById('lb-img').src=p.url;
+  document.getElementById('lb-cap').textContent=p.caption||'';
+  document.getElementById('lb-count').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+}
+function lbNav(d){lbIdx=(lbIdx+d+lbPhotos.length)%lbPhotos.length;showLb();}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+
+// Swipe
+let lbTx=0;
+document.getElementById('lb').addEventListener('touchstart',e=>{lbTx=e.touches[0].clientX;});
+document.getElementById('lb').addEventListener('touchend',e=>{const d=lbTx-e.changedTouches[0].clientX;if(Math.abs(d)>50)lbNav(d>0?1:-1);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')lbNav(-1);if(e.key==='ArrowRight')lbNav(1);});
+
+// ═══════════════════════════════════════════
+//  REACTIONS
+// ═══════════════════════════════════════════
+async function sendLike(key,btn){
+  btn.classList.add('liked');
+  await sendReaction('like',key);
+  const span=btn.querySelector('.reaction-count');
+  const n=parseInt(span.textContent||'0')+1;
+  span.textContent=n;
+  showToast('❤️ Réaction envoyée !');
 }
 
-// ═══════════════════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════════════════
-function loadConfig() {
-  document.getElementById('cfg-cloud').value  = localStorage.getItem('cld_cloud')  || '';
-  document.getElementById('cfg-preset').value = localStorage.getItem('cld_preset') || '';
+async function sendComment(dayKey){
+  const inp=document.getElementById('ci-'+dayKey);
+  const txt=inp.value.trim();
+  if(!txt)return;
+  const comment={author:'Proche',text:txt,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
+  await sendReaction('comment',dayKey,JSON.stringify(comment));
+  inp.value='';
+  showToast('💬 Commentaire envoyé !');
 }
 
-function saveConfig() {
-  CLOUD_NAME    = document.getElementById('cfg-cloud').value.trim();
-  UPLOAD_PRESET = document.getElementById('cfg-preset').value.trim();
-  localStorage.setItem('cld_cloud',  CLOUD_NAME);
-  localStorage.setItem('cld_preset', UPLOAD_PRESET);
-  showToast('✅ Configuration enregistrée');
-}
-
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  TOAST
-// ═══════════════════════════════════════════════════════
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+// ═══════════════════════════════════════════
+function showToast(m){
+  const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 //  INIT
-// ═══════════════════════════════════════════════════════
-updateCountdown();
-setInterval(updateCountdown, 60000);
+// ═══════════════════════════════════════════
+updateTimes();
+setInterval(updateTimes,30000);
 renderCurrentBanner();
 renderTimeline();
-renderDestPills();
-
-// Keyboard: escape closes lightbox/panel
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeLightbox();
-    document.getElementById('admin-panel').classList.remove('open');
-  }
-  if (e.key === 'ArrowLeft') lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
-});
 </script>
 </body>
 </html>
