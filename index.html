@@ -22,8 +22,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:var(--coral);display:flex;align-items:center;justify-content:space-between;padding:0 14px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .topbar-title{font-size:16px;font-weight:700;color:#fff}
 .topbar-sub{font-size:10px;color:var(--gold-lt)}
-.topbar-right{display:flex;align-items:center;gap:7px}
-.thai-time{background:rgba(0,0,0,.2);color:#fff;border-radius:12px;padding:3px 9px;font-size:12px;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:5px}
+.time-badges{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+.time-badge{border-radius:10px;padding:2px 7px;font-size:10px;font-weight:700;white-space:nowrap}
+.time-th{background:rgba(0,0,0,.2);color:#fff}
+.time-fr{background:rgba(255,255,255,.2);color:var(--gold-lt)}
 .countdown-badge{background:var(--gold);color:var(--brown);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
 
 /* BOTTOM NAV */
@@ -276,8 +279,60 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .wx-sm-ico{font-size:22px;margin-bottom:5px}
 .wx-sm-st{font-size:10px;color:var(--brown-mid);line-height:1.4}
 
+/* PRATIQUE SUB-TABS */
+.prat-tabs{display:flex;gap:0;border-radius:10px;overflow:hidden;border:1.5px solid var(--sand-mid);margin-bottom:14px;margin-top:4px}
+.prat-tab{flex:1;padding:8px 3px;font-size:9px;font-weight:700;text-align:center;background:#fff;color:var(--brown-mid);cursor:pointer;-webkit-tap-highlight-color:transparent;line-height:1.4}
+.prat-tab .pti{font-size:15px;display:block;margin-bottom:2px}
+.prat-tab.active{background:var(--coral);color:#fff}
+.prat-sec{display:none}
+.prat-sec.active{display:block}
+/* DAY MAP */
+.day-map-wrap{height:190px;border-radius:var(--rs);overflow:hidden;margin:10px 0 4px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.day-map-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-top:10px;margin-bottom:3px;display:flex;align-items:center;gap:5px}
+/* UNIFORM INFO ROW - adresse + durée + maps */
+.info-row{display:flex;align-items:flex-start;gap:6px;margin-top:4px;padding:5px 8px;background:var(--sand);border-radius:6px}
+.info-row-ico{font-size:12px;flex-shrink:0;margin-top:1px}
+.info-row-txt{font-size:11px;color:var(--brown-mid);line-height:1.4;flex:1}
+.info-row-maps{font-size:10px;font-weight:700;background:var(--turq-lt);color:var(--turq-dk);border-radius:5px;padding:2px 7px;flex-shrink:0;text-decoration:none;white-space:nowrap}
 /* RECAP */
 .recap-btn{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--brown),var(--brown-mid));color:#fff;font-size:15px;font-weight:700;margin-top:7px;display:flex;align-items:center;justify-content:center;gap:7px}
+/* PHOTOS */
+.photo-grid-day{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border-radius:var(--rs);overflow:hidden;margin-top:8px}
+.photo-cell{position:relative;aspect-ratio:1;background:var(--sand-mid);overflow:hidden;cursor:pointer}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.photo-cell:hover img{transform:scale(1.05)}
+.photo-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:10px;padding:14px 6px 5px;line-height:1.3}
+.photo-badge{position:absolute;top:4px;right:4px;border-radius:9px;padding:2px 6px;font-size:9px;font-weight:700}
+.badge-priv{background:var(--brown);color:#fff}
+.badge-all{background:var(--turq);color:#fff}
+.photo-empty{text-align:center;padding:20px;color:var(--brown-mid);font-size:12px;border:1.5px dashed #ddd;border-radius:var(--rs);margin-top:8px}
+.photo-add{width:100%;padding:10px;background:var(--coral);color:#fff;border-radius:var(--rs);font-size:12px;font-weight:700;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:5px}
+.ph-modal{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
+.ph-modal.open{display:flex}
+.ph-sheet{background:#fff;border-radius:20px 20px 0 0;padding:18px 16px 40px;width:100%;max-height:88vh;overflow-y:auto;position:relative}
+.dp-pill{padding:5px 11px;border-radius:14px;font-size:11px;font-weight:600;background:var(--sand-mid);color:var(--brown-mid);border:1.5px solid transparent;cursor:pointer;margin:0 4px 4px 0;display:inline-block}
+.dp-pill.sel{border-color:var(--coral);background:var(--coral-lt);color:var(--coral-dk)}
+.diff-row{display:flex;gap:6px;margin-bottom:10px}
+.diff-btn{flex:1;padding:8px;border-radius:7px;font-size:12px;font-weight:700;text-align:center;border:1.5px solid var(--sand-mid);cursor:pointer;background:#fff;color:var(--brown-mid)}
+.diff-btn.sel{border-color:var(--coral);background:var(--coral-lt);color:var(--coral-dk)}
+.up-zone{border:2px dashed #ddd;border-radius:11px;padding:22px;text-align:center;cursor:pointer;background:var(--sand);transition:all .2s;margin-bottom:9px}
+.up-zone:hover{border-color:var(--coral);background:var(--coral-lt)}
+.up-prevs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.up-prev{position:relative;width:62px;height:62px;border-radius:7px;overflow:hidden}
+.up-prev img{width:100%;height:100%;object-fit:cover}
+.up-rm{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:15px;height:15px;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pub-btn{width:100%;padding:12px;background:var(--coral);color:#fff;border-radius:11px;font-size:14px;font-weight:700;margin-top:10px}
+.pub-btn:disabled{background:#ccc}
+.lb{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.93);display:none;flex-direction:column;align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb-img{max-width:100%;max-height:72vh;object-fit:contain;border-radius:8px}
+.lb-cap{color:#fff;font-size:13px;margin-top:11px;text-align:center;padding:0 20px;line-height:1.5}
+.lb-close{position:absolute;top:14px;right:18px;color:#fff;font-size:25px;cursor:pointer}
+.lb-nav{display:flex;gap:18px;margin-top:14px}
+.lb-nav button{background:rgba(255,255,255,.15);color:#fff;border-radius:50%;width:40px;height:40px;font-size:16px;display:flex;align-items:center;justify-content:center}
+.lb-count{color:rgba(255,255,255,.5);font-size:11px;margin-top:7px}
+.g-login-btn{width:100%;padding:11px;background:#4285F4;color:#fff;border-radius:9px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:9px}
+.g-login-ok{font-size:12px;color:var(--green);font-weight:600;text-align:center;margin-bottom:7px}
 
 /* PIN */
 .pin-overlay{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--coral),var(--coral-dk));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
@@ -341,7 +396,10 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 <header class="topbar">
   <div><div class="topbar-title">🇹🇭 Thaïlande 2026</div><div class="topbar-sub">Guide Famille</div></div>
   <div class="topbar-right">
-    <div class="thai-time" id="thai-time">--:--</div>
+    <div class="time-badges">
+      <div class="time-badge time-th" id="thai-time">🇹🇭 --:--</div>
+      <div class="time-badge time-fr" id="fr-time">🇫🇷 --:--</div>
+    </div>
     <div class="countdown-badge" id="countdown">J–?</div>
   </div>
 </header>
@@ -391,6 +449,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <div class="hero-desc">Phase détente. Plages calmes, couchers de soleil et bons restaurants avant le retour.</div>
   </div>
   <div id="wx-ks" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
+  <div id="sea-ks"></div>
   <div id="days-ks"></div>
 </div>
 
@@ -537,163 +596,189 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 
 <!-- PRATIQUE -->
 <div class="tab" id="tab-prat">
+
+  <!-- Hero compteur -->
   <div class="hero" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47);margin-bottom:14px">
     <span class="hero-em">✈️</span>
     <div class="hero-title" id="cdown-big">Chargement…</div>
     <div class="hero-dates">Départ le 20 juillet 2026 à 16h40 · CDG Terminal 2E</div>
-    <div class="hero-desc" id="thai-time-big" style="margin-top:7px;font-size:15px;font-weight:700"></div>
-  </div>
-
-  <!-- CURRENCY -->
-  <div class="sec-title">💱 Convertisseur devises</div>
-  <div class="cur-card">
-    <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
-    <div class="cur-tabs">
-      <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
-      <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
-      <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
-    </div>
-    <div class="cur-row">
-      <div class="cur-lbl" id="cur-from">EUR</div>
-      <input class="cur-input" id="cur-in" type="number" placeholder="0" oninput="convertCur()">
-      <div class="cur-lbl">→</div>
-    </div>
-    <div class="cur-result">
-      <div class="cur-result-val" id="cur-res">—</div>
-      <div class="cur-result-lbl" id="cur-res-lbl">THB</div>
-    </div>
-    <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
-  </div>
-
-  <!-- TRANSLATOR -->
-  <div class="sec-title">🗣 Traducteur thaï ↔ français</div>
-  <div class="trans-card">
-    <div class="trans-tabs">
-      <div class="trans-tab active" onclick="setTransMode('text',this)">⌨️ Écrit</div>
-      <div class="trans-tab" onclick="setTransMode('voice',this)">🎤 Vocal</div>
-    </div>
-    <div class="dir-row">
-      <div class="dir-btn active" id="dir-fr" onclick="setDir('fr-th')">🇫🇷 Français</div>
-      <div class="dir-swap" onclick="swapDir()">⇄</div>
-      <div class="dir-btn" id="dir-th" onclick="setDir('th-fr')">🇹🇭 Thaï</div>
-    </div>
-    <div id="trans-text-mode">
-      <textarea class="trans-input" id="trans-in" rows="3" placeholder="Tapez votre texte ici…"></textarea>
-      <div class="trans-actions">
-        <button class="t-btn t-translate" onclick="doTranslate()">🔄 Traduire</button>
-        <button class="t-btn t-speak" onclick="speakTrans()">🔊 Écouter</button>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1">
+        <div style="font-size:10px;color:rgba(255,255,255,.7)">🇹🇭 Thaïlande</div>
+        <div id="thai-time-big" style="font-size:16px;font-weight:700;color:#fff">--:--</div>
       </div>
-      <div class="trans-result empty" id="trans-out">La traduction apparaîtra ici…</div>
-      <div class="trans-actions" style="margin-top:7px">
-        <button class="t-btn t-copy" onclick="copyTrans()">📋 Copier</button>
-        <button class="t-btn t-speak" onclick="speakTrans()">🔊 Réécouter</button>
-      </div>
-    </div>
-    <div id="trans-voice-mode" style="display:none">
-      <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
-      <div class="mic-status" id="mic-status">Appuyez pour parler</div>
-      <div class="trans-result empty" id="voice-out" style="margin-top:10px">Texte reconnu et traduit…</div>
-      <div class="trans-actions" style="margin-top:7px">
-        <button class="t-btn t-speak" onclick="speakVoice()">🔊 Répéter</button>
-        <button class="t-btn t-copy" onclick="copyVoice()">📋 Copier</button>
+      <div style="background:rgba(255,255,255,.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1">
+        <div style="font-size:10px;color:rgba(255,255,255,.7)">🇫🇷 France</div>
+        <div id="fr-time-big" style="font-size:16px;font-weight:700;color:#fff">--:--</div>
       </div>
     </div>
   </div>
 
-  <!-- AI -->
-  <div class="sec-title">🤖 Assistant voyage</div>
-  <div class="ai-card">
-    <div class="ai-hdr">
-      <span style="font-size:20px">🤖</span>
-      <div><div class="ai-hdr-title">Assistant Thaïlande 2026</div><div class="ai-hdr-sub">Pose toutes tes questions sur le voyage</div></div>
+  <!-- SUB-TABS -->
+  <div class="prat-tabs">
+    <div class="prat-tab active" onclick="goP('info',this)"><span class="pti">ℹ️</span>Infos</div>
+    <div class="prat-tab" onclick="goP('outils',this)"><span class="pti">🛠</span>Outils</div>
+    <div class="prat-tab" onclick="goP('pratique',this)"><span class="pti">📋</span>Pratique</div>
+    <div class="prat-tab" onclick="goP('photos',this)"><span class="pti">📸</span>Photos</div>
+    <div class="prat-tab" onclick="goP('config',this)"><span class="pti">⚙️</span>Config</div>
+  </div>
+
+  <!-- ── SECTION INFO ── -->
+  <div class="prat-sec active" id="ps-info">
+    <div class="sec-title">💱 Convertisseur devises</div>
+    <div class="cur-card">
+      <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
+      <div class="cur-tabs">
+        <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
+        <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
+        <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
+      </div>
+      <div class="cur-row">
+        <div class="cur-lbl" id="cur-from">EUR</div>
+        <input class="cur-input" id="cur-in" type="number" placeholder="0" oninput="convertCur()">
+        <div class="cur-lbl">→</div>
+      </div>
+      <div class="cur-result">
+        <div class="cur-result-val" id="cur-res">—</div>
+        <div class="cur-result-lbl" id="cur-res-lbl">THB</div>
+      </div>
+      <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
     </div>
-    <div class="ai-msgs" id="ai-msgs">
-      <div class="ai-msg assistant">Bonjour ! Je connais tout votre programme en Thaïlande. Posez-moi vos questions — météo, restaurant, logistique, plan B si il pleut… 🌴</div>
+
+    <div class="sec-title">🌧 Météo & plan B</div>
+    <div class="wx-grid">
+      <div class="wx-sm"><div class="wx-sm-dest">Bangkok</div><div class="wx-sm-ico">🌦</div><div class="wx-sm-st">Pluies courtes · Peu d'impact</div></div>
+      <div class="wx-sm"><div class="wx-sm-dest">Chiang Mai</div><div class="wx-sm-ico">🌧</div><div class="wx-sm-st">Saison verte · Averses</div></div>
+      <div class="wx-sm"><div class="wx-sm-dest">Koh Tao</div><div class="wx-sm-ico">⛅</div><div class="wx-sm-st">Côte est protégée</div></div>
+      <div class="wx-sm"><div class="wx-sm-dest">Koh Samui</div><div class="wx-sm-ico">🌤</div><div class="wx-sm-st">Côte est · Variable</div></div>
     </div>
-    <div class="ai-sugg">
-      <div class="ai-s" onclick="aiAsk('Il pleut à Koh Tao, que faire ?')">🌧 Plan B pluie</div>
-      <div class="ai-s" onclick="aiAsk('Restaurant proche logement Chiang Mai ?')">🍜 Resto proche</div>
-      <div class="ai-s" onclick="aiAsk('Conseils snorkeling enfants Shark Bay ?')">🐠 Snorkeling</div>
-      <div class="ai-s" onclick=&quot;aiAsk('Que faire ce soir à Bangkok ?')&quot;>🌃 Soir Bangkok</div>
+
+    <div class="sec-title">🚨 Urgences</div>
+    <div id="emergencies"></div>
+
+    <div class="sec-title">📱 Applis à télécharger</div>
+    <div id="apps"></div>
+  </div>
+
+  <!-- ── SECTION OUTILS ── -->
+  <div class="prat-sec" id="ps-outils">
+    <div class="sec-title">🗣 Traducteur thaï ↔ français</div>
+    <div class="trans-card">
+      <div class="trans-tabs">
+        <div class="trans-tab active" onclick="setTransMode('text',this)">⌨️ Écrit</div>
+        <div class="trans-tab" onclick="setTransMode('voice',this)">🎤 Vocal</div>
+      </div>
+      <div class="dir-row">
+        <div class="dir-btn active" id="dir-fr" onclick="setDir('fr-th')">🇫🇷 Français</div>
+        <div class="dir-swap" onclick="swapDir()">⇄</div>
+        <div class="dir-btn" id="dir-th" onclick="setDir('th-fr')">🇹🇭 Thaï</div>
+      </div>
+      <div id="trans-text-mode">
+        <textarea class="trans-input" id="trans-in" rows="3" placeholder="Tapez votre texte ici…"></textarea>
+        <div class="trans-actions">
+          <button class="t-btn t-translate" onclick="doTranslate()">🔄 Traduire</button>
+          <button class="t-btn t-speak" onclick="speakTrans()">🔊 Écouter</button>
+        </div>
+        <div class="trans-result empty" id="trans-out">La traduction apparaîtra ici…</div>
+        <div class="trans-actions" style="margin-top:7px">
+          <button class="t-btn t-copy" onclick="copyTrans()">📋 Copier</button>
+          <button class="t-btn t-speak" onclick="speakTrans()">🔊 Réécouter</button>
+        </div>
+      </div>
+      <div id="trans-voice-mode" style="display:none">
+        <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
+        <div class="mic-status" id="mic-status">Appuyez pour parler</div>
+        <div class="trans-result empty" id="voice-out" style="margin-top:10px">Texte reconnu et traduit…</div>
+        <div class="trans-actions" style="margin-top:7px">
+          <button class="t-btn t-speak" onclick="speakVoice()">🔊 Répéter</button>
+          <button class="t-btn t-copy" onclick="copyVoice()">📋 Copier</button>
+        </div>
+      </div>
     </div>
-    <div class="ai-input-row">
-      <input class="ai-input" id="ai-in" placeholder="Votre question…" onkeydown="if(event.key==='Enter')aiSend()">
-      <button class="ai-send" onclick="aiSend()">➤</button>
+
+    <div class="sec-title">🤖 Assistant voyage</div>
+    <div class="ai-card">
+      <div class="ai-hdr">
+        <span style="font-size:20px">🤖</span>
+        <div><div class="ai-hdr-title">Assistant Thaïlande 2026</div><div class="ai-hdr-sub">Pose toutes tes questions sur le voyage</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs">
+        <div class="ai-msg assistant">Bonjour ! Je connais tout votre programme. Posez-moi vos questions — météo, restaurant, logistique, plan B… 🌴</div>
+      </div>
+      <div class="ai-sugg">
+        <div class="ai-s" onclick="aiAsk('Il pleut à Koh Tao, que faire ?')">🌧 Plan B pluie</div>
+        <div class="ai-s" onclick="aiAsk('Restaurant proche logement Chiang Mai ?')">🍜 Resto proche</div>
+        <div class="ai-s" onclick="aiAsk('Conseils snorkeling enfants Shark Bay ?')">🐠 Snorkeling</div>
+        <div class="ai-s" onclick="aiAsk('Que faire ce soir à Bangkok ?')">🌃 Soir Bangkok</div>
+      </div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="ai-in" placeholder="Votre question…" onkeydown="if(event.key==='Enter')aiSend()">
+        <button class="ai-send" onclick="aiSend()">➤</button>
+      </div>
     </div>
   </div>
 
-  <!-- MAP -->
-  <div class="sec-title">🗺 Carte interactive</div>
-  <div class="map-days" id="map-days"></div>
-  <div class="map-wrap"><div id="lmap"></div></div>
+  <!-- ── SECTION PRATIQUE ── -->
+  <div class="prat-sec" id="ps-pratique">
+    <div class="sec-title">🗣 Phrases utiles</div>
+    <p class="sec-note">Tap 🔊 pour écouter · « Copier » pour envoyer en message</p>
+    <div id="phrases"></div>
 
-  <!-- URGENCES -->
-  <div class="sec-title">🚨 Urgences</div>
-  <div id="emergencies"></div>
+    <div class="sec-title">🧳 Check-list valise</div>
+    <div class="bag-hdr">
+      <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
+      <div class="bag-w">4,1 kg <span style="font-size:14px;font-weight:400">de contenu max</span></div>
+      <div style="font-size:11px;opacity:.8">Format cabine · Machines à laver dans tous les logements</div>
+      <div class="bag-bar-wrap"><div class="bag-bar" id="bag-bar" style="width:0%"></div></div>
+      <div style="font-size:11px;opacity:.8;margin-top:5px" id="bag-prog">0 / 0 cochés</div>
+    </div>
+    <div id="bag-list"></div>
 
-  <!-- PHRASES -->
-  <div class="sec-title">🗣 Phrases utiles</div>
-  <p class="sec-note">Tap 🔊 pour écouter · « Copier » pour envoyer en message</p>
-  <div id="phrases"></div>
+    <div class="sec-title">💉 Vaccins & santé</div>
+    <div id="vaccins"></div>
+    <div class="tip tip-red" style="margin-bottom:14px">
+      <span style="font-size:14px">🦟</span>
+      <div><div class="tip-lbl">Dengue — présente toute l'année</div>Répulsif DEET/Icaridine sur toute la famille, surtout au lever et coucher du soleil.</div>
+    </div>
 
-  <!-- BAG CHECKLIST -->
-  <div class="sec-title">🧳 Check-list valise</div>
-  <div class="bag-hdr">
-    <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
-    <div class="bag-w">4,1 kg <span style="font-size:14px;font-weight:400">de contenu max</span></div>
-    <div style="font-size:11px;opacity:.8">Format cabine · Machines à laver dans tous les logements</div>
-    <div class="bag-bar-wrap"><div class="bag-bar" id="bag-bar" style="width:0%"></div></div>
-    <div style="font-size:11px;opacity:.8;margin-top:5px" id="bag-prog">0 / 0 cochés</div>
-  </div>
-  <div id="bag-list"></div>
+    <div class="sec-title">📄 Documents à préparer</div>
+    <div class="tip tip-red" style="margin-bottom:10px">
+      <span style="font-size:14px">⚠️</span>
+      <div><div class="tip-lbl">Priorité absolue</div>Passeports valides jusqu'au 06/02/2027 minimum · Pas de visa requis pour la France &lt; 30 jours</div>
+    </div>
+    <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
+    <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage (rapatriement inclus) · Adresses logements imprimées</div></div>
+    <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
 
-  <!-- VACCINS -->
-  <div class="sec-title">💉 Vaccins & santé</div>
-  <div id="vaccins"></div>
-  <div class="tip tip-red" style="margin-bottom:14px">
-    <span style="font-size:14px">🦟</span>
-    <div><div class="tip-lbl">Dengue — présente toute l'année</div>Répulsif DEET/Icaridine sur toute la famille, surtout au lever et coucher du soleil.</div>
-  </div>
-
-  <!-- DOCS -->
-  <div class="sec-title">📄 Documents à préparer</div>
-  <div class="tip tip-red" style="margin-bottom:10px">
-    <span style="font-size:14px">⚠️</span>
-    <div><div class="tip-lbl">Priorité absolue</div>Passeports valides jusqu'au 06/02/2027 minimum · Pas de visa requis pour la France &lt; 30 jours</div>
-  </div>
-  <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
-  <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage (rapatriement inclus) · Adresses logements imprimées</div></div>
-  <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
-
-  <!-- MÉTÉO PLAN B -->
-  <div class="sec-title">🌧 Météo & plan B</div>
-  <div class="wx-grid">
-    <div class="wx-sm"><div class="wx-sm-dest">Bangkok</div><div class="wx-sm-ico">🌦</div><div class="wx-sm-st">Pluies courtes · Peu d'impact</div></div>
-    <div class="wx-sm"><div class="wx-sm-dest">Chiang Mai</div><div class="wx-sm-ico">🌧</div><div class="wx-sm-st">Saison verte · Averses</div></div>
-    <div class="wx-sm"><div class="wx-sm-dest">Koh Tao</div><div class="wx-sm-ico">⛅</div><div class="wx-sm-st">Côte est protégée</div></div>
-    <div class="wx-sm"><div class="wx-sm-dest">Koh Samui</div><div class="wx-sm-ico">🌤</div><div class="wx-sm-st">Côte est · Variable</div></div>
+    <div class="sec-title">📊 Récap voyage</div>
+    <p class="sec-note">Génère un PDF souvenir avec activités cochées et notes.</p>
+    <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
   </div>
 
-  <!-- APPS -->
-  <div class="sec-title">📱 Applis à télécharger</div>
-  <div id="apps"></div>
-
-  <!-- RECAP PDF -->
-  <div class="sec-title">📊 Récap voyage</div>
-  <p class="sec-note">Génère un PDF souvenir avec activités cochées et notes.</p>
-  <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
-
-  <!-- CONFIG -->
-  <div class="sec-title">⚙️ Configuration</div>
-  <div class="info-card">
-    <div class="info-title">📊 Google Sheets (synchronisation)</div>
-    <div class="info-body">Notes et activités synchronisées automatiquement entre tous les téléphones via Google Sheets.</div>
-    <button onclick="gsLoad().then(()=>{renderDays(DATA.bangkok,'days-bkk','bkk');renderDays(DATA.chiangmai,'days-cm','cm');renderDays(DATA.kohtao,'days-kt','kt');renderDays(DATA.kohsamui,'days-ks','ks');toast('✅ Synchronisé !');}).catch(()=>toast('❌ Erreur de sync'))" style="margin-top:9px;background:var(--green);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔄 Synchroniser maintenant</button>
+  <!-- ── SECTION PHOTOS ── -->
+  <div class="prat-sec" id="ps-photos">
+    <div class="sec-title">📸 Photos du voyage</div>
+    <div id="g-login-area">
+      <button class="g-login-btn" onclick="gDriveLogin()">🔑 Se connecter avec Google</button>
+    </div>
+    <div id="photo-section"></div>
+    <button class="photo-add" onclick="openPhotoModal()" id="photo-add-btn" style="display:none">📷 Ajouter des photos</button>
   </div>
-  <div class="info-card" style="margin-top:7px">
-    <div class="info-title">🔐 Code PIN</div>
-    <button onclick="changePin()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Changer le PIN</button>
+
+  <!-- ── SECTION CONFIG ── -->
+  <div class="prat-sec" id="ps-config">
+    <div class="sec-title">⚙️ Configuration</div>
+    <div class="info-card">
+      <div class="info-title">📊 Google Sheets (synchronisation)</div>
+      <div class="info-body">Notes et activités synchronisées automatiquement entre tous les téléphones.</div>
+      <button onclick="gsLoad().then(()=>{renderDays(DATA.bangkok,'days-bkk','bkk');renderDays(DATA.chiangmai,'days-cm','cm');renderDays(DATA.kohtao,'days-kt','kt');renderDays(DATA.kohsamui,'days-ks','ks');toast('✅ Synchronisé !');}).catch(()=>toast('❌ Erreur de sync'))" style="margin-top:9px;background:var(--green);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔄 Synchroniser maintenant</button>
+    </div>
+    <div class="info-card" style="margin-top:7px">
+      <div class="info-title">🔐 Code PIN</div>
+      <button onclick="changePin()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Changer le PIN</button>
+    </div>
   </div>
+
 </div>
 
 </main>
@@ -703,7 +788,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
   <button class="nav-btn active" onclick="goTab('bkk',this)"><span class="ni">🏙</span>Bangkok</button>
   <button class="nav-btn" onclick="goTab('cm',this)"><span class="ni">🌿</span>Ch.Mai</button>
   <button class="nav-btn" onclick="goTab('kt',this)"><span class="ni">🐠</span>Koh Tao</button>
-  <button class="nav-btn" onclick="goTab('ks',this)"><span class="ni">🌴</span>Samui</button>
+  <button class="nav-btn" onclick="goTab('ks',this)"><span class="ni">🌴</span>Koh Samui</button>
   <button class="nav-btn" onclick="goTab('lodge',this)"><span class="ni">🏠</span>Séjour</button>
   <button class="nav-btn" onclick="goTab('prat',this)"><span class="ni">📋</span>Pratique</button>
 </nav>
@@ -720,6 +805,56 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <div class="cfg-lbl">App ID</div><input class="cfg-input" id="fb-aid" placeholder="1:xxx:web:xxx">
     <button class="cfg-save" onclick="saveFb()">💾 Enregistrer</button>
   </div>
+</div>
+
+<!-- PHOTO MODAL -->
+<div class="ph-modal" id="ph-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="ph-sheet">
+    <button style="position:absolute;top:14px;right:16px;font-size:20px;color:var(--brown-mid)" onclick="document.getElementById('ph-modal').classList.remove('open')">✕</button>
+    <div class="modal-title" style="font-size:16px;font-weight:800;color:var(--brown);margin-bottom:14px;text-align:center">📷 Ajouter des photos</div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Destination</div>
+    <div id="ph-dest-pills" style="margin-bottom:10px"></div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Journée</div>
+    <div id="ph-day-pills" style="margin-bottom:10px"><span style="font-size:12px;color:var(--brown-mid)">← Choisir une destination</span></div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Diffusion</div>
+    <div class="diff-row">
+      <div class="diff-btn sel" id="diff-priv" onclick="setDiff('priv')">🔒 Privé</div>
+      <div class="diff-btn" id="diff-all" onclick="setDiff('all')">👨‍👩‍👧 Proches</div>
+      <div class="diff-btn" id="diff-both" onclick="setDiff('both')">🌍 Les deux</div>
+    </div>
+
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Photos</div>
+    <div class="up-prevs" id="up-prevs"></div>
+    <div class="up-zone" onclick="document.getElementById('ph-file').click()"
+         ondragover="event.preventDefault();this.style.borderColor='var(--coral)'"
+         ondrop="event.preventDefault();this.style.borderColor='#ddd';handleFiles(event.dataTransfer.files)">
+      <div style="font-size:28px;margin-bottom:6px">🖼</div>
+      <div style="font-size:13px;color:var(--brown-mid)">Appuyer pour choisir des photos</div>
+      <div style="font-size:11px;color:#bbb;margin-top:3px">JPG, PNG, HEIC</div>
+    </div>
+    <input type="file" id="ph-file" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px">Légende (optionnel)</div>
+    <textarea style="width:100%;border:1.5px solid var(--sand-mid);border-radius:7px;padding:9px 11px;font-size:12px;font-family:inherit;resize:none;outline:none;color:var(--brown);background:var(--sand)" id="ph-caption" rows="2" placeholder="Ex: Vue depuis Doi Suthep…"></textarea>
+
+    <button class="pub-btn" id="pub-btn" onclick="publishPhotos()" disabled>📤 Publier les photos</button>
+    <div style="font-size:11px;color:var(--brown-mid);text-align:center;margin-top:8px" id="pub-status"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <div class="lb-cap" id="lb-cap"></div>
+  <div class="lb-nav">
+    <button onclick="lbNav(-1)">←</button>
+    <button onclick="lbNav(1)">→</button>
+  </div>
+  <div class="lb-count" id="lb-count"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -980,9 +1115,12 @@ function updCdown(){
   const B=document.getElementById('cdown-big');if(B)B.textContent=b;
 }
 function updThaiTime(){
-  const t=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
-  document.getElementById('thai-time').textContent='🇹🇭 '+t;
-  const B=document.getElementById('thai-time-big');if(B)B.textContent='🕐 Heure en Thaïlande : '+t;
+  const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
+  const fr=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(new Date());
+  const e1=document.getElementById('thai-time');if(e1)e1.textContent='🇹🇭 '+th;
+  const e2=document.getElementById('fr-time');if(e2)e2.textContent='🇫🇷 '+fr;
+  const e3=document.getElementById('thai-time-big');if(e3)e3.textContent=th;
+  const e4=document.getElementById('fr-time-big');if(e4)e4.textContent=fr;
 }
 
 // ═══ WEATHER ════════════════════════════════
@@ -1002,15 +1140,17 @@ async function fetchWx(k){
 }
 
 // ═══ SEA CONDITIONS ══════════════════════════
-async function fetchSea(){
-  const el=document.getElementById('sea-kt');if(!el)return;
+async function fetchSea(dest){
+  const cfgs={kt:{el:"sea-kt",lat:10.10,lon:99.84,n:"Koh Tao"},ks:{el:"sea-ks",lat:9.54,lon:100.06,n:"Koh Samui"}};
+  const cfg=cfgs[dest];if(!cfg)return;
+  const el=document.getElementById(cfg.el);if(!el)return;
   try{
-    const r=await fetch('https://marine-api.open-meteo.com/v1/marine?latitude=10.10&longitude=99.84&current=wave_height,wind_wave_height&timezone=Asia%2FBangkok'),d=await r.json();
+    const r=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${cfg.lat}&longitude=${cfg.lon}&current=wave_height,wind_wave_height&timezone=Asia%2FBangkok`),d=await r.json();
     const wh=d.current.wave_height,ww=d.current.wind_wave_height;
-    const cond=wh<0.5?'🟢 Mer calme':wh<1.0?'🟡 Mer légère':wh<1.5?'🟠 Mer modérée':'🔴 Mer agitée';
-    const adv=wh<0.5?'Idéal pour le snorkeling':wh<1.0?'Bonnes conditions':wh<1.5?'Snorkeling avec prudence':'Éviter les excursions bateau';
-    el.innerHTML=`<div class="sea"><div class="sea-title">🌊 Conditions mer — Koh Tao</div><div class="sea-stats"><div class="sea-stat"><div class="sea-val">${wh.toFixed(1)}m</div><div class="sea-lbl">Hauteur vagues</div></div><div class="sea-stat"><div class="sea-val">${ww.toFixed(1)}m</div><div class="sea-lbl">Vagues vent</div></div><div class="sea-stat"><div class="sea-val" style="font-size:13px">${cond}</div><div class="sea-lbl">${adv}</div></div></div></div>`;
-  }catch(e){el.innerHTML='<div class="sea"><div class="sea-title">🌊 Conditions mer — Koh Tao</div><div style="font-size:11px;color:var(--brown-mid)">Données indisponibles hors connexion</div></div>';}
+    const cond=wh<0.5?"🟢 Mer calme":wh<1.0?"🟡 Mer légère":wh<1.5?"🟠 Mer modérée":"🔴 Mer agitée";
+    const adv=wh<0.5?"Idéal pour le snorkeling":wh<1.0?"Bonnes conditions":wh<1.5?"Snorkeling avec prudence":"Éviter les excursions bateau";
+    el.innerHTML=`<div class="sea"><div class="sea-title">🌊 Conditions mer — ${cfg.n}</div><div class="sea-stats"><div class="sea-stat"><div class="sea-val">${wh.toFixed(1)}m</div><div class="sea-lbl">Hauteur vagues</div></div><div class="sea-stat"><div class="sea-val">${ww.toFixed(1)}m</div><div class="sea-lbl">Vagues vent</div></div><div class="sea-stat"><div class="sea-val" style="font-size:13px">${cond}</div><div class="sea-lbl">${adv}</div></div></div></div>`;
+  }catch(e){el.innerHTML=`<div class="sea"><div class="sea-title">🌊 Conditions mer — ${cfg.n}</div><div style="font-size:11px;color:var(--brown-mid)">Données indisponibles hors connexion</div></div>`;}
 }
 
 // ═══ CURRENCY ════════════════════════════════
@@ -1167,14 +1307,119 @@ function saveNote(dk,i){
 
 // ═══ RENDER DAYS ═════════════════════════════
 const DC={bkk:"#E8734A",cm:"#5B8C5A",kt:"#2BBFB3",ks:"#D4A853"};
+const dayMapIds={};
+
+function renderDayMap(dk, i, spots){
+  if(!spots||!spots.length)return'';
+  const mapId=`dmap-${dk}-${i}`;
+  dayMapIds[mapId]=spots;
+  return`<div class="day-map-lbl">🗺 Spots de la journée</div><div class="day-map-wrap" id="${mapId}"></div>`;
+}
+
+function initDayMap(mapId){
+  const spots=dayMapIds[mapId];
+  if(!spots||!spots.length)return;
+  const el=document.getElementById(mapId);
+  if(!el||el._mapInit)return;
+  el._mapInit=true;
+  const center=[spots[0].lat,spots[0].lng];
+  const m=L.map(mapId,{zoomControl:false,scrollWheelZoom:false}).setView(center,12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(m);
+  const bounds=[];
+  spots.forEach((s,idx)=>{
+    const ico=L.divIcon({className:'',html:`<div style="background:${s.c||'#E8734A'};color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.3);border:2px solid #fff">${idx+1}</div>`,iconSize:[26,26]});
+    L.marker([s.lat,s.lng],{icon:ico}).addTo(m).bindPopup(`<b>${s.n}</b>`);
+    bounds.push([s.lat,s.lng]);
+  });
+  if(bounds.length>1)m.fitBounds(bounds,{padding:[15,15]});
+}
+
 function renderDays(days,cid,dk){
   const color=DC[dk],c=document.getElementById(cid),aS=getActs(),nS=getNotes();
   c.innerHTML=days.map((day,i)=>{
     const cid2=`card-${dk}-${i}`,nk=`note-${dk}-${i}`,sn=nS[nk]||'';
-    const actsH=(day.acts&&day.acts.length)?`<div class="act-section"><div class="act-title">✅ Ce qu'on a fait</div>${day.acts.map((a,ai)=>{const ak=`act-${dk}-${i}-${ai}`,done=aS[ak]?'done':'',mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.m)}`;return`<div class="act-item ${done}" id="${ak}" onclick="toggleAct('${ak}')"><div class="act-check"></div><div class="act-lbl">${a.l}</div><a class="mbtn" href="${mu}" target="_blank" onclick="event.stopPropagation()">🗺 Maps</a></div>`;}).join('')}</div>`:'';
-    const notesH=`<div class="notes-section"><div class="notes-lbl">📝 Notes & souvenirs</div><textarea class="notes-input" id="ni-${dk}-${i}" rows="3" placeholder="On a aussi découvert… le resto était… les enfants ont adoré…">${sn}</textarea><button class="notes-save" onclick="saveNote('${dk}',${i})">Sauvegarder</button><div class="cf"></div></div>`;
-    return`<div class="day-card" id="${cid2}"><div class="day-card-hdr" onclick="this.parentElement.classList.toggle('open')"><div style="display:flex;align-items:center;gap:9px"><div class="day-dot" style="background:${color}"></div><div><div class="day-date">${day.date}</div><div class="day-title">${day.title}</div></div></div><span class="day-chev">▼</span></div><div class="day-body"><div class="tl">${day.items.map(it=>`<div class="tli"><div class="tl-dot" style="background:${color};box-shadow:0 0 0 1px ${color}"></div>${it.t?`<div class="tl-time">${it.t}</div>`:''}<div class="tl-name">${it.n}</div>${it.d?`<div class="tl-desc">${it.d.replace(/\n/g,'<br>')}</div>`:''} ${it.a?`<div class="tl-addr">📍 ${it.a}</div>`:''} ${it.al?`<div class="tip tip-red" style="margin-top:6px"><span style="font-size:13px">⚠️</span><div><div class="tip-text">${it.al}</div></div></div>`:''} ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}</div>`).join('')}</div>${day.tip?`<div class="tip tip-${day.tip.c}" style="margin-top:10px"><span style="font-size:14px">${day.tip.i}</span><div><div class="tip-lbl">${day.tip.l}</div><div>${day.tip.t}</div></div></div>`:''} ${actsH} ${notesH}</div></div>`;
+    const spots=DATA.mapSpots[`${dk}-${i}`]||[];
+    const mapH=renderDayMap(dk,i,spots);
+
+    // Activities — Maps button in label, not in checkbox row
+    const actsH=(day.acts&&day.acts.length)?`<div class="act-section"><div class="act-title">✅ Ce qu'on a fait</div>${day.acts.map((a,ai)=>{
+      const ak=`act-${dk}-${i}-${ai}`,done=aS[ak]?'done':'';
+      const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.m)}`;
+      return`<div class="act-item ${done}" id="${ak}" onclick="toggleAct('${ak}')">
+        <div class="act-check"></div>
+        <div class="act-lbl">
+          ${a.l}
+          <a class="mbtn" href="${mu}" target="_blank" onclick="event.stopPropagation()" style="margin-left:6px;margin-top:3px;display:inline-flex">🗺 Maps</a>
+        </div>
+      </div>`;
+    }).join('')}</div>`:'';
+
+    // Notes — textarea auto-expand
+    const notesH=`<div class="notes-section"><div class="notes-lbl">📝 Notes & souvenirs</div><textarea class="notes-input" id="ni-${dk}-${i}" rows="${sn?Math.max(3,sn.split('\n').length+1):3}" placeholder="On a aussi découvert… le resto était… les enfants ont adoré…" oninput="this.rows=Math.max(3,this.value.split('\\n').length+1)">${sn}</textarea><button class="notes-save" onclick="saveNote('${dk}',${i})">Sauvegarder</button><div class="cf"></div></div>`;
+
+    // Timeline items with uniform info-row for address + duration
+    const tlH=day.items.map(it=>{
+      const addrParts=it.a?it.a.split('·').map(x=>x.trim()):[];
+      const addr=addrParts[0]||'';
+      const duration=addrParts[1]||'';
+      const mapsQuery=it.acts_m||it.n;
+      const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr||mapsQuery)}`;
+      return`<div class="tli">
+        <div class="tl-dot" style="background:${color};box-shadow:0 0 0 1px ${color}"></div>
+        ${it.t?`<div class="tl-time">${it.t}</div>`:''}
+        <div class="tl-name">${it.n}</div>
+        ${it.d?`<div class="tl-desc">${it.d.replace(/\n/g,'<br>')}</div>`:''}
+        ${it.a?`<div class="info-row">
+          <span class="info-row-ico">📍</span>
+          <span class="info-row-txt">${addr}${duration?` · <b>${duration}</b>`:''}</span>
+          ${addr?`<a class="info-row-maps" href="${mapsUrl}" target="_blank">🗺 Maps</a>`:''}
+        </div>`:''}
+        ${it.al?`<div class="tip tip-red" style="margin-top:6px"><span style="font-size:13px">⚠️</span><div><div class="tip-text">${it.al}</div></div></div>`:''}
+        ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}
+      </div>`;
+    }).join('');
+
+    return`<div class="day-card" id="${cid2}">
+      <div class="day-card-hdr" onclick="toggleDayCard('${cid2}')">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div class="day-dot" style="background:${color}"></div>
+          <div><div class="day-date">${day.date}</div><div class="day-title">${day.title}</div></div>
+        </div>
+        <span class="day-chev">▼</span>
+      </div>
+      <div class="day-body">
+        <div class="tl">${tlH}</div>
+        ${day.tip?`<div class="tip tip-${day.tip.c}" style="margin-top:10px"><span style="font-size:14px">${day.tip.i}</span><div><div class="tip-lbl">${day.tip.l}</div><div>${day.tip.t}</div></div></div>`:''}
+        ${actsH}
+        ${notesH}
+        ${mapH}
+      </div>
+    </div>`;
   }).join('');
+
+  // Init day maps when cards open
+  document.querySelectorAll(`#${cid} .day-card-hdr`).forEach(hdr=>{
+    hdr.addEventListener('click',()=>{
+      const card=hdr.parentElement;
+      setTimeout(()=>{
+        if(card.classList.contains('open')){
+          const mapEl=card.querySelector('.day-map-wrap');
+          if(mapEl)initDayMap(mapEl.id);
+        }
+      },100);
+    });
+  });
+}
+
+function toggleDayCard(id){
+  const card=document.getElementById(id);
+  card.classList.toggle('open');
+  if(card.classList.contains('open')){
+    setTimeout(()=>{
+      const mapEl=card.querySelector('.day-map-wrap');
+      if(mapEl)initDayMap(mapEl.id);
+    },100);
+  }
 }
 
 // ═══ RENDER PRATIQUE ═════════════════════════
@@ -1247,8 +1492,236 @@ async function initFirebase(){
   }catch(e){console.warn('Firebase:',e.message);}
 }
 
-// ═══ NAV ══════════════════════════════════════
-function goTab(k,b){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));document.getElementById('tab-'+k).classList.add('active');b.classList.add('active');window.scrollTo(0,0);if(['bkk','cm','kt','ks'].includes(k)&&!wxL[k]){wxL[k]=true;fetchWx(k);if(k==='kt')fetchSea();}if(k==='prat'&&!lmap){setTimeout(()=>{initMap();buildMapDays();},300);}}
+// ═══ GOOGLE DRIVE PHOTOS ══════════════════════
+const GD_CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
+const GD_FOLDER_ID='1sZCQKYH_yFOfvx1smwXB3BeU0khbuupk';
+const GD_SCOPE='https://www.googleapis.com/auth/drive.file';
+let gdToken=null,pendingFiles=[],selDest=null,selDay=null,selDiff='priv';
+let lbPhotos=[],lbIdx=0;
+
+function loadGapiScript(){
+  return new Promise(resolve=>{
+    if(window.gapi){resolve();return;}
+    const s=document.createElement('script');
+    s.src='https://apis.google.com/js/api.js';
+    s.onload=()=>gapi.load('client',resolve);
+    document.head.appendChild(s);
+  });
+}
+
+async function gDriveLogin(){
+  await loadGapiScript();
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:GD_CLIENT_ID,scope:GD_SCOPE,
+    callback:async(resp)=>{
+      if(resp.error)return;
+      gdToken=resp.access_token;
+      localStorage.setItem('gd_token',gdToken);
+      await gapi.client.init({});
+      showGLoginOk();
+      renderPhotoSection();
+    }
+  });
+  // Charger GSI
+  if(!window.google){
+    const s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=()=>client.requestAccessToken();
+    document.head.appendChild(s);
+  } else {
+    client.requestAccessToken();
+  }
+}
+
+function showGLoginOk(){
+  document.getElementById('g-login-area').innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive</div>`;
+  document.getElementById('photo-add-btn').style.display='flex';
+}
+
+function getPhotos(){return JSON.parse(localStorage.getItem('trip_photos')||'[]');}
+function savePhotosMeta(p){localStorage.setItem('trip_photos',JSON.stringify(p));}
+
+async function uploadToDrive(file,caption,destKey,dayKey,diff){
+  const meta={name:file.name,parents:[GD_FOLDER_ID],description:JSON.stringify({caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()})};
+  const form=new FormData();
+  form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
+  form.append('file',file);
+  const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webContentLink,webViewLink',{
+    method:'POST',headers:{Authorization:'Bearer '+gdToken},body:form
+  });
+  const d=await r.json();
+  // Rendre public en lecture
+  await fetch(`https://www.googleapis.com/drive/v3/files/${d.id}/permissions`,{
+    method:'POST',headers:{Authorization:'Bearer '+gdToken,'Content-Type':'application/json'},
+    body:JSON.stringify({role:'reader',type:'anyone'})
+  });
+  // URL directe pour affichage
+  const imgUrl=`https://drive.google.com/thumbnail?id=${d.id}&sz=w800`;
+  return{id:d.id,url:imgUrl,caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()};
+}
+
+async function publishPhotos(){
+  if(!selDest||!selDay||!pendingFiles.length)return;
+  const btn=document.getElementById('pub-btn'),status=document.getElementById('pub-status');
+  btn.disabled=true;btn.innerHTML='<span class="sp"></span> Envoi en cours…';
+  const caption=document.getElementById('ph-caption').value.trim();
+  const photos=getPhotos();
+  try{
+    for(const file of pendingFiles){
+      const p=await uploadToDrive(file,caption,selDest,selDay,selDiff);
+      photos.push(p);
+      // Sync Google Sheets
+      gsSave('photo',`${selDest}-${selDay}-${p.id}`,JSON.stringify({url:p.url,caption,diff:selDiff}));
+    }
+    savePhotosMeta(photos);
+    toast(`✅ ${pendingFiles.length} photo${pendingFiles.length>1?'s':''} publiée${pendingFiles.length>1?'s':''} !`);
+    pendingFiles=[];
+    document.getElementById('up-prevs').innerHTML='';
+    document.getElementById('ph-caption').value='';
+    document.getElementById('ph-modal').classList.remove('open');
+    renderPhotoSection();
+    // Sync vers voyage.html via GS
+    syncPhotosToVoyage(photos);
+  }catch(e){
+    toast('❌ Erreur — vérifiez la connexion Google');
+    status.textContent='Erreur : '+e.message;
+  }
+  btn.disabled=false;btn.textContent='📤 Publier les photos';
+}
+
+function syncPhotosToVoyage(photos){
+  // Envoie les photos "all" et "both" vers GS pour que voyage.html les lise
+  const pubPhotos=photos.filter(p=>p.diff==='all'||p.diff==='both');
+  gsSave('photos_voyage','all_photos',JSON.stringify(pubPhotos));
+}
+
+function renderPhotoSection(){
+  const photos=getPhotos();
+  const all=[
+    ...DATA.bangkok.map((d,i)=>({key:`bkk-${i}`,label:`🏙 ${d.date}`,dest:'bkk'})),
+    ...DATA.chiangmai.map((d,i)=>({key:`cm-${i}`,label:`🌿 ${d.date}`,dest:'cm'})),
+    ...DATA.kohtao.map((d,i)=>({key:`kt-${i}`,label:`🐠 ${d.date}`,dest:'kt'})),
+    ...DATA.kohsamui.map((d,i)=>({key:`ks-${i}`,label:`🌴 ${d.date}`,dest:'ks'})),
+  ];
+  let html='';
+  all.forEach(day=>{
+    const dayPhotos=photos.filter(p=>p.dayKey===day.key);
+    if(!dayPhotos.length)return;
+    html+=`<div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--brown-mid);margin-bottom:5px">${day.label}</div>
+      <div class="photo-grid-day">
+        ${dayPhotos.map((p,i)=>`
+          <div class="photo-cell" onclick="openLb('${day.key}',${i})">
+            <img src="${p.url}" alt="${p.caption||''}" loading="lazy">
+            ${p.caption?`<div class="photo-cap">${p.caption}</div>`:''}
+            <div class="photo-badge ${p.diff==='priv'?'badge-priv':'badge-all'}">${p.diff==='priv'?'🔒':'👁'}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  });
+  document.getElementById('photo-section').innerHTML=html||'<div class="photo-empty">📷 Aucune photo pour l\'instant<br>Appuyez sur le bouton ci-dessous pour en ajouter</div>';
+}
+
+// PHOTO MODAL
+function openPhotoModal(){
+  if(!gdToken){toast('🔑 Connectez-vous à Google d\'abord');return;}
+  selDest=null;selDay=null;selDiff='priv';pendingFiles=[];
+  document.getElementById('up-prevs').innerHTML='';
+  document.getElementById('ph-caption').value='';
+  document.getElementById('pub-btn').disabled=true;
+  // Dest pills
+  const dests=[{k:'bkk',l:'🏙 Bangkok'},{k:'cm',l:'🌿 Chiang Mai'},{k:'kt',l:'🐠 Koh Tao'},{k:'ks',l:'🌴 Samui'}];
+  document.getElementById('ph-dest-pills').innerHTML=dests.map(d=>`<span class="dp-pill" onclick="selPhDest('${d.k}',this)">${d.l}</span>`).join('');
+  document.getElementById('ph-day-pills').innerHTML='<span style="font-size:12px;color:var(--brown-mid)">← Choisir une destination</span>';
+  document.getElementById('ph-modal').classList.add('open');
+}
+
+function selPhDest(dk,el){
+  selDest=dk;selDay=null;
+  document.querySelectorAll('#ph-dest-pills .dp-pill').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  const dayMap={bkk:DATA.bangkok,cm:DATA.chiangmai,kt:DATA.kohtao,ks:DATA.kohsamui};
+  document.getElementById('ph-day-pills').innerHTML=dayMap[dk].map((d,i)=>`<span class="dp-pill" onclick="selPhDay('${dk}-${i}',this)">${d.date.split(' ').slice(0,2).join(' ')}</span>`).join('');
+  updPubBtn();
+}
+
+function selPhDay(key,el){
+  selDay=key;
+  document.querySelectorAll('#ph-day-pills .dp-pill').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+  updPubBtn();
+}
+
+function setDiff(d){
+  selDiff=d;
+  ['priv','all','both'].forEach(x=>document.getElementById('diff-'+x).classList.toggle('sel',x===d));
+}
+
+function updPubBtn(){document.getElementById('pub-btn').disabled=!(selDest&&selDay&&pendingFiles.length);}
+
+function handleFiles(files){
+  for(const f of files)if(f.type.startsWith('image/'))pendingFiles.push(f);
+  const c=document.getElementById('up-prevs');
+  c.innerHTML=pendingFiles.map((f,i)=>{
+    const url=URL.createObjectURL(f);
+    return`<div class="up-prev"><img src="${url}"><div class="up-rm" onclick="rmFile(${i})">✕</div></div>`;
+  }).join('');
+  updPubBtn();
+}
+
+function rmFile(i){pendingFiles.splice(i,1);handleFiles([]);}
+
+// LIGHTBOX
+function openLb(dayKey,idx){
+  const photos=getPhotos().filter(p=>p.dayKey===dayKey);
+  if(!photos.length)return;
+  lbPhotos=photos;lbIdx=idx;showLb();
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function showLb(){
+  const p=lbPhotos[lbIdx];
+  document.getElementById('lb-img').src=p.url;
+  document.getElementById('lb-cap').textContent=p.caption||'';
+  document.getElementById('lb-count').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+}
+function lbNav(d){lbIdx=(lbIdx+d+lbPhotos.length)%lbPhotos.length;showLb();}
+function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+
+// Swipe lightbox
+let lbTx=0;
+document.addEventListener('DOMContentLoaded',()=>{
+  const lb=document.getElementById('lb');
+  if(lb){
+    lb.addEventListener('touchstart',e=>{lbTx=e.touches[0].clientX;});
+    lb.addEventListener('touchend',e=>{const d=lbTx-e.changedTouches[0].clientX;if(Math.abs(d)>50)lbNav(d>0?1:-1);});
+  }
+});
+
+// Clavier lightbox
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeLb();
+  if(e.key==='ArrowLeft')lbNav(-1);
+  if(e.key==='ArrowRight')lbNav(1);
+});
+function goP(key,btn){
+  document.querySelectorAll('.prat-sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.prat-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ps-'+key).classList.add('active');
+  btn.classList.add('active');
+}
+
+function goTab(k,b){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  document.getElementById('tab-'+k).classList.add('active');
+  b.classList.add('active');window.scrollTo(0,0);
+  if(['bkk','cm','kt','ks'].includes(k)&&!wxL[k]){
+    wxL[k]=true;fetchWx(k);
+    if(k==='kt')fetchSea('kt');
+    if(k==='ks')fetchSea('ks');
+  }
+}
 
 // ═══ TOAST ════════════════════════════════════
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
@@ -1260,11 +1733,15 @@ function initApp(){
   renderDays(DATA.kohtao,'days-kt','kt');
   renderDays(DATA.kohsamui,'days-ks','ks');
   renderPrat();
+  renderPhotoSection();
+  // Vérifier si déjà connecté Google
+  const storedToken=localStorage.getItem('gd_token');
+  if(storedToken){gdToken=storedToken;showGLoginOk();}
   updCdown();updThaiTime();
   setInterval(updCdown,60000);setInterval(updThaiTime,30000);
   fetchWx('bkk');wxL['bkk']=true;
   fetchRates();
-  gsLoad(); // Sync Google Sheets au démarrage
+  gsLoad();
   schedNotifs();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
   setTimeout(()=>{const f=document.querySelector('.day-card');if(f)f.classList.add('open');},100);
