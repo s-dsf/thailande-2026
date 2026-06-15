@@ -1032,7 +1032,7 @@ async function doTranslate(){
   const el=document.getElementById('trans-out');el.className='trans-result typing';el.textContent='Traduction en cours…';
   try{
     const src=tDir==='fr-th'?'français':'thaï',tgt=tDir==='fr-th'?'thaï':'français';
-    const rsp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. Réponds UNIQUEMENT avec la traduction.\n\n${txt}`}]})});
+    const rsp=await fetch('https://claude-proxy-thailande.s-desferet.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. Réponds UNIQUEMENT avec la traduction.\n\n${txt}`}]})});
     const data=await rsp.json();lastTrans=data.content[0].text.trim();el.className='trans-result';el.textContent=lastTrans;
   }catch(e){el.className='trans-result empty';el.textContent='Erreur — vérifiez votre connexion';}
 }
@@ -1049,7 +1049,7 @@ function startRec(){
     const el=document.getElementById('voice-out');el.className='trans-result typing';el.textContent=`"${spoken}" — Traduction…`;
     try{
       const src=tDir==='fr-th'?'français':'thaï',tgt=tDir==='fr-th'?'thaï':'français';
-      const rsp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:300,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. UNIQUEMENT la traduction.\n\n${spoken}`}]})});
+      const rsp=await fetch('https://claude-proxy-thailande.s-desferet.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:300,messages:[{role:'user',content:`Traduis de ${src} vers ${tgt}. UNIQUEMENT la traduction.\n\n${spoken}`}]})});
       const data=await rsp.json();lastVoice=data.content[0].text.trim();el.className='trans-result';el.innerHTML=`<div style="font-size:10px;color:var(--brown-mid);margin-bottom:5px">Reconnu : "${spoken}"</div>${lastVoice}`;speakVoice();
     }catch(e){el.textContent='Erreur de traduction';}
     stopRec();
@@ -1070,7 +1070,7 @@ async function aiSend(){
   const inp=document.getElementById('ai-in'),msg=inp.value.trim();if(!msg)return;inp.value='';
   addAiMsg(msg,'user');aiHist.push({role:'user',content:msg});addAiMsg('…','assistant typing');
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:AI_SYS,messages:aiHist})});
+    const r=await fetch('https://claude-proxy-thailande.s-desferet.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:AI_SYS,messages:aiHist})});
     const d=await r.json(),reply=d.content[0].text;aiHist.push({role:'assistant',content:reply});
     document.getElementById('ai-msgs').lastChild.remove();addAiMsg(reply,'assistant');
   }catch(e){document.getElementById('ai-msgs').lastChild.remove();addAiMsg('Erreur de connexion.','assistant');}
