@@ -279,7 +279,14 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .wx-sm-ico{font-size:22px;margin-bottom:5px}
 .wx-sm-st{font-size:10px;color:var(--brown-mid);line-height:1.4}
 
-/* PRATIQUE SUB-TABS */
+/* LOGEMENT CARD */
+.logement-card{background:rgba(255,255,255,.15);border-radius:var(--rs);padding:10px 12px;margin-top:10px;position:relative}
+.logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:rgba(255,255,255,.7);margin-bottom:3px}
+.logement-addr{font-size:12px;color:var(--white);line-height:1.4}
+.logement-maps{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);color:var(--white);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;margin-top:5px;text-decoration:none}
+/* NOTE DANS ACTS */
+.act-note-item{background:var(--gold-lt);border-radius:var(--rs);padding:8px 12px;margin-bottom:4px;font-size:12px;color:var(--brown);border-left:3px solid var(--gold)}
+.act-note-time{font-size:10px;color:var(--brown-mid);margin-top:2px}
 .prat-tabs{display:flex;gap:0;border-radius:10px;overflow:hidden;border:1.5px solid var(--sand-mid);margin-bottom:14px;margin-top:4px}
 .prat-tab{flex:1;padding:8px 3px;font-size:9px;font-weight:700;text-align:center;background:#fff;color:var(--brown-mid);cursor:pointer;-webkit-tap-highlight-color:transparent;line-height:1.4}
 .prat-tab .pti{font-size:15px;display:block;margin-bottom:2px}
@@ -394,7 +401,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 
 <!-- TOP BAR -->
 <header class="topbar">
-  <div><div class="topbar-title">🇹🇭 Thaïlande 2026</div><div class="topbar-sub">Guide Famille</div></div>
+  <div><div class="topbar-title">Thaïlande 2026</div><div class="topbar-sub">Guide Famille</div></div>
   <div class="topbar-right">
     <div class="time-badges">
       <div class="time-badge time-th" id="thai-time">🇹🇭 --:--</div>
@@ -410,8 +417,13 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 <div class="tab active" id="tab-bkk">
   <div class="hero" style="background:linear-gradient(135deg,#E8734A,#C85A32)">
     <span class="hero-em">🏙</span><div class="hero-title">Bangkok</div>
-    <div class="hero-dates">21 – 24 juillet 2026</div>
+    <div class="hero-dates">21 – 25 juillet 2026</div>
     <div class="hero-desc">Capitale effervescente. Temples le matin, marchés le soir, bateaux pour tout relier.</div>
+    <div class="logement-card">
+      <div class="logement-label">🏠 Logement</div>
+      <div class="logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
+      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Maps</a>
+    </div>
   </div>
   <div id="wx-bkk" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="days-bkk"></div>
@@ -423,6 +435,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <span class="hero-em">🌿</span><div class="hero-title">Chiang Mai</div>
     <div class="hero-dates">25 – 29 juillet 2026</div>
     <div class="hero-desc">Plus calme, plus verte, plus fraîche. Éléphants, montagne, marchés nocturnes.</div>
+    <div class="logement-card">
+      <div class="logement-label">🏠 Logement</div>
+      <div class="logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
+      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Maps</a>
+    </div>
   </div>
   <div id="wx-cm" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="days-cm"></div>
@@ -434,6 +451,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <span class="hero-em">🐠</span><div class="hero-title">Koh Tao</div>
     <div class="hero-dates">29 juillet – 1er août 2026</div>
     <div class="hero-desc">La partie la plus forte pour le snorkeling. Tortues, coraux, eau cristalline.</div>
+    <div class="logement-card">
+      <div class="logement-label">🏠 Logement</div>
+      <div class="logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
+      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Maps</a>
+    </div>
   </div>
   <div id="wx-kt" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="sea-kt"></div>
@@ -447,6 +469,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <span class="hero-em">🌴</span><div class="hero-title">Koh Samui</div>
     <div class="hero-dates">1 – 5 août 2026</div>
     <div class="hero-desc">Phase détente. Plages calmes, couchers de soleil et bons restaurants avant le retour.</div>
+    <div class="logement-card">
+      <div class="logement-label">🏠 Logement</div>
+      <div class="logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
+      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Maps</a>
+    </div>
   </div>
   <div id="wx-ks" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="sea-ks"></div>
@@ -865,66 +892,99 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 // ═══════════════════════════════════════════
 const DATA = {
   depart:"2026-07-20T16:40:00",
+  // Adresses logements — affichées en haut de chaque destination
+  logements:{
+    bkk:{addr:"Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700",maps:"Soi+Palakun+Khet+Bang+Phlat+Bangkok"},
+    cm:{addr:"1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300",maps:"1+Chang+Moi+Road+Soi+2+Chiang+Mai+50300"},
+    kt:{addr:"13/35 Moo 2, Ko Tao, Surat Thani 84360",maps:"13%2F35+Moo+2+Ko+Tao+Surat+Thani+84360"},
+    ks:{addr:"57/57 Moo 5 Anthong, Nathon, Surathani 84140",maps:"57%2F57+Moo+5+Anthong+Nathon+Ko+Samui"},
+  },
   bangkok:[
+    // ── 21 juillet ──────────────────────────────
     {date:"Mardi 21 juillet",title:"Arrivée douce & immersion progressive",
      acts:[{l:"Arrivée BKK — Suvarnabhumi",m:"Suvarnabhumi Airport Bangkok"},{l:"Déjeuner Rooftop Avani+ Riverside",m:"Avani Riverside Bangkok Hotel"},{l:"Balade Chao Phraya",m:"Chao Phraya River Bangkok"}],
      items:[
-       {t:"Matinée",n:"Arrivée BKK — Suvarnabhumi",d:"Transfert Airbnb 45–60 min. Check-in à partir de 14h. Taxi réservé par l'Airbnb — 1 500 bahts, rien à payer au chauffeur, payer au logement le lendemain.",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
-       {t:"Déjeuner",n:"🏙 Rooftop Avani+ Riverside Bangkok",d:"Taxi 28 min.",a:"Avani+ Riverside Bangkok Hotel"},
+       {t:"Matinée",n:"Arrivée BKK — Suvarnabhumi",
+        d:"Transfert Airbnb 45–60 min. Check-in à partir de 14h.",
+        a:"Suvarnabhumi Airport, Bangkok",
+        al:"⚠️ 1 500 bahts — rien à payer au chauffeur · Payer au logement en liquide le lendemain"},
+       {t:"Déjeuner",n:"🏙 Rooftop Avani+ Riverside Bangkok",d:"",a:"Avani+ Riverside Bangkok Hotel · Taxi 28 min"},
        {t:"Après-midi",n:"🚤 Balade Chao Phraya",d:"Premier contact avec Bangkok. Bateaux, temples et skyline.",a:"Chao Phraya, Khlong San, Bangkok 10600 · À pied 7 min"},
        {t:"Soir",n:"Dîner au logement",d:"Maintenir les enfants éveillés jusqu'à 20h pour recaler les rythmes."},
-     ],tip:{c:"turq",i:"💡",l:"Objectif du jour",t:"Récupérer du vol sans trop en faire. Décalage horaire : +5h en été."}},
+     ]},
+    // ── 22 juillet ──────────────────────────────
     {date:"Mercredi 22 juillet",title:"Temples majeurs & klongs",
+     tip:{c:"red",i:"⚠️",l:"Dress code temples",t:"Épaules et genoux couverts obligatoirement. Prévoir un foulard léger."},
      acts:[{l:"Wat Pho — Bouddha couché",m:"Wat Pho Bangkok"},{l:"Grand Palais & Wat Phra Kaew",m:"Grand Palace Bangkok"},{l:"Déjeuner The Sixth 6th",m:"The Sixth Bangkok"},{l:"Long-tail boat klongs",m:"Tha Tien Pier Bangkok"},{l:"Asiatique Riverfront",m:"Asiatique The Riverfront Bangkok"}],
      items:[
-       {t:"Matinée",n:"🛕 Wat Pho — Bouddha couché",d:"Bouddha de 46m. Bols en métal = dons symboliques.",a:"2 Sanam Chai Rd, Phra Nakhon, Bangkok 10200 · Taxi 25 min",al:"Épaules et genoux couverts obligatoirement."},
+       {t:"Matinée",n:"🛕 Wat Pho — Bouddha couché",d:"Bouddha de 46m. Bols en métal = dons symboliques.",a:"2 Sanam Chai Rd, Phra Nakhon, Bangkok 10200 · Taxi 25 min"},
        {t:"Matinée",n:"🏛 Grand Palais & Wat Phra Kaew",d:"Architecture la plus spectaculaire du pays.",a:"Na Phra Lan Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
-       {t:"Déjeuner",n:"The Sixth 6th",d:"",a:"6 Maharat Rd, Phra Nakhon, Bangkok 10200"},
+       {t:"Déjeuner",n:"The Sixth 6th",d:"",a:"6 Maharat Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
        {t:"Après-midi",n:"🚤 Long-tail boat klongs — 1h",d:"Départ Tha Tien Pier · Wat Arun · Bangkok Noi Canal · Bangkok Yai Canal · Artist's House · Poissons géants · Retour Tha Tien Pier."},
-       {t:"Soirée",n:"🌃 Asiatique Riverfront",d:"Grande roue · Street food · Pad thai · Poulet grillé.",a:"2194 Charoen Krung Rd, Bang Kho Laem, Bangkok 10120",r:["Asiatique Riverfront"]},
-     ],tip:{c:"red",i:"⚠️",l:"Dress code temples",t:"Épaules et genoux couverts obligatoirement. Prévoir un foulard léger."}},
+       {t:"Soirée",n:"🌃 Asiatique Riverfront",d:"Grande roue · Spectacles · Street food · Pad thai · Poulet grillé.",a:"2194 Charoen Krung Rd, Bang Kho Laem, Bangkok 10120 · Taxi 20 min"},
+     ]},
+    // ── 23 juillet ──────────────────────────────
     {date:"Jeudi 23 juillet",title:"Excursion Ayutthaya — Ancienne capitale",
+     tip:{c:"gold",i:"🍬",l:"Spécialité locale",t:"Roti Sai Mai — barbe à papa enveloppée dans une crêpe sucrée. Incontournable à Ayutthaya !"},
      acts:[{l:"Wat Sri Sanphet + Wat Mahathad",m:"Ayutthaya Historical Park"},{l:"Wat Yai Chaimongkhol",m:"Wat Yai Chai Mongkhon Ayutthaya"},{l:"Musée Chao Sam Phraya",m:"Chao Sam Phraya Museum Ayutthaya"},{l:"Barge restaurant flottante",m:"Ayutthaya Boat Tour"},{l:"Bang Pa-In — Palais royal d'été",m:"Bang Pa-In Royal Palace"}],
      items:[
-       {t:"08h00",n:"Départ guide francophone au logement",d:"Excursion déjà payée. Véhicule climatisé privé avec chauffeur."},
-       {t:"Matin",n:"🛕 Wat Sri Sanphet + Wat Mahathad",d:"En tuk-tuk. La tête de Bouddha dans les racines = site le plus photographié.",a:"Ayutthaya Historical Park"},
-       {t:"Matin",n:"🛕 Wat Yai Chaimongkhol",d:"L'un des plus grands chedi. Jardin magnifique.",a:"Ayutthaya"},
-       {t:"Midi",n:"🏛 Musée Chao Sam Phraya",d:"Entièrement climatisé. Fermé lun/mar.",al:"Vérifier l'ouverture — fermé lundi et mardi."},
+       {t:"08h00",n:"Départ guide francophone au logement",d:"",al:"✅ DÉJÀ PAYÉ — Véhicule climatisé privé avec chauffeur"},
+       {t:"Matin",n:"🛕 Wat Sri Sanphet + Wat Mahathad",d:"En tuk-tuk. La tête de Bouddha dans les racines = site le plus photographié."},
+       {t:"Matin",n:"🛕 Wat Yai Chaimongkhol",d:"L'un des plus grands chedi. Jardin magnifique."},
+       {t:"Midi",n:"🏛 Musée Chao Sam Phraya",d:"Entièrement climatisé. Trésors inestimables des temples."},
        {t:"Déjeuner",n:"🚢 Barge restaurant flottante",d:"Croisière 1h30 autour de l'île · Déjeuner à bord."},
-       {t:"Après-midi",n:"🏰 Bang Pa-In",d:"Résidence royale d'été. Architecture thaïe & européenne.",a:"Bang Pa-In Royal Palace, Ayutthaya"},
+       {t:"Après-midi",n:"🏰 Bang Pa-In",d:"Résidence royale d'été. Architecture thaïe & européenne."},
        {t:"~17h00",n:"Retour Bangkok",d:"Soirée repos au logement."},
-     ],tip:{c:"gold",i:"🍬",l:"Spécialité locale",t:"Roti Sai Mai — barbe à papa enveloppée dans une crêpe sucrée. Incontournable à Ayutthaya !"}},
+     ]},
+    // ── 24 juillet ──────────────────────────────
     {date:"Vendredi 24 juillet",title:"Journée fun & Train Night Market",
      acts:[{l:"Siam Amazing Park (Option A)",m:"Siam Amazing Park Bangkok"},{l:"ICONSIAM (Option B)",m:"ICONSIAM Bangkok"},{l:"Train Night Market Srinakarin",m:"Train Night Market Srinakarin Bangkok"}],
      items:[
-       {t:"Matin",n:"🎢 Activité ludique",d:"Option A : Siam Amazing Park (parc aquatique) · Taxi 1h\nOption B : ICONSIAM · Marché flottant · Taxi 30 min"},
+       {t:"Matin",n:"🎢 Activité ludique",d:"Option A : Siam Amazing Park (parc aquatique)\nOption B : ICONSIAM · Marché flottant",
+        a:"Option A : 203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230 · Taxi 1h\nOption B : 299 Charoen Nakhon Rd, Khlong San, Bangkok 10600 · Taxi 30 min"},
        {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme."},
-       {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas."},
+       {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas.",
+        a:"Train Night Market Srinakarin, Bangkok · Taxi 40 min"},
+     ]},
+    // ── 25 juillet (vol vers Chiang Mai) ────────
+    {date:"Samedi 25 juillet",title:"✈ Départ vers Chiang Mai",
+     acts:[{l:"Check-out & départ aéroport Don Mueang",m:"Don Mueang International Airport Bangkok"}],
+     items:[
+       {t:"Avant 11h",n:"Check-out logement Bangkok",d:"Taxi pour l'aéroport Don Mueang : 30 min.",a:"Aéroport international Don Mueang, Bangkok · 30 min"},
+       {t:"10h15",n:"✈ Vol Don Mueang T2 → Chiang Mai",d:"AirAsia Move · Arrivée CNX 11h25 · Terminal 2"},
      ]},
   ],
   chiangmai:[
+    // ── 25 juillet ──────────────────────────────
     {date:"Samedi 25 juillet",title:"Arrivée & installation",
-     acts:[{l:"Arrivée aéroport CNX",m:"Chiang Mai International Airport"},{l:"Wat Phra Singh",m:"Wat Phra Singh Chiang Mai"},{l:"Khao Soi Khun Yai",m:"Khao Soi Khun Yai Chiang Mai"}],
+     tip:{c:"red",i:"📌",l:"À régler dès l'arrivée au logement en liquide",t:"Sanctuaire des éléphants : 13 600 THB"},
+     acts:[{l:"Arrivée aéroport CNX",m:"Chiang Mai International Airport"},{l:"Wat Phra Singh",m:"Wat Phra Singh Chiang Mai"},{l:"Khao Soi Khun Yai (dîner)",m:"Khao Soi Khun Yai Chiang Mai"}],
      items:[
-       {t:"10h15",n:"✈ Vol Don Mueang T2 → Chiang Mai",d:"AirAsia Move. Check-out Bangkok avant 11h. Taxi aéroport Don Mueang : 30 min."},
-       {t:"11h25",n:"Arrivée CNX Terminal 2",d:"Taxi Airbnb organisé — 300 bahts en liquide. Check-in 14h.",a:"1 Chang Moi Road Soi 2, Chiang Mai 50300"},
+       {t:"11h25",n:"Arrivée CNX Terminal 2",d:"",a:"Aéroport international de Chiang Mai, Terminal 2",
+        al:"⚠️ Taxi Airbnb organisé — 300 bahts en liquide directement au chauffeur"},
        {t:"Après-midi",n:"🛕 Wat Phra Singh",d:"Élégant et accessible. Observer les moines en robe safran.",a:"2 Samlarn Rd, Si Phum, Mueang Chiang Mai 50200 · À pied 22 min"},
-       {t:"Soirée",n:"🍜 Khao Soi Khun Yai",d:"LE plat du Nord : curry coco + nouilles croustillantes.",a:"Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200 · À pied 27 min",r:["Khao Soi Khun Yai"]},
+       {t:"Soirée",n:"🍜 Khao Soi Khun Yai — Spécialité du Nord",d:"LE plat emblématique de Chiang Mai : curry coco + nouilles croustillantes.",a:"Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200 · À pied 27 min"},
      ]},
+    // ── 26 juillet ──────────────────────────────
     {date:"Dimanche 26 juillet",title:"🐘 Sanctuaire d'éléphants — Full Day",
-     acts:[{l:"Sanctuaire éléphants + Sticky Waterfall",m:"Elephant Sanctuary Chiang Mai"},{l:"Dash! Restaurant and Bar",m:"Dash Restaurant Bar Chiang Mai"}],
+     tip:{c:"turq",i:"🧳",l:"À prendre pour la journée",t:"Vêtements de rechange · Serviettes · Crème solaire · Sandales · Maillot de bain · Spray répulsif insectes\n✅ Inclus : transport aller-retour, assurance, nourriture éléphants, eau potable, déjeuner thaï traditionnel"},
+     acts:[{l:"Sanctuaire éléphants + Sticky Waterfall",m:"Elephant Sanctuary Chiang Mai"}],
      items:[
-       {t:"08h00–17h00",n:"Full Day Elephants Care + Sticky Waterfall",d:"Nourrir les éléphants · Vitamin balls · Baignade · Sticky Waterfall (on remonte à pied !).\nÀ prendre : vêtements de rechange, serviettes, crème solaire, sandales, maillot, spray répulsif.\nInclus : transport, assurance, nourriture éléphants, eau, déjeuner thaï traditionnel."},
-       {t:"Soirée",n:"Dash! Restaurant and Bar",d:"Maison traditionnelle en bois, ambiance familiale.",a:"38/2 Moon Muang Road, Phra Sing, Mueang Chiang Mai 50200 · À pied 5 min",r:["Dash! Restaurant and Bar"]},
-     ],tip:{c:"red",i:"📌",l:"À régler dès l'arrivée au logement",t:"13 600 THB — Full Day 08h00–17h00. Chauffeur vient chercher et ramène."}},
-    {date:"Lundi 27 juillet",title:"Doi Suthep + Nimman + Night Bazaar",
-     acts:[{l:"Doi Suthep",m:"Doi Suthep Temple Chiang Mai"},{l:"No.39 Café (déjeuner)",m:"No.39 Cafe Chiang Mai"},{l:"Quartier Nimman + Cheevit Cheeva",m:"Nimman Road Chiang Mai"},{l:"Chiang Mai Night Bazaar",m:"Chiang Mai Night Bazaar"},{l:"The Riverside Bar & Restaurant",m:"The Riverside Bar Restaurant Chiang Mai"}],
-     items:[
-       {t:"Matinée tôt",n:"⛩ Doi Suthep",d:"Escalier serpent mythique · Vue panoramique sur Chiang Mai · En voiture 1h.",a:"Doi Suthep, Suthep, Mueang Chiang Mai 50200",al:"Arriver tôt. Épaules et genoux couverts."},
-       {t:"Déjeuner",n:"No.39 Café",d:"Cadre tropical · Pontons · Lac · Ambiance jungle · Les ados adorent.",a:"No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200"},
-       {t:"13h30–15h00",n:"🌿 Quartier Nimman",d:"Boutiques · Cafés · Glaces artisanales. Les ados aiment beaucoup.\nCheevit Cheeva — desserts et kakigori · Nimman Rd, Su Thep, Mueang Chiang Mai",a:"Nimman Road, Su Thep, Mueang Chiang Mai"},
-       {t:"Soirée",n:"🛍 Night Bazaar + Riverside",d:"À pied 15 min. Musique live, tables en plein air.",a:"Changklan Rd, Chang Moi, Mueang Chiang Mai 50100",r:["The Riverside Bar & Restaurant"]},
+       {t:"08h00",n:"🐘 Départ — Guide vient chercher au logement",d:"Full Day 08h00–17h00. Chauffeur vient chercher et ramène au logement (environ 1h de route)."},
+       {t:"Journée",n:"Activités au sanctuaire",d:"Nourrir les éléphants · Préparer des vitamin balls · Baignade avec les éléphants · Sticky Waterfall (on remonte à pied !)"},
+       {t:"~17h00",n:"Retour au logement",d:"Dîner libre à Chiang Mai."},
      ]},
+    // ── 27 juillet ──────────────────────────────
+    {date:"Lundi 27 juillet",title:"Doi Suthep + Nimman + Night Bazaar",
+     tip:{c:"red",i:"⚠️",l:"Dress code",t:"Épaules et genoux couverts à Doi Suthep. Prévoir un foulard léger."},
+     acts:[{l:"Doi Suthep",m:"Doi Suthep Temple Chiang Mai"},{l:"No.39 Café (déjeuner)",m:"No.39 Cafe Chiang Mai"},{l:"Quartier Nimman + Cheevit Cheeva",m:"Nimman Road Chiang Mai"},{l:"Chiang Mai Night Bazaar",m:"Chiang Mai Night Bazaar"}],
+     items:[
+       {t:"Matinée tôt",n:"⛩ Doi Suthep",d:"Escalier serpent mythique · Vue panoramique sur Chiang Mai. Arriver tôt pour éviter chaleur et foule.",a:"Doi Suthep, Suthep, Mueang Chiang Mai 50200 · En voiture 1h"},
+       {t:"Déjeuner",n:"No.39 Café",d:"Cadre tropical magnifique · Pontons · Lac · Ambiance jungle · Les ados adorent.",a:"No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200 · En taxi 15 min"},
+       {t:"13h30–15h00",n:"🌿 Quartier Nimman",d:"Boutiques · Cafés · Glaces artisanales. Les ados aiment beaucoup.\nCheevit Cheeva — desserts et kakigori.",a:"Nimman Road, Su Thep, Mueang Chiang Mai · En taxi 20 min"},
+       {t:"Soirée",n:"🛍 Chiang Mai Night Bazaar",d:"Musique live, tables en plein air.",a:"Changklan Rd, Chang Moi, Mueang Chiang Mai 50100 · À pied 15 min"},
+     ]},
+    // ── 28 juillet ──────────────────────────────
     {date:"Mardi 28 juillet",title:"Grand Canyon Water Park — Journée fun",
      acts:[{l:"Grand Canyon Water Park",m:"Grand Canyon Water Park Chiang Mai"},{l:"Ploen Ruedee Night Market",m:"Ploen Ruedee Night Market Chiang Mai"}],
      items:[
@@ -932,71 +992,96 @@ const DATA = {
        {t:"12h30",n:"🌊 Grand Canyon Water Park",d:"Ancienne carrière reconvertie · Parcours gonflables · 3–4h.",a:"202 Nam Phrae, Hang Dong, Chiang Mai 50230 · En voiture 30 min"},
        {t:"Soirée",n:"Ploen Ruedee Night Market",d:"Food trucks · Pad thai · Brochettes · Riz frit.",a:"28/3-4 Changklan Rd, Chang Moi, Mueang Chiang Mai 50100 · À pied 15 min"},
      ]},
+    // ── 29 juillet (trajet) ──────────────────────
     {date:"Mercredi 29 juillet",title:"Trajet vers Koh Tao",
      acts:[{l:"Aéroport CNX — départ",m:"Chiang Mai International Airport"}],
      items:[
-       {t:"Matin",n:"Check-out avant 10h",d:"Taxi gratuit pris en charge par l'Airbnb.",a:"60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200 · 15 min"},
-       {t:"10h40",n:"✈ Vol CNX → Surat Thani",d:"AirAsia. Arrivée 12h30."},
-       {t:"15h30",n:"🚢 Ferry Tapee Pier → Mae Haad",d:"Direct Ferries. Arrivée ~18h. Chercher panneau avec votre nom dans le pavillon couvert.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
+       {t:"Avant 10h",n:"Check-out logement Chiang Mai",d:"",a:"60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200 · 15 min",
+        al:"✅ Taxi gratuit pris en charge par l'Airbnb"},
+       {t:"10h40",n:"✈ Vol CNX → Surat Thani",d:"AirAsia · Arrivée 12h30."},
+       {t:"15h30",n:"🚢 Ferry Tapee Pier → Mae Haad",d:"Direct Ferries · Arrivée ~18h · Chercher panneau avec votre nom dans le grand pavillon couvert.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
      ]},
   ],
   kohtao:[
+    // ── 29 juillet ──────────────────────────────
     {date:"Jeudi 29 juillet",title:"Arrivée à Koh Tao",
      acts:[{l:"Ferry Mae Haad — arrivée",m:"Mae Haad Pier Koh Tao"},{l:"Dîner au logement",m:"Ko Tao Surat Thani"}],
      items:[
-       {t:"~18h00",n:"Arrivée Mae Haad Pier",d:"Taxi Airbnb · 15 min. Check-in 15h.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
+       {t:"~18h00",n:"Arrivée Mae Haad Pier",d:"Check-in 15h.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360",
+        al:"✅ Transport organisé par l'Airbnb en taxi depuis le ferry — 15 min"},
        {t:"Soirée",n:"Dîner au logement",d:"Repos après la longue journée de transport."},
      ],tip:{c:"turq",i:"😴",l:"Objectif",t:"Dormir tôt pour profiter du premier matin snorkeling à Shark Bay."}},
+    // ── 30 juillet ──────────────────────────────
     {date:"Vendredi 30 juillet",title:"🐢 Shark Bay ⭐⭐⭐ — Les tortues",
-     acts:[{l:"Shark Bay — snorkeling tortues",m:"Shark Bay Koh Tao"},{l:"Restaurant Sai Daeng",m:"Sai Daeng Resort Koh Tao"},{l:"John Suwan Viewpoint",m:"John Suwan Viewpoint Koh Tao"},{l:"Haadtien Beach Club",m:"Haadtien Beach Club Koh Tao"}],
+     acts:[{l:"Shark Bay — snorkeling tortues",m:"Shark Bay Koh Tao"},{l:"John Suwan Viewpoint",m:"John Suwan Viewpoint Koh Tao"}],
      items:[
-       {t:"08h00",n:"🐢 SHARK BAY",d:"Herbiers marins = tortues. Entrée devant Sai Daeng Resort.",a:"Free beach to Shark Bay, Ko Tao, Surat Thani · En voiture 10 min",al:"Ne pas arriver à midi — tortues moins actives et beaucoup de monde."},
-       {t:"Midi",n:"Restaurant Sai Daeng",d:"Vue mer, accès direct plage.",a:"Sai Daeng Resort, 46/9 Moo 3, Sai Daeng Beach, Koh Tao · En voiture 7 min",r:["Restaurant Sai Daeng"]},
-       {t:"Après-midi",n:"John Suwan Viewpoint",d:"Vue spectaculaire sur deux baies.",a:"John-Suwan Viewpoint, Ko Tao · En voiture 10 min"},
-       {t:"Soirée",n:"Haadtien Beach Club",d:"Pieds dans le sable.",a:"Beach Club by Haadtien, Moo 3, Ko Tao · En voiture 10 min",r:["Haadtien Beach Club"]},
+       {t:"08h00",n:"🐢 SHARK BAY",d:"Herbiers marins = tortues. Eau limpide tôt le matin. Entrée devant Sai Daeng Resort.",a:"Free beach to Shark Bay, Ko Tao, Surat Thani 84280 · En voiture 10 min",
+        al:"Ne pas arriver à midi — tortues moins actives et beaucoup de monde."},
+       {t:"Midi",n:"Déjeuner Restaurant Sai Daeng",d:"Vue mer, accès direct plage.",a:"Sai Daeng Resort, 46/9 Moo 3, Sai Daeng Beach, Koh Tao · En voiture 7 min"},
+       {t:"Après-midi",n:"John Suwan Viewpoint",d:"Vue spectaculaire sur deux baies.",a:"John-Suwan Viewpoint, Ko Tao, Surat Thani · En voiture 10 min"},
+       {t:"Soirée",n:"Dîner — Haadtien Beach Club",d:"Pieds dans le sable.",a:"Beach Club by Haadtien, Moo 3, Ko Tao · En voiture 10 min"},
      ]},
+    // ── 31 juillet ──────────────────────────────
     {date:"Samedi 31 juillet",title:"🌊 Ao Leuk Beach ⭐⭐⭐⭐⭐",
-     acts:[{l:"Ao Leuk Beach — snorkeling",m:"Ao Leuk Beach Koh Tao"},{l:"Pause smoothies — Aow Leuk 2",m:"Ao Leuk Koh Tao"},{l:"Barracuda Restaurant",m:"Barracuda Restaurant Koh Tao"}],
+     acts:[{l:"Ao Leuk Beach — snorkeling",m:"Ao Leuk Beach Koh Tao"},{l:"Pause smoothies — Aow Leuk 2",m:"Ao Leuk Koh Tao"}],
      items:[
        {t:"Matinée",n:"🌊 Ao Leuk Beach",d:"La plus belle plage familiale de Koh Tao. Eau calme, beaucoup de poissons, entrée facile.\nEntrer sur la partie droite — nager parallèlement à la plage.\nCe qu'on peut voir : 🐠 poissons-perroquets · 🐟 poissons-papillons · 🐡 poissons-ballons · 🌿 coraux",a:"Ao Leuk, Ko Tao, Surat Thani · En voiture 10 min"},
        {t:"Fin matinée",n:"Pause smoothies — Aow Leuk 2",d:"Smoothie mangue · Smoothie pastèque."},
-       {t:"19h30",n:"🐟 Barracuda Restaurant",d:"Poisson grillé excellent.",a:"Barracuda Roof Top Restaurant, Koh Tao, Surat Thani · À pied 10 min",r:["Barracuda Restaurant"]},
+       {t:"Soirée",n:"Dîner — Barracuda Restaurant",d:"Poisson grillé excellent.",a:"Barracuda Roof Top Restaurant, Koh Tao · À pied 10 min"},
      ]},
+    // ── 1er août ────────────────────────────────
     {date:"Dimanche 1er août",title:"Snorkeling doux + départ ferry",
      acts:[{l:"Ao Leuk — session courte",m:"Ao Leuk Beach Koh Tao"},{l:"Ferry Mae Haad → Koh Samui",m:"Mae Haad Pier Koh Tao"}],
      items:[
        {t:"Matin",n:"🌊 Session courte Ao Leuk",d:"Éviter la fatigue avant le bateau. Check-out avant 10h."},
-       {t:"11h30",n:"🚢 Ferry Mae Haad → Bangrak Pier",d:"Arrivée Koh Samui 13h."},
-     ],tip:{c:"turq",i:"🚢",l:"Ferry 11h30",t:"Départ Mae Haad Pier à 11h30 · Arrivée Bangrak Pier Koh Samui à 13h."}},
+       {t:"11h30",n:"🚢 Ferry Mae Haad → Bangrak Pier",d:"",a:"Mae Haad Pier, Koh Tao",
+        al:"✅ Transport organisé par l'Airbnb · Arrivée Bangrak Pier Koh Samui 13h"},
+     ]},
   ],
   kohsamui:[
+    // ── 1er août ────────────────────────────────
     {date:"Lundi 1er août",title:"Arrivée & Lipa Noi Beach",
      acts:[{l:"Arrivée Bangrak Pier",m:"Bangrak Pier Koh Samui"},{l:"Lipa Noi Beach",m:"Lipa Noi Beach Koh Samui"},{l:"Think & Retro Cafe",m:"Think Retro Cafe Ko Samui"}],
      items:[
-       {t:"13h00",n:"Arrivée Bangrak Pier",d:"Transport organisé par l'Airbnb.",a:"57/57 Moo 5 Anthong, Nathon, Surathani 84140"},
-       {t:"16h30–18h30",n:"🏖 Lipa Noi Beach ⭐⭐⭐⭐⭐",d:"Immense plage, eau peu profonde, très calme, idéale enfants. Superbe coucher de soleil.",a:"Lipa Noi Beach, Ko Samui, Surat Thani"},
-       {t:"19h00",n:"Think & Retro Cafe",d:"Ambiance familiale · Décoration originale · Cuisine simple.",a:"38/48 Lipa Noi, Ko Samui, Surat Thani 84140 · À pied 20 min",r:["Think & Retro Cafe"]},
+       {t:"13h00",n:"Arrivée Bangrak Pier",d:"",a:"57/57 Moo 5 Anthong, Nathon, Surathani 84140",
+        al:"✅ Transport organisé par l'Airbnb depuis le ferry"},
+       {t:"16h30–18h30",n:"🏖 Lipa Noi Beach ⭐⭐⭐⭐⭐",d:"Immense plage, eau peu profonde, très calme, idéale enfants. Superbe coucher de soleil.",a:"Lipa Noi Beach, Ko Samui, Surat Thani · En voiture"},
+       {t:"19h00",n:"Think & Retro Cafe",d:"Ambiance familiale · Décoration originale · Cuisine simple.",a:"38/48 Lipa Noi, Ko Samui, Surat Thani 84140 · À pied 20 min"},
      ]},
-    {date:"Dimanche 2 août",title:"Silver Beach + Coco Tam's",
-     acts:[{l:"Silver Beach — snorkeling",m:"Silver Beach Koh Samui"},{l:"Café 69 (déjeuner)",m:"Cafe 69 Koh Samui"},{l:"Coco Tam's — spectacle de feu",m:"Coco Tams Koh Samui"}],
+    // ── 2 août ──────────────────────────────────
+    {date:"Dimanche 2 août",title:"Silver Beach + soirée animée",
+     acts:[{l:"Silver Beach — snorkeling",m:"Silver Beach Koh Samui"},{l:"Retour au logement",m:"57/57 Moo 5 Anthong Nathon Ko Samui"},{l:"Coco Tam's — spectacle de feu",m:"Coco Tams Koh Samui"}],
      items:[
-       {t:"09h00–11h30",n:"🌊 Silver Beach ⭐⭐⭐⭐⭐",d:"Meilleur snorkeling de Samui. Arriver avant 10h.",a:"Silver Beach, 124/4 Maret, Ko Samui, Surat Thani 84310 · ~30 min de route",al:"Ne pas y aller en après-midi — l'eau devient agitée."},
-       {t:"Midi",n:"Café 69",d:"Cuisine créative, portions partageables.",r:["Café 69"]},
-       {t:"Soirée",n:"🔥 Coco Tam's — Spectacle de feu",d:"Vers 19h30. Les enfants adorent.",r:["Coco Tam's"]},
+       {t:"09h00–11h30",n:"🌊 Silver Beach ⭐⭐⭐⭐⭐",d:"Meilleur snorkeling de Samui. Arriver avant 10h.",a:"Silver Beach, 124/4 Maret, Ko Samui, Surat Thani 84310 · ~30 min de route",
+        al:"Ne pas y aller en après-midi — l'eau devient agitée."},
+       {t:"Midi",n:"Café 69 (déjeuner)",d:"Cuisine créative, portions partageables.",a:"Café 69, Ko Samui"},
+       {t:"Après-midi",n:"Retour au logement",d:"Repos, piscine."},
+       {t:"Soirée",n:"🔥 Coco Tam's — Spectacle de feu",d:"Vers 19h30. Les enfants adorent.",a:"Coco Tam's, Bophut, Ko Samui"},
      ]},
+    // ── 3 août ──────────────────────────────────
     {date:"Lundi 3 août",title:"Big Buddha + Cascades + Secret Garden",
-     acts:[{l:"Big Buddha",m:"Big Buddha Koh Samui"},{l:"The Mother Restaurant",m:"The Mother Restaurant Koh Samui"},{l:"Cascades Na Muang",m:"Na Muang Waterfall Koh Samui"},{l:"Secret Buddha Garden",m:"Tarnim Magic Garden Koh Samui"}],
+     acts:[{l:"Big Buddha",m:"Big Buddha Koh Samui"},{l:"Cascades Na Muang",m:"Na Muang Waterfall Koh Samui"},{l:"Secret Buddha Garden",m:"Tarnim Magic Garden Koh Samui"}],
      items:[
        {t:"Matin",n:"🙏 Big Buddha",d:"Les enfants aiment les grandes statues, les poissons, les couleurs.",a:"Wat Phra Yai, Bo Put, Ko Samui District, Surat Thani 84320 · À pied 20 min"},
-       {t:"Déjeuner",n:"The Mother Restaurant",d:"Cuisine thaïlandaise simple, très bon rapport qualité-prix.",a:"The Mother Restaurant, Bo Put, Ko Samui 84320 · En voiture 10 min",r:["The Mother Restaurant"]},
+       {t:"Déjeuner",n:"The Mother Restaurant",d:"Cuisine thaïlandaise simple, très bon rapport qualité-prix.",a:"The Mother Restaurant, Bo Put, Ko Samui 84320 · En voiture 10 min"},
        {t:"Après-midi",n:"💧 Cascades Na Muang",d:"Baignade possible. À prévoir : baskets, serviettes, anti-moustique.",a:"Na Muang 2 Waterfall, Na Mueang, Ko Samui 84140 · En voiture 50 min"},
        {t:"Après-midi",n:"🌿 Secret Buddha Garden",d:"Lieu caché dans la jungle. Très différent des plages.",a:"Tarnim Magic Garden, Na Mueang, Ko Samui 84140 · En voiture 20 min"},
+       {t:"Fin après-midi",n:"Retour logement",d:""},
      ]},
+    // ── 4 août ──────────────────────────────────
     {date:"Mardi 4 août",title:"Vraie journée de vacances",
-     acts:[{l:"Logement + piscine — journée libre",m:"57/57 Moo 5 Anthong Nathon Ko Samui"},{l:"The Road Less Travelled (dîner)",m:"The Road Less Travelled Cafe Ko Samui"}],
+     acts:[{l:"Logement + piscine — journée libre",m:"57/57 Moo 5 Anthong Nathon Ko Samui"}],
      items:[
        {t:"Journée",n:"🌴 Journée libre au logement",d:"Piscine, détente, lecture. Pas de programme imposé."},
-       {t:"Soirée",n:"The Road Less Travelled Samui",d:"",a:"11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140",r:["The Road Less Travelled"]},
+       {t:"Soirée",n:"The Road Less Travelled Samui",d:"",a:"11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140"},
+     ]},
+    // ── 5 août (retour Bangkok) ──────────────────
+    {date:"Mercredi 5 août",title:"✈ Retour Bangkok",
+     acts:[{l:"Vol Koh Samui → Bangkok BKK",m:"Samui Airport Ko Samui"},{l:"Hôtel Grand BS Airport Suvarnabhumi",m:"Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok"}],
+     items:[
+       {t:"Matin",n:"Check-out logement Koh Samui",d:"Transfert vers l'aéroport organisé."},
+       {t:"14h30",n:"✈ Vol Koh Samui → Bangkok Suvarnabhumi",d:"Bangkok Airways · Arrivée BKK 15h30."},
+       {t:"Check-in ~16h",n:"🏨 Hôtel Grand BS Airport Hotel Suvarnabhumi",d:"2 chambres · Après-midi piscine de l'hôtel.",a:"836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520"},
      ]},
   ],
   urgences:[
@@ -1300,9 +1385,15 @@ function saveNote(dk,i){
   const key=`note-${dk}-${i}`,val=document.getElementById(`ni-${dk}-${i}`).value,saved=getNotes();
   saved[key]=val;
   saveNotes(saved);
-  gsSave('note', key, val);
+  gsSave("note", key, val);
+  // Afficher dans la liste "ce quon a fait"
+  const ac=document.getElementById(`notes-acts-${dk}-${i}`);
+  if(ac&&val.trim()){
+    const t=new Intl.DateTimeFormat("fr-FR",{timeZone:"Asia/Bangkok",hour:"2-digit",minute:"2-digit"}).format(new Date());
+    ac.innerHTML=val.split("\n").filter(l=>l.trim()).map(l=>`<div class="act-note-item">📝 ${l}<div class="act-note-time">Ajouté à ${t} (heure TH)</div></div>`).join("");
+  }
   const b=document.querySelector(`#card-${dk}-${i} .notes-save`);
-  if(b){b.className='notes-saved';b.textContent='✓ Sauvegardé';setTimeout(()=>{b.className='notes-save';b.textContent='Sauvegarder';},2000);}
+  if(b){b.className="notes-saved";b.textContent="✓ Sauvegardé";setTimeout(()=>{b.className="notes-save";b.textContent="Sauvegarder";},2000);}
 }
 
 // ═══ RENDER DAYS ═════════════════════════════
@@ -1341,20 +1432,18 @@ function renderDays(days,cid,dk){
     const spots=DATA.mapSpots[`${dk}-${i}`]||[];
     const mapH=renderDayMap(dk,i,spots);
 
-    // Activities — Maps button in label, not in checkbox row
+    // Activities — sans bouton Maps dans les cases à cocher
     const actsH=(day.acts&&day.acts.length)?`<div class="act-section"><div class="act-title">✅ Ce qu'on a fait</div>${day.acts.map((a,ai)=>{
       const ak=`act-${dk}-${i}-${ai}`,done=aS[ak]?'done':'';
-      const mu=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.m)}`;
       return`<div class="act-item ${done}" id="${ak}" onclick="toggleAct('${ak}')">
         <div class="act-check"></div>
-        <div class="act-lbl">
-          ${a.l}
-          <a class="mbtn" href="${mu}" target="_blank" onclick="event.stopPropagation()" style="margin-left:6px;margin-top:3px;display:inline-flex">🗺 Maps</a>
-        </div>
+        <div class="act-lbl">${a.l}</div>
       </div>`;
-    }).join('')}</div>`:'';
+    }).join('')}
+    <div id="notes-acts-${dk}-${i}"></div>
+    </div>`:'';
 
-    // Notes — textarea auto-expand
+    // Notes — textarea auto-expand + ajout à la liste ce qu'on a fait
     const notesH=`<div class="notes-section"><div class="notes-lbl">📝 Notes & souvenirs</div><textarea class="notes-input" id="ni-${dk}-${i}" rows="${sn?Math.max(3,sn.split('\n').length+1):3}" placeholder="On a aussi découvert… le resto était… les enfants ont adoré…" oninput="this.rows=Math.max(3,this.value.split('\\n').length+1)">${sn}</textarea><button class="notes-save" onclick="saveNote('${dk}',${i})">Sauvegarder</button><div class="cf"></div></div>`;
 
     // Timeline items with uniform info-row for address + duration
@@ -1392,7 +1481,6 @@ function renderDays(days,cid,dk){
         ${day.tip?`<div class="tip tip-${day.tip.c}" style="margin-top:10px"><span style="font-size:14px">${day.tip.i}</span><div><div class="tip-lbl">${day.tip.l}</div><div>${day.tip.t}</div></div></div>`:''}
         ${actsH}
         ${notesH}
-        ${mapH}
       </div>
     </div>`;
   }).join('');
