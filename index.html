@@ -411,7 +411,40 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 .journal-text{font-size:13px;color:var(--brown);line-height:1.5}
 .journal-acts{font-size:11px;color:var(--green);margin-top:4px;font-style:italic}
 
-/* TOAST */
+/* LOGIN GOOGLE */
+.g-login-overlay{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--coral),var(--coral-dk));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.g-login-logo{font-size:52px;margin-bottom:10px}
+.g-login-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.g-login-sub{font-size:13px;color:rgba(255,255,255,.8);margin-bottom:28px;line-height:1.5}
+.g-login-btn{background:#fff;color:var(--brown);border-radius:13px;padding:13px 24px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:9px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);border:none;margin:0 auto}
+.g-user-badge{position:fixed;top:8px;right:12px;z-index:200;background:rgba(0,0,0,.2);border-radius:20px;padding:3px 10px 3px 4px;display:flex;align-items:center;gap:6px;cursor:pointer;display:none}
+.g-avatar{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.5)}
+.g-uname{font-size:11px;font-weight:700;color:#fff;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* HOME SCREEN */
+.home-overlay{position:fixed;inset:0;z-index:998;background:var(--sand);display:none;flex-direction:column;overflow-y:auto}
+.home-overlay.show{display:flex}
+.home-header{background:linear-gradient(135deg,var(--coral),var(--coral-dk));padding:28px 20px 22px;text-align:center}
+.home-title{font-size:24px;font-weight:800;color:#fff}
+.home-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:4px}
+.home-times{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.home-time{background:rgba(0,0,0,.2);color:#fff;border-radius:10px;padding:3px 10px;font-size:11px;font-weight:700}
+.home-cdown{display:inline-block;background:var(--gold);color:var(--brown);border-radius:18px;padding:5px 16px;font-size:13px;font-weight:700;margin-top:12px}
+.home-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:18px 16px}
+.home-tile{border-radius:16px;padding:22px 16px;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.home-tile:active{transform:scale(.97)}
+.home-tile-icon{font-size:36px;margin-bottom:8px;display:block}
+.home-tile-name{font-size:14px;font-weight:800;color:#fff}
+.home-tile-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:3px}
+.home-tile-prat{background:linear-gradient(135deg,var(--brown),var(--brown-mid));grid-column:span 2}
+
+/* US & COUTUMES */
+.coutume-card{background:var(--white);border-radius:var(--rs);padding:12px 14px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.coutume-title{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.coutume-rule{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--sand-mid);font-size:12px;color:var(--brown-mid);line-height:1.4}
+.coutume-rule:last-child{border-bottom:none;padding-bottom:0}
+.coutume-ok{color:var(--green);font-size:14px;flex-shrink:0}
+.coutume-no{color:var(--red);font-size:14px;flex-shrink:0}
 .toast{position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:#fff;border-radius:18px;padding:9px 18px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px}
@@ -420,23 +453,66 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 </head>
 <body>
 
-<!-- PIN -->
-<div class="pin-overlay" id="pin-overlay">
-  <div class="pin-logo">🇹🇭</div>
-  <div class="pin-title">Thaïlande 2026</div>
-  <div class="pin-sub">Entrez votre code PIN</div>
-  <div class="pin-dots" id="pin-dots">
-    <div class="pin-dot"></div><div class="pin-dot"></div>
-    <div class="pin-dot"></div><div class="pin-dot"></div>
+<!-- GOOGLE LOGIN -->
+<div class="g-login-overlay" id="g-login-overlay">
+  <div class="g-login-logo">🇹🇭</div>
+  <div class="g-login-title">Thaïlande 2026</div>
+  <div class="g-login-sub">Guide personnel du voyage<br>Connectez-vous pour accéder</div>
+  <button class="g-login-btn" onclick="gIndexLogin()">
+    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Se connecter avec Google
+  </button>
+</div>
+
+<!-- USER BADGE -->
+<div class="g-user-badge" id="g-user-badge" onclick="confirmGLogout()">
+  <img class="g-avatar" id="g-avatar" src="" alt="">
+  <span class="g-uname" id="g-uname"></span>
+</div>
+
+<!-- HOME SCREEN -->
+<div class="home-overlay" id="home-overlay">
+  <div class="home-header">
+    <div class="home-title">🇹🇭 Thaïlande 2026</div>
+    <div class="home-sub">Guide Famille</div>
+    <div class="home-times">
+      <div class="home-time" id="home-time-th">🇹🇭 --:--</div>
+      <div class="home-time" id="home-time-fr">🇫🇷 --:--</div>
+    </div>
+    <div class="home-cdown" id="home-cdown">Chargement…</div>
   </div>
-  <div class="pin-kp">
-    <div class="pin-key" onclick="pk('1')">1</div><div class="pin-key" onclick="pk('2')">2</div><div class="pin-key" onclick="pk('3')">3</div>
-    <div class="pin-key" onclick="pk('4')">4</div><div class="pin-key" onclick="pk('5')">5</div><div class="pin-key" onclick="pk('6')">6</div>
-    <div class="pin-key" onclick="pk('7')">7</div><div class="pin-key" onclick="pk('8')">8</div><div class="pin-key" onclick="pk('9')">9</div>
-    <div class="pin-key" onclick="pk('del')">⌫</div><div class="pin-key" onclick="pk('0')">0</div><div class="pin-key" onclick="pk('ok')">OK</div>
+  <div class="home-grid">
+    <div class="home-tile" style="background:linear-gradient(135deg,#E8734A,#C85A32)" onclick="goHome('bkk')">
+      <span class="home-tile-icon">🏙</span>
+      <div class="home-tile-name">Bangkok</div>
+      <div class="home-tile-sub">21 – 25 juillet</div>
+    </div>
+    <div class="home-tile" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)" onclick="goHome('cm')">
+      <span class="home-tile-icon">🌿</span>
+      <div class="home-tile-name">Chiang Mai</div>
+      <div class="home-tile-sub">25 – 29 juillet</div>
+    </div>
+    <div class="home-tile" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)" onclick="goHome('kt')">
+      <span class="home-tile-icon">🐠</span>
+      <div class="home-tile-name">Koh Tao</div>
+      <div class="home-tile-sub">29 juil – 1er août</div>
+    </div>
+    <div class="home-tile" style="background:linear-gradient(135deg,#D4A853,#B8883A)" onclick="goHome('ks')">
+      <span class="home-tile-icon">🌴</span>
+      <div class="home-tile-name">Koh Samui</div>
+      <div class="home-tile-sub">1 – 5 août</div>
+    </div>
+    <div class="home-tile" style="background:linear-gradient(135deg,#7A5C47,#3D2B1F)" onclick="goHome('lodge')">
+      <span class="home-tile-icon">🏠</span>
+      <div class="home-tile-name">Séjour</div>
+      <div class="home-tile-sub">Logements & Vols</div>
+    </div>
+    <div class="home-tile home-tile-prat" onclick="goHome('prat')">
+      <span class="home-tile-icon">📋</span>
+      <div class="home-tile-name">Pratique</div>
+      <div class="home-tile-sub">Traducteur · IA · Urgences · Photos · Config</div>
+    </div>
   </div>
-  <div class="pin-err" id="pin-err"></div>
-  <button onclick="skipPin()" style="color:rgba(255,255,255,.6);font-size:11px;margin-top:18px">Ignorer</button>
 </div>
 
 <!-- SW UPDATE BANNER -->
@@ -697,51 +773,9 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 
   <!-- ── SECTION INFO ── -->
   <div class="prat-sec" id="ps-info">
-    <div class="sec-title">🚨 Urgences rapides</div>
-    <div id="emergencies2"></div>
     <div class="sec-title">🌡 Météo historique juillet-août</div>
     <p class="sec-note" style="margin-top:-6px">Températures moyennes pour la période du voyage.</p>
     <div id="histo-meteo-info"></div>
-    <div class="cur-card">
-      <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
-      <div class="cur-tabs">
-        <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
-        <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
-        <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
-        <div class="cur-tab" onclick="setCur('THB_USD',this)">THB → USD</div>
-      </div>
-      <div class="cur-row">
-        <div class="cur-lbl" id="cur-from">EUR</div>
-        <input class="cur-input" id="cur-in" type="number" placeholder="0" oninput="convertCur()">
-        <div class="cur-lbl">→</div>
-      </div>
-      <div class="cur-result">
-        <div class="cur-result-val" id="cur-res">—</div>
-        <div class="cur-result-lbl" id="cur-res-lbl">THB</div>
-      </div>
-      <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
-    </div>
-
-    <div class="sec-title">🌧 Météo & plan B</div>
-    <div class="wx-grid">
-      <div class="wx-sm"><div class="wx-sm-dest">Bangkok</div><div class="wx-sm-ico">🌦</div><div class="wx-sm-st">Pluies courtes · Peu d'impact</div></div>
-      <div class="wx-sm"><div class="wx-sm-dest">Chiang Mai</div><div class="wx-sm-ico">🌧</div><div class="wx-sm-st">Saison verte · Averses</div></div>
-      <div class="wx-sm"><div class="wx-sm-dest">Koh Tao</div><div class="wx-sm-ico">⛅</div><div class="wx-sm-st">Côte est protégée</div></div>
-      <div class="wx-sm"><div class="wx-sm-dest">Koh Samui</div><div class="wx-sm-ico">🌤</div><div class="wx-sm-st">Côte est · Variable</div></div>
-    </div>
-
-    <div class="sec-title">🚨 Urgences</div>
-    <div id="emergencies"></div>
-
-    <div class="sec-title">📞 Contacts utiles</div>
-    <div id="contacts"></div>
-
-    <div class="sec-title">📱 Applis à télécharger</div>
-    <div id="apps"></div>
-
-    <div class="sec-title">🌡 Météo historique juillet-août</div>
-    <p class="sec-note">Températures et précipitations moyennes pour la période du voyage.</p>
-    <div id="histo-meteo"></div>
   </div>
 
   <!-- ── SECTION OUTILS ── -->
@@ -766,6 +800,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
       </div>
       <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
     </div>
+
     <div class="sec-title">🗣 Traducteur thaï ↔ français</div>
     <div class="trans-card">
       <div class="trans-tabs">
@@ -821,42 +856,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="sec-title">🗣 Phrases utiles</div>
     <p class="sec-note">Tap 🔊 pour écouter · « Copier » pour envoyer en message</p>
     <div id="phrases"></div>
-
-    <div class="sec-title">🧳 Check-list valise</div>
-    <div class="bag-hdr">
-      <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
-      <div class="bag-w">4,1 kg <span style="font-size:14px;font-weight:400">de contenu max</span></div>
-      <div style="font-size:11px;opacity:.8">Format cabine · Machines à laver dans tous les logements</div>
-      <div class="bag-bar-wrap"><div class="bag-bar" id="bag-bar" style="width:0%"></div></div>
-      <div style="font-size:11px;opacity:.8;margin-top:5px" id="bag-prog">0 / 0 cochés</div>
-    </div>
-    <div id="bag-list"></div>
-
-    <div class="sec-title">💉 Vaccins & santé</div>
-    <div id="vaccins"></div>
-    <div class="tip tip-red" style="margin-bottom:14px">
-      <span style="font-size:14px">🦟</span>
-      <div><div class="tip-lbl">Dengue — présente toute l'année</div>Répulsif DEET/Icaridine sur toute la famille, surtout au lever et coucher du soleil.</div>
-    </div>
-
-    <div class="sec-title">📄 Documents à préparer</div>
-    <div class="tip tip-red" style="margin-bottom:10px">
-      <span style="font-size:14px">⚠️</span>
-      <div><div class="tip-lbl">Priorité absolue</div>Passeports valides jusqu'au 06/02/2027 minimum · Pas de visa requis pour la France &lt; 30 jours</div>
-    </div>
-    <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
-    <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage (rapatriement inclus) · Adresses logements imprimées</div></div>
-    <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
-
-    <div class="sec-title">📊 Récap voyage</div>
-    <p class="sec-note">Génère un PDF souvenir avec activités cochées et notes.</p>
-    <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
-
-    <div class="sec-title" style="margin-top:20px">📔 Journal de voyage</div>
-    <p class="sec-note">Résumé automatique de tout ce que vous avez fait et noté.</p>
-    <div id="journal"></div>
+    <div class="sec-title" style="margin-top:16px">📞 Contacts utiles</div>
+    <div id="contacts"></div>
+    <div class="sec-title" style="margin-top:16px">🙏 Us & coutumes</div>
+    <div id="coutumes"></div>
   </div>
-
 
   <!-- ── SECTION AVANT ── -->
   <div class="prat-sec" id="ps-avant">
@@ -886,9 +890,8 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
     <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage · Adresses logements</div></div>
     <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
-    <div class="sec-title">🌡 Météo historique juillet-août</div>
-    <div id="histo-meteo"></div>
   </div>
+
   <!-- ── SECTION PHOTOS ── -->
   <div class="prat-sec" id="ps-photos">
     <div class="sec-title">📸 Photos du voyage</div>
@@ -914,19 +917,23 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     </div>
     <div class="info-card" style="margin-top:7px">
       <div class="info-title">🌙 Mode nuit</div>
-      <div class="info-body">Réduire la luminosité pour une utilisation nocturne.</div>
       <button onclick="toggleDark()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%" id="dark-btn">🌙 Activer le mode nuit</button>
     </div>
     <div class="info-card" style="margin-top:7px">
       <div class="info-title">🔐 Code PIN</div>
-      <div class="info-body">Code actuel : défini à la première utilisation.</div>
       <button onclick="changePin()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Changer le PIN</button>
     </div>
     <div class="info-card" style="margin-top:7px">
       <div class="info-title">📷 Google Drive</div>
-      <div class="info-body">Connexion pour l'upload des photos.</div>
       <button onclick="gDriveLogin()" style="margin-top:9px;background:#4285F4;color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔑 (Re)connecter Google Drive</button>
     </div>
+    <div class="divider"></div>
+    <div class="sec-title">📊 Récap voyage</div>
+    <p class="sec-note">Génère un PDF souvenir avec activités cochées, notes et photos.</p>
+    <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
+    <div class="sec-title" style="margin-top:16px">📔 Journal de voyage</div>
+    <p class="sec-note">Résumé automatique de tout ce que vous avez fait et noté.</p>
+    <div id="journal"></div>
   </div>
 
 </div>
@@ -1352,23 +1359,168 @@ const DATA = {
   },
 };
 
-// ═══ PIN ═══════════════════════════════════
-const DEF_PIN="2026"; let pinE="";
-function pk(k){
-  if(k==='del'){pinE=pinE.slice(0,-1);}
-  else if(k==='ok'){chkPin();return;}
-  else if(pinE.length<4){pinE+=k;}
-  updDots();
-  if(pinE.length===4)setTimeout(chkPin,200);
+// ═══ GOOGLE LOGIN (INDEX) ════════════════════
+const GD_CLIENT_ID_IDX='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
+const GD_SCOPE_IDX='https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.profile';
+let idxToken=null, idxTokenExpiry=0;
+
+function loadGsi(){
+  return new Promise(resolve=>{
+    if(window.google?.accounts){resolve();return;}
+    const s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=resolve;document.head.appendChild(s);
+  });
 }
-function updDots(){document.querySelectorAll('.pin-dot').forEach((d,i)=>d.classList.toggle('filled',i<pinE.length));}
-function chkPin(){
-  const stored=localStorage.getItem('app_pin')||DEF_PIN;
-  if(pinE===stored){document.getElementById('pin-overlay').style.display='none';initApp();}
-  else{document.getElementById('pin-err').textContent='Code incorrect';pinE='';updDots();setTimeout(()=>document.getElementById('pin-err').textContent='',1500);}
+
+async function gIndexLogin(){
+  await loadGsi();
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:GD_CLIENT_ID_IDX, scope:GD_SCOPE_IDX,
+    callback:async(resp)=>{
+      if(resp.error){toast('❌ Connexion Google échouée');return;}
+      idxToken=resp.access_token;
+      idxTokenExpiry=Date.now()+(resp.expires_in||3600)*1000;
+      localStorage.setItem('idx_token',idxToken);
+      localStorage.setItem('idx_token_expiry',idxTokenExpiry);
+      // Récupérer infos utilisateur
+      try{
+        const r=await fetch('https://www.googleapis.com/oauth2/v2/userinfo',{headers:{Authorization:'Bearer '+idxToken}});
+        const u=await r.json();
+        document.getElementById('g-avatar').src=u.picture||'';
+        document.getElementById('g-uname').textContent=u.given_name||u.name||'';
+        document.getElementById('g-user-badge').style.display='flex';
+        // Transmettre token au module Drive
+        gdToken=idxToken; gdTokenExpiry=idxTokenExpiry;
+      }catch(e){}
+      document.getElementById('g-login-overlay').style.display='none';
+      showHomeScreen();
+    }
+  });
+  client.requestAccessToken();
 }
-function skipPin(){document.getElementById('pin-overlay').style.display='none';initApp();}
-function changePin(){const p=prompt('Nouveau PIN (4 chiffres) :');if(p&&/^\d{4}$/.test(p)){localStorage.setItem('app_pin',p);toast('✅ PIN mis à jour');}}
+
+function confirmGLogout(){
+  if(confirm('Se déconnecter ?')){
+    localStorage.removeItem('idx_token');
+    localStorage.removeItem('idx_token_expiry');
+    idxToken=null;gdToken=null;
+    document.getElementById('g-user-badge').style.display='none';
+    document.getElementById('home-overlay').classList.remove('show');
+    document.getElementById('g-login-overlay').style.display='flex';
+  }
+}
+
+// ═══ HOME SCREEN ═════════════════════════════
+function showHomeScreen(){
+  const ho=document.getElementById('home-overlay');
+  ho.classList.add('show');
+  // Mettre à jour les temps sur l'accueil
+  const updHome=()=>{
+    const now=new Date();
+    const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
+    const fr=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(now);
+    const ht=document.getElementById('home-time-th');if(ht)ht.textContent='🇹🇭 '+th;
+    const hf=document.getElementById('home-time-fr');if(hf)hf.textContent='🇫🇷 '+fr;
+    const dep=new Date(DATA.depart),diff=dep-now;
+    const hc=document.getElementById('home-cdown');
+    if(hc){if(diff<=0){const d=Math.floor((now-dep)/864e5);hc.textContent=d===0?'🎉 Bon vol !':'Jour '+d+' du voyage';}
+    else{const d=Math.floor(diff/864e5);hc.textContent=d===0?'Départ aujourd\'hui !':'J – '+d+' avant le départ';}}
+  };
+  updHome();setInterval(updHome,30000);
+  if(!document.getElementById('days-bkk').innerHTML) initApp();
+}
+
+function goHome(tab){
+  document.getElementById('home-overlay').classList.remove('show');
+  const btn=document.querySelector(`.nav-btn[onclick*="'${tab}'"]`);
+  if(btn) goTab(tab,btn);
+  else{
+    // Fallback
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    const t=document.getElementById('tab-'+tab);
+    if(t)t.classList.add('active');
+  }
+}
+
+// Bouton "Accueil" dans la nav — tap sur le titre topbar
+document.addEventListener('DOMContentLoaded',()=>{
+  const topbarTitle=document.querySelector('.topbar-title');
+  if(topbarTitle) topbarTitle.style.cursor='pointer',topbarTitle.addEventListener('click',()=>{
+    if(idxToken) showHomeScreen();
+  });
+});
+
+// ═══ US & COUTUMES ════════════════════════════
+const COUTUMES=[
+  {title:'🛕 Dans les temples',rules:[
+    {ok:true,text:'Enlever ses chaussures avant d\'entrer'},
+    {ok:true,text:'Épaules et genoux couverts — prévoir un foulard léger'},
+    {ok:true,text:'Parler doucement, se déplacer calmement'},
+    {ok:true,text:'Faire une légère révérence devant les statues'},
+    {ok:false,text:'Ne jamais pointer les pieds vers une statue de Bouddha'},
+    {ok:false,text:'Ne pas toucher la tête de quelqu\'un (partie la plus sacrée du corps)'},
+    {ok:false,text:'Ne pas grimper sur les statues ou autels'},
+    {ok:false,text:'Les femmes ne doivent pas toucher les moines'},
+  ]},
+  {title:'🍜 Au restaurant',rules:[
+    {ok:true,text:'Les plats arrivent au fur et à mesure — c\'est normal'},
+    {ok:true,text:'On partage les assiettes au centre de la table'},
+    {ok:true,text:'Dire "khop khun" pour remercier le personnel'},
+    {ok:true,text:'"Mai phet" = pas épicé · "Mai sai nom" = sans lait'},
+    {ok:false,text:'Ne pas laisser les baguettes plantées verticalement dans le riz (signe funèbre)'},
+    {ok:false,text:'Ne pas pointer avec les doigts — utiliser la main ouverte'},
+  ]},
+  {title:'🚕 Taxi & transports',rules:[
+    {ok:true,text:'Utiliser l\'appli Grab — prix fixé à l\'avance, pas de négociation'},
+    {ok:true,text:'Toujours vérifier que le compteur tourne dans les taxis classiques'},
+    {ok:true,text:'Avoir l\'adresse en thaï sur son téléphone'},
+    {ok:false,text:'Ne pas hausser la voix si problème — garder le sourire'},
+    {ok:false,text:'Éviter les tuk-tuks sur de longues distances'},
+  ]},
+  {title:'🌊 Plage & snorkeling',rules:[
+    {ok:true,text:'Entrer lentement dans l\'eau pour ne pas effrayer les animaux'},
+    {ok:true,text:'Observer les tortues à distance — ne pas les toucher'},
+    {ok:true,text:'Crème solaire reef-safe obligatoire (coraux fragiles)'},
+    {ok:false,text:'Ne jamais marcher ou s\'appuyer sur les coraux'},
+    {ok:false,text:'Ne pas nourrir les poissons — déséquilibre l\'écosystème'},
+    {ok:false,text:'Ne pas prélever coquillages, coraux ou créatures marines'},
+  ]},
+  {title:'👋 Savoir-vivre général',rules:[
+    {ok:true,text:'"Wai" — mains jointes en salut : répondre de même aux adultes'},
+    {ok:true,text:'Sourire toujours — c\'est la clé de toutes les interactions'},
+    {ok:true,text:'Négocier avec bienveillance et humour sur les marchés'},
+    {ok:true,text:'Demander la permission avant de photographier des personnes'},
+    {ok:false,text:'Ne jamais critiquer la monarchie thaïlandaise — loi très stricte'},
+    {ok:false,text:'Ne pas montrer d\'énervement ou élever la voix en public'},
+    {ok:false,text:'Éviter les démonstrations d\'affection trop visibles en public'},
+  ]},
+  {title:'👶 Avec les enfants',rules:[
+    {ok:true,text:'Les Thaïlandais adorent les enfants — interactions chaleureuses garanties'},
+    {ok:true,text:'Expliquer aux enfants de ne pas toucher les animaux sauvages'},
+    {ok:true,text:'Leur apprendre "khop khun" (merci) et "sawasdee" (bonjour)'},
+    {ok:false,text:'Ne pas laisser les enfants grimper sur les statues dans les temples'},
+    {ok:false,text:'Éviter de leur toucher la tête devant des Thaïlandais'},
+  ]},
+];
+
+function renderCoutumes(){
+  const el=document.getElementById('coutumes');if(!el)return;
+  el.innerHTML=COUTUMES.map(cat=>`
+    <div class="coutume-card">
+      <div class="coutume-title">${cat.title}</div>
+      ${cat.rules.map(r=>`
+        <div class="coutume-rule">
+          <span class="${r.ok?'coutume-ok':'coutume-no'}">${r.ok?'✓':'✗'}</span>
+          <span>${r.text}</span>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+// ═══ PIN legacy → changePin conservé pour Config ═══
+function changePin(){toast('Code PIN remplacé par la connexion Google');}
+
 
 // ═══ COUNTDOWN & THAI TIME ══════════════════
 function updCdown(){
@@ -1990,13 +2142,10 @@ async function uploadToDrive(file,caption,destKey,dayKey,diff){
     method:'POST',headers:{Authorization:'Bearer '+gdToken},body:form
   });
   const d=await r.json();
-  // Rendre public en lecture
-  await fetch(`https://www.googleapis.com/drive/v3/files/${d.id}/permissions`,{
-    method:'POST',headers:{Authorization:'Bearer '+gdToken,'Content-Type':'application/json'},
-    body:JSON.stringify({role:'reader',type:'anyone'})
-  });
-  // URL directe pour affichage
-  const imgUrl=`https://drive.google.com/thumbnail?id=${d.id}&sz=w800`;
+  if(!d.id) throw new Error('Upload Drive échoué: '+JSON.stringify(d));
+  // NE PAS rendre public — les photos restent privées dans Drive
+  // L'accès se fait via le token OAuth de chaque utilisateur connecté sur voyage.html
+  const imgUrl=`https://drive.google.com/uc?export=view&id=${d.id}`;
   return{id:d.id,url:imgUrl,caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()};
 }
 
@@ -2307,6 +2456,7 @@ function initApp(){
   renderContacts();
   renderHistoMeteo();
   renderJournal();
+  renderCoutumes();
   initDarkMode();
 
   // Vérifier token Google Drive
@@ -2342,8 +2492,20 @@ function initApp(){
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
-  const pin=localStorage.getItem('app_pin')||DEF_PIN;
-  if(!pin)initApp();
+  // Vérifier si token Google encore valide
+  const savedToken=localStorage.getItem('idx_token');
+  const expiry=parseInt(localStorage.getItem('idx_token_expiry')||'0');
+  if(savedToken && Date.now() < expiry-60000){
+    idxToken=savedToken;idxTokenExpiry=expiry;
+    gdToken=savedToken;gdTokenExpiry=expiry;
+    // Restaurer badge utilisateur si possible
+    document.getElementById('g-user-badge').style.display='flex';
+    document.getElementById('g-login-overlay').style.display='none';
+    showHomeScreen();
+  } else {
+    // Afficher écran de connexion
+    document.getElementById('g-login-overlay').style.display='flex';
+  }
 });
 </script>
 </body>

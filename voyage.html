@@ -117,6 +117,18 @@ a{color:inherit;text-decoration:none}
 .lb-nav button{background:rgba(255,255,255,.15);color:#fff;border-radius:50%;width:40px;height:40px;font-size:16px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
 .lb-count{color:rgba(255,255,255,.5);font-size:11px;margin-top:7px}
 
+/* LOGIN SCREEN */
+.login-overlay{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,var(--coral),var(--coral-dk));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.login-logo{font-size:56px;margin-bottom:12px}
+.login-title{font-size:26px;font-weight:800;color:#fff;margin-bottom:6px}
+.login-sub{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:8px;line-height:1.5}
+.login-info{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:32px;line-height:1.6;max-width:300px}
+.login-btn{background:#fff;color:var(--brown);border-radius:14px;padding:14px 28px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);border:none;margin:0 auto}
+.login-error{color:rgba(255,255,255,.9);font-size:13px;margin-top:16px;background:rgba(0,0,0,.2);border-radius:8px;padding:8px 16px;display:none}
+.user-badge{position:fixed;top:8px;right:12px;z-index:200;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 10px 4px 4px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.user-avatar{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.5)}
+.user-name{font-size:11px;font-weight:700;color:#fff;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:#fff;border-radius:20px;padding:10px 20px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -128,6 +140,27 @@ a{color:inherit;text-decoration:none}
 </style>
 </head>
 <body>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-logo">🇹🇭</div>
+  <div class="login-title">Thaïlande 2026</div>
+  <div class="login-sub">Suivez le voyage en temps réel</div>
+  <div class="login-info">
+    Connectez-vous avec votre compte Google<br>pour accéder aux photos et aux nouvelles du voyage
+  </div>
+  <button class="login-btn" onclick="googleLogin()">
+    <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Se connecter avec Google
+  </button>
+  <div class="login-error" id="login-error">Connexion impossible. Réessayez.</div>
+</div>
+
+<!-- USER BADGE (visible après connexion) -->
+<div class="user-badge" id="user-badge" style="display:none" onclick="confirmLogout()">
+  <img class="user-avatar" id="user-avatar" src="" alt="">
+  <span class="user-name" id="user-name"></span>
+</div>
 
 <!-- HEADER -->
 <header class="header">
@@ -163,6 +196,8 @@ a{color:inherit;text-decoration:none}
   </div>
 </main>
 
+<button onclick="refreshPage()" style="position:fixed;bottom:20px;right:16px;z-index:100;width:44px;height:44px;border-radius:50%;background:var(--coral);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);border:none;cursor:pointer">🔄</button>
+
 <!-- LIGHTBOX -->
 <div class="lb" id="lb" onclick="if(event.target===this)closeLb()">
   <button class="lb-close" onclick="closeLb()">✕</button>
@@ -183,32 +218,160 @@ a{color:inherit;text-decoration:none}
 // ═══════════════════════════════════════════
 const GS_URL='https://script.google.com/macros/s/AKfycbzkoXJ3BUbPBGSkZM8d8kBtPgDaj46qInSvU9n6aiXxf6bLd4QCZwI4to2GWhtauYFn/exec';
 const DEPART=new Date('2026-07-20T16:40:00');
+const GD_CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
+const GD_SCOPE='https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/userinfo.profile';
+
+// ═══════════════════════════════════════════
+//  AUTH GOOGLE
+// ═══════════════════════════════════════════
+let userToken=null, userInfo=null, gsiClient=null;
+
+function loadGsiScript(){
+  return new Promise(resolve=>{
+    if(window.google?.accounts){resolve();return;}
+    const s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=resolve;
+    document.head.appendChild(s);
+  });
+}
+
+async function googleLogin(){
+  await loadGsiScript();
+  gsiClient=google.accounts.oauth2.initTokenClient({
+    client_id:GD_CLIENT_ID,
+    scope:GD_SCOPE,
+    callback:async(resp)=>{
+      if(resp.error){
+        document.getElementById('login-error').style.display='block';
+        return;
+      }
+      userToken=resp.access_token;
+      localStorage.setItem('voyage_token',userToken);
+      localStorage.setItem('voyage_token_expiry', Date.now()+(resp.expires_in||3600)*1000);
+      await loadUserInfo();
+      showApp();
+    }
+  });
+  gsiClient.requestAccessToken();
+}
+
+async function loadUserInfo(){
+  try{
+    const r=await fetch('https://www.googleapis.com/oauth2/v2/userinfo',{
+      headers:{Authorization:'Bearer '+userToken}
+    });
+    userInfo=await r.json();
+    document.getElementById('user-avatar').src=userInfo.picture||'';
+    document.getElementById('user-name').textContent=userInfo.given_name||userInfo.name||'';
+    document.getElementById('user-badge').style.display='flex';
+    // Sauvegarder le prénom pour les commentaires
+    localStorage.setItem('voyage_user_name', userInfo.given_name||userInfo.name||'Proche');
+  }catch(e){console.warn('UserInfo error:',e);}
+}
+
+function showApp(){
+  document.getElementById('login-overlay').style.display='none';
+  updateTimes();
+  setInterval(updateTimes,30000);
+  renderCurrentBanner();
+  if(!localStorage.getItem('intro_seen')){
+    document.getElementById('intro-banner').style.display='block';
+  }
+  renderTimeline();
+}
+
+function confirmLogout(){
+  if(confirm(`Se déconnecter ?`)){
+    localStorage.removeItem('voyage_token');
+    localStorage.removeItem('voyage_token_expiry');
+    localStorage.removeItem('voyage_user_name');
+    userToken=null;userInfo=null;
+    document.getElementById('user-badge').style.display='none';
+    document.getElementById('login-overlay').style.display='flex';
+  }
+}
+
+async function ensureToken(){
+  // Token encore valide ?
+  const expiry=parseInt(localStorage.getItem('voyage_token_expiry')||'0');
+  if(userToken && Date.now() < expiry-60000) return true;
+  // Renouvellement silencieux
+  return new Promise(async resolve=>{
+    await loadGsiScript();
+    const client=google.accounts.oauth2.initTokenClient({
+      client_id:GD_CLIENT_ID, scope:GD_SCOPE, prompt:'',
+      callback:(resp)=>{
+        if(resp.error){resolve(false);return;}
+        userToken=resp.access_token;
+        localStorage.setItem('voyage_token',userToken);
+        localStorage.setItem('voyage_token_expiry',Date.now()+(resp.expires_in||3600)*1000);
+        resolve(true);
+      }
+    });
+    client.requestAccessToken();
+  });
+}
+
+// ═══════════════════════════════════════════
+//  INIT AUTH
+// ═══════════════════════════════════════════
+async function initAuth(){
+  const savedToken=localStorage.getItem('voyage_token');
+  const expiry=parseInt(localStorage.getItem('voyage_token_expiry')||'0');
+  if(savedToken && Date.now() < expiry-60000){
+    userToken=savedToken;
+    await loadGsiScript();
+    await loadUserInfo();
+    showApp();
+  } else {
+    // Afficher l'écran de login
+    document.getElementById('login-overlay').style.display='flex';
+  }
+}
 
 // ═══════════════════════════════════════════
 //  DESTINATIONS
 // ═══════════════════════════════════════════
 const DESTINATIONS=[
   {key:'bkk',emoji:'🏙',name:'Bangkok',color:'#E8734A',
-   dates:'21 – 24 juillet',start:new Date('2026-07-21'),end:new Date('2026-07-25'),
-   airbnb:{addr:'Soi Palakun, Khet Bang Phlat, Bangkok 10700',note:'Taxi réservé par l\'Airbnb — 1 500 bahts, rien à payer au chauffeur',maps:'Soi+Palakun+Khet+Bang+Phlat+Bangkok'},
+   dates:'21 – 25 juillet 2026',start:new Date('2026-07-21'),end:new Date('2026-07-25'),
+   hotel:{
+     label:'Logement Airbnb',
+     addr:'Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700',
+     note:'Taxi réservé par l\'Airbnb · 1 500 bahts — rien à payer au chauffeur · Régler au logement le lendemain',
+     maps:'Soi+Palakun+Khet+Bang+Phlat+Bangkok'
+   },
    days:[
      {key:'bkk-0',date:'Mar 21 juillet'},
      {key:'bkk-1',date:'Mer 22 juillet'},
      {key:'bkk-2',date:'Jeu 23 juillet'},
      {key:'bkk-3',date:'Ven 24 juillet'},
+     {key:'bkk-4',date:'Sam 25 juillet'},
    ]},
   {key:'cm',emoji:'🌿',name:'Chiang Mai',color:'#5B8C5A',
-   dates:'25 – 28 juillet',start:new Date('2026-07-25'),end:new Date('2026-07-29'),
-   airbnb:{addr:'1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300',note:'Taxi Airbnb — 300 bahts en liquide au chauffeur',maps:'1+Chang+Moi+Road+Soi+2+Chiang+Mai'},
+   dates:'25 – 29 juillet 2026',start:new Date('2026-07-25'),end:new Date('2026-07-29'),
+   hotel:{
+     label:'Logement Airbnb',
+     addr:'1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300',
+     note:'Taxi organisé par l\'Airbnb · 300 bahts en liquide au chauffeur',
+     maps:'1+Chang+Moi+Road+Soi+2+Chiang+Mai'
+   },
    days:[
      {key:'cm-0',date:'Sam 25 juillet'},
      {key:'cm-1',date:'Dim 26 juillet'},
      {key:'cm-2',date:'Lun 27 juillet'},
      {key:'cm-3',date:'Mar 28 juillet'},
+     {key:'cm-4',date:'Mer 29 juillet'},
    ]},
   {key:'kt',emoji:'🐠',name:'Koh Tao',color:'#2BBFB3',
-   dates:'29 juillet – 1er août',start:new Date('2026-07-29'),end:new Date('2026-08-01'),
-   airbnb:{addr:'13/35 Moo 2, Ko Tao, Surat Thani 84360',note:'Transport Airbnb depuis le ferry — chercher panneau avec votre nom',maps:'Ko+Tao+Surat+Thani+84360'},
+   dates:'29 juillet – 1er août 2026',start:new Date('2026-07-29'),end:new Date('2026-08-01'),
+   hotel:{
+     label:'Logement Airbnb',
+     addr:'13/35 Moo 2, Ko Tao, Surat Thani 84360',
+     note:'Transport Airbnb depuis le ferry · Chercher panneau avec votre nom dans le grand pavillon couvert',
+     maps:'Ko+Tao+Surat+Thani+84360'
+   },
    days:[
      {key:'kt-0',date:'Jeu 29 juillet'},
      {key:'kt-1',date:'Ven 30 juillet'},
@@ -216,13 +379,30 @@ const DESTINATIONS=[
      {key:'kt-3',date:'Dim 1er août'},
    ]},
   {key:'ks',emoji:'🌴',name:'Koh Samui',color:'#D4A853',
-   dates:'1 – 5 août',start:new Date('2026-08-01'),end:new Date('2026-08-06'),
-   airbnb:{addr:'57/57 Moo 5 Anthong, Nathon, Surathani 84140',note:'Transport Airbnb depuis le ferry Bangrak Pier',maps:'57+Moo+5+Anthong+Nathon+Ko+Samui'},
+   dates:'1 – 5 août 2026',start:new Date('2026-08-01'),end:new Date('2026-08-05'),
+   hotel:{
+     label:'Logement Airbnb',
+     addr:'57/57 Moo 5 Anthong, Nathon, Surathani 84140',
+     note:'Transport organisé par l\'Airbnb depuis le ferry · Arrivée Bangrak Pier 13h',
+     maps:'57+Moo+5+Anthong+Nathon+Ko+Samui'
+   },
    days:[
      {key:'ks-0',date:'Lun 1er août'},
      {key:'ks-1',date:'Mar 2 août'},
      {key:'ks-2',date:'Mer 3 août'},
      {key:'ks-3',date:'Jeu 4 août'},
+   ]},
+  {key:'bkk2',emoji:'🏨',name:'Bangkok — Retour',color:'#7A5C47',
+   dates:'5 – 6 août 2026',start:new Date('2026-08-05'),end:new Date('2026-08-07'),
+   hotel:{
+     label:'Hôtel nuit avant vol',
+     addr:'Grand BS Airport Hotel Suvarnabhumi · 836, 11 Lat Krabang 30/4 Alley, Bangkok 10520',
+     note:'Check-in 16h · Check-out avant 12h · Vol retour 11h25',
+     maps:'Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok'
+   },
+   days:[
+     {key:'bkk2-0',date:'Mer 5 août'},
+     {key:'bkk2-1',date:'Jeu 6 août'},
    ]},
 ];
 
@@ -237,24 +417,24 @@ function thToFr(hhmm){
 //  TRANSPORTS ENTRE DESTINATIONS
 // ═══════════════════════════════════════════
 const TRANSPORTS=[
-  {after:'bkk',type:'✈ Vol',from:'Bangkok Don Mueang',to:'Chiang Mai',
+  {after:'bkk',type:'✈ Vol',from:'Bangkok Don Mueang T2',to:'Chiang Mai CNX',
    date:'Sam 25 juillet',company:'AirAsia Move',
-   dep:'10h15',arr:'11h25'},
+   dep:'10h10',arr:'11h25'},
   {after:'cm',type:'✈ Vol + 🚢 Ferry',from:'Chiang Mai',to:'Koh Tao',
-   date:'Mer 29 juillet',company:'AirAsia + Direct Ferries',
+   date:'Mer 29 juillet',company:'AirAsia Move + Direct Ferries',
    details:[
-     {label:'Vol CNX → Surat Thani',dep:'10h40',arr:'12h30'},
-     {label:'Ferry Tapee Pier → Mae Haad',dep:'15h30',arr:'~18h00'},
+     {label:'✈ Vol CNX T2 → Surat Thani (URT)',dep:'10h40',arr:'12h30'},
+     {label:'🚢 Ferry Tapee Pier → Mae Haad',dep:'15h30',arr:'~18h00'},
    ]},
-  {after:'kt',type:'🚢 Ferry',from:'Koh Tao',to:'Koh Samui',
-   date:'Dim 1er août',company:'Lomprayah',
+  {after:'kt',type:'🚢 Ferry',from:'Koh Tao Mae Haad',to:'Koh Samui Bangrak',
+   date:'Dim 1er août',company:'Direct Ferries',
    dep:'11h30',arr:'13h00'},
   {after:'ks',type:'✈ Vol + ✈ Vol',from:'Koh Samui',to:'Paris CDG',
-   date:'Mer 5 – Jeu 6 août',company:'Bangkok Airways + Vol international',
+   date:'Mer 5 – Jeu 6 août',company:'Bangkok Airways + Air France',
    details:[
-     {label:'Vol Koh Samui → Bangkok BKK',dep:'14h30',arr:'15h30'},
-     {label:'Nuit à l\'hôtel Grand BS Airport Suvarnabhumi','dep':'','arr':''},
-     {label:'Vol Bangkok → Paris CDG T2E',dep:'11h25',arr:'19h00 (heure fr)'},
+     {label:'✈ Vol Koh Samui (USM) → Bangkok BKK',dep:'14h20',arr:'15h30'},
+     {label:'🏨 Nuit hôtel Grand BS Airport Suvarnabhumi',dep:'',arr:''},
+     {label:'✈ Vol Bangkok BKK → Paris CDG T2E',dep:'11h25',arr:'19h00 🇫🇷'},
    ]},
 ];
 
@@ -306,26 +486,60 @@ function renderCurrentBanner(){
 // ═══════════════════════════════════════════
 async function loadPhotos(){
   try{
-    const r=await fetch(GS_URL+'?t='+Date.now());
+    const r=await fetch(GS_URL+'?action=get&t='+Date.now(),{
+      method:'GET',headers:{'Accept':'application/json'},mode:'cors'
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
-    if(!d.data)return{};
+    if(!d.data){console.warn('Pas de données');return{};}
     const photos={};
     d.data.forEach(row=>{
       if(row.type==='photo'&&row.key&&row.value){
         try{
           const p=JSON.parse(row.value);
-          // Afficher uniquement photos "all" ou "both"
           if(p.diff==='priv')return;
-          // Extraire dayKey depuis le JSON ou depuis la clé (format: dest-dayIdx-photoId)
-          const dayKey=p.dayKey||row.key.split('-').slice(0,2).join('-');
+          const parts=row.key.split('-');
+          const dayKey=p.dayKey||(parts.length>=2?parts[0]+'-'+parts[1]:'');
+          if(!dayKey)return;
           if(!photos[dayKey])photos[dayKey]=[];
-          photos[dayKey].push({...p,dayKey});
-        }catch(e){console.warn('Photo parse error:',e,row);}
+          // Stocker l'ID Drive pour charger avec le token utilisateur
+          photos[dayKey].push({...p,dayKey,driveId:p.id});
+        }catch(e){console.warn('Photo parse error:',e.message);}
       }
     });
-    console.log('Photos chargées:', photos);
+    console.log('✅ Photos chargées:', Object.keys(photos).length,'journées');
     return photos;
-  }catch(e){console.warn('loadPhotos error:',e);return{};}
+  }catch(e){console.warn('❌ loadPhotos:',e.message);return{};}
+}
+
+// Génère une URL d'image Drive avec le token de l'utilisateur connecté
+function getDriveImgUrl(photo){
+  if(photo.driveId && userToken){
+    // URL avec token Bearer — chargée dans un blob pour affichage
+    return `https://www.googleapis.com/drive/v3/files/${photo.driveId}?alt=media`;
+  }
+  return photo.url||'';
+}
+
+// Charge une image Drive privée dans un élément img
+async function loadPrivateImg(imgEl, photo){
+  if(!photo.driveId || !userToken){
+    imgEl.src=photo.url||'';
+    return;
+  }
+  try{
+    const ok=await ensureToken();
+    if(!ok){imgEl.src=photo.url||'';return;}
+    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${photo.driveId}?alt=media`,{
+      headers:{Authorization:'Bearer '+userToken}
+    });
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const blob=await r.blob();
+    imgEl.src=URL.createObjectURL(blob);
+  }catch(e){
+    console.warn('loadPrivateImg error:',e.message);
+    imgEl.src=photo.url||'';
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -405,6 +619,23 @@ async function renderTimeline(){
 
   let html='';
 
+  // Vol aller Paris → Bangkok en tête de timeline
+  html+=`<div style="margin-bottom:8px">
+    <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;padding:0 2px;margin-bottom:5px">Lundi 20 juillet 2026</div>
+    <div class="transport-card" style="margin:0">
+      <div class="transport-type">✈ Vol aller · Lundi 20 juillet 2026</div>
+      <div class="transport-route">
+        <span class="transport-city">Paris CDG</span>
+        <span class="transport-arrow">→</span>
+        <span class="transport-city">Bangkok BKK</span>
+      </div>
+      <div class="transport-details">
+        <div class="transport-row">Départ <b>16h40 🇫🇷</b> Terminal 2E → Arrivée <b>09h15 🇹🇭 +1j</b> (04h15 🇫🇷)</div>
+      </div>
+      <span class="transport-company">✈ Air France · Vol direct ~11h</span>
+    </div>
+  </div>`;
+
   DESTINATIONS.forEach(dest=>{
     const status=now>=dest.end?'past':now>=dest.start?'current':'future';
     const statusLabel=status==='past'?'Visité':status==='current'?'📍 En cours':'À venir';
@@ -420,14 +651,14 @@ async function renderTimeline(){
         <span class="dest-status ${statusClass}">${statusLabel}</span>
       </div>
 
-      <!-- Adresse Airbnb -->
+      <!-- Logement -->
       <div class="airbnb-card">
-        <span class="airbnb-icon">🏠</span>
+        <span class="airbnb-icon">${dest.key==='bkk2'?'🏨':'🏠'}</span>
         <div style="flex:1">
-          <div class="airbnb-label">Logement</div>
-          <div class="airbnb-addr">${dest.airbnb.addr}</div>
-          <div class="airbnb-note">${dest.airbnb.note}</div>
-          <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.airbnb.maps}" target="_blank">🗺 Maps</a>
+          <div class="airbnb-label">${dest.hotel.label}</div>
+          <div class="airbnb-addr">${dest.hotel.addr}</div>
+          <div class="airbnb-note">${dest.hotel.note}</div>
+          <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.hotel.maps}" target="_blank">🗺 Maps</a>
         </div>
       </div>`;
 
@@ -454,8 +685,9 @@ async function renderTimeline(){
         html+=`<div class="photo-grid ${gridClass}">`;
         dayPhotos.slice(0,shown).forEach((p,i)=>{
           const isLast=i===shown-1&&extra>0;
+          const imgId=`img-${day.key}-${i}`;
           html+=`<div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
-            <img src="${p.url}" alt="${p.caption||''}" loading="lazy">
+            <img id="${imgId}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="${p.caption||''}" loading="lazy" style="background:var(--sand-mid)">
             ${p.caption&&i===0?`<div class="photo-caption">${p.caption}</div>`:''}
             ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
           </div>`;
@@ -503,6 +735,17 @@ async function renderTimeline(){
   </div>`;
 
   timeline.innerHTML=html;
+
+  // Charger les images privées depuis Drive avec le token utilisateur
+  DESTINATIONS.forEach(dest=>{
+    dest.days.forEach(day=>{
+      const dayPhotos=photos[day.key]||[];
+      dayPhotos.slice(0,6).forEach((p,i)=>{
+        const imgEl=document.getElementById(`img-${day.key}-${i}`);
+        if(imgEl) loadPrivateImg(imgEl, p);
+      });
+    });
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -547,7 +790,8 @@ async function sendComment(dayKey){
   const inp=document.getElementById('ci-'+dayKey);
   const txt=inp.value.trim();
   if(!txt)return;
-  const comment={author:'Proche',text:txt,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
+  const userName=localStorage.getItem('voyage_user_name')||'Proche';
+  const comment={author:userName,text:txt,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
   await sendReaction('comment',dayKey,JSON.stringify(comment));
   inp.value='';
   showToast('💬 Commentaire envoyé !');
@@ -564,14 +808,13 @@ function showToast(m){
 // ═══════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════
-updateTimes();
-setInterval(updateTimes,30000);
-renderCurrentBanner();
-// Afficher intro si première visite
-if(!localStorage.getItem('intro_seen')){
-  document.getElementById('intro-banner').style.display='block';
+function refreshPage(){
+  document.getElementById('timeline').innerHTML='<div class="loading"><div class="loading-spinner"></div>Actualisation…</div>';
+  renderTimeline();
 }
-renderTimeline();
+
+// Démarrage — vérifier si déjà connecté
+window.addEventListener('DOMContentLoaded', initAuth);
 </script>
 </body>
 </html>
