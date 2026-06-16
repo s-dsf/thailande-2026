@@ -279,11 +279,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .wx-sm-ico{font-size:22px;margin-bottom:5px}
 .wx-sm-st{font-size:10px;color:var(--brown-mid);line-height:1.4}
 
-/* LOGEMENT CARD */
-.logement-card{background:rgba(255,255,255,.15);border-radius:var(--rs);padding:10px 12px;margin-top:10px;position:relative}
-.logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:rgba(255,255,255,.7);margin-bottom:3px}
-.logement-addr{font-size:12px;color:var(--white);line-height:1.4}
-.logement-maps{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.2);color:var(--white);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;margin-top:5px;text-decoration:none}
+/* LOGEMENT CARD DETACHEE */
+.logement-card{background:var(--white);border-radius:var(--r);padding:12px 14px;margin-top:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--brown-mid);margin-bottom:3px}
+.logement-addr{font-size:12px;color:var(--brown);line-height:1.4}
+.logement-maps{display:inline-flex;align-items:center;gap:4px;background:var(--turq);color:var(--white);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;margin-top:6px;text-decoration:none}
 /* NOTE DANS ACTS */
 .act-note-item{background:var(--gold-lt);border-radius:var(--rs);padding:8px 12px;margin-bottom:4px;font-size:12px;color:var(--brown);border-left:3px solid var(--gold)}
 .act-note-time{font-size:10px;color:var(--brown-mid);margin-top:2px}
@@ -464,11 +464,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <span class="hero-em">🏙</span><div class="hero-title">Bangkok</div>
     <div class="hero-dates">21 – 25 juillet 2026</div>
     <div class="hero-desc">Capitale effervescente. Temples le matin, marchés le soir, bateaux pour tout relier.</div>
-    <div class="logement-card">
-      <div class="logement-label">🏠 Logement</div>
-      <div class="logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
-      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Maps</a>
-    </div>
+  </div>
+  <div class="logement-card">
+    <div class="logement-label">🏠 Logement Airbnb</div>
+    <div class="logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
+    <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-bkk" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="days-bkk"></div>
@@ -480,11 +480,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <span class="hero-em">🌿</span><div class="hero-title">Chiang Mai</div>
     <div class="hero-dates">25 – 29 juillet 2026</div>
     <div class="hero-desc">Plus calme, plus verte, plus fraîche. Éléphants, montagne, marchés nocturnes.</div>
-    <div class="logement-card">
-      <div class="logement-label">🏠 Logement</div>
-      <div class="logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
-      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Maps</a>
-    </div>
+  </div>
+  <div class="logement-card">
+    <div class="logement-label">🏠 Logement Airbnb</div>
+    <div class="logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
+    <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-cm" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="days-cm"></div>
@@ -496,11 +496,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <span class="hero-em">🐠</span><div class="hero-title">Koh Tao</div>
     <div class="hero-dates">29 juillet – 1er août 2026</div>
     <div class="hero-desc">La partie la plus forte pour le snorkeling. Tortues, coraux, eau cristalline.</div>
-    <div class="logement-card">
-      <div class="logement-label">🏠 Logement</div>
-      <div class="logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
-      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Maps</a>
-    </div>
+  </div>
+  <div class="logement-card">
+    <div class="logement-label">🏠 Logement Airbnb</div>
+    <div class="logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
+    <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-kt" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="sea-kt"></div>
@@ -514,11 +514,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <span class="hero-em">🌴</span><div class="hero-title">Koh Samui</div>
     <div class="hero-dates">1 – 5 août 2026</div>
     <div class="hero-desc">Phase détente. Plages calmes, couchers de soleil et bons restaurants avant le retour.</div>
-    <div class="logement-card">
-      <div class="logement-label">🏠 Logement</div>
-      <div class="logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
-      <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Maps</a>
-    </div>
+  </div>
+  <div class="logement-card">
+    <div class="logement-label">🏠 Logement Airbnb</div>
+    <div class="logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
+    <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-ks" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
   <div id="sea-ks"></div>
@@ -530,31 +530,30 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="sec-title">🏠 Logements</div>
 
   <div class="accom-card">
-    <div class="accom-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="accom-dest">🏙 Bangkok</div><div class="accom-dates">21 – 24 juillet · Airbnb</div></div>
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="accom-dest">🏙 Bangkok</div><div class="accom-dates">21 – 25 juillet · Airbnb</div></div>
     <div class="accom-body">
       <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🚕</span><div><div class="accom-rl">Transfert aéroport</div><div class="accom-rv">Taxi réservé par l'Airbnb</div><div class="accom-rn">⚠ 1 500 bahts — rien à payer au chauffeur · Régler au logement le lendemain</div></div></div>
+
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in à partir de 14h · Check-out avant 11h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
   </div>
 
   <div class="accom-card">
-    <div class="accom-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="accom-dest">🌿 Chiang Mai</div><div class="accom-dates">25 – 28 juillet · Airbnb</div></div>
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="accom-dest">🌿 Chiang Mai</div><div class="accom-dates">25 – 29 juillet · Airbnb</div></div>
     <div class="accom-body">
       <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🚕</span><div><div class="accom-rl">Transfert aéroport</div><div class="accom-rv">Taxi organisé par l'Airbnb</div><div class="accom-rn">💵 300 bahts en liquide directement au chauffeur</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🐘</span><div><div class="accom-rl">À régler à l'arrivée</div><div class="accom-rv">Sanctuaire d'éléphants : 13 600 THB</div></div></div>
+
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 14h · Check-out avant 10h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
   </div>
 
   <div class="accom-card">
-    <div class="accom-hdr" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)"><div class="accom-dest">🐠 Koh Tao</div><div class="accom-dates">29 juillet – 1er août · Airbnb</div></div>
+    <div class="accom-hdr" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)"><div class="accom-dest">🐠 Koh Tao</div><div class="accom-dates">29 juillet – 1er août</div></div>
     <div class="accom-body">
       <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🚢</span><div><div class="accom-rl">Arrivée ferry</div><div class="accom-rv">Transport organisé par l'Airbnb · 15 min</div><div class="accom-rn">📋 Chercher panneau avec votre nom dans le grand pavillon couvert</div></div></div>
+
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 15h · Check-out avant 10h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
@@ -564,7 +563,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="accom-hdr" style="background:linear-gradient(135deg,#D4A853,#B8883A)"><div class="accom-dest">🌴 Koh Samui</div><div class="accom-dates">1 – 5 août · Airbnb</div></div>
     <div class="accom-body">
       <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🚢</span><div><div class="accom-rl">Arrivée ferry</div><div class="accom-rv">Bangrak Pier 13h · Transport organisé par l'Airbnb</div></div></div>
+
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">À l'arrivée · Check-out avant 11h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
@@ -574,7 +573,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="accom-hdr" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47)"><div class="accom-dest">🏨 Bangkok — Nuit retour</div><div class="accom-dates">5 – 6 août · Hôtel</div></div>
     <div class="accom-body">
       <div class="accom-row"><span class="accom-ri">🏨</span><div><div class="accom-rl">Hôtel</div><div class="accom-rv">Grand BS Airport Hotel Suvarnabhumi</div><div class="accom-rv" style="font-size:11px;color:var(--brown-mid)">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div></div></div>
-      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in</div><div class="accom-rv">14h · 2 chambres · Piscine l'après-midi</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in</div><div class="accom-rv">Check-in 16h · Check-out avant 12h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
   </div>
@@ -585,11 +584,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="flight-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="flight-ht">✈ Paris CDG → Bangkok BKK</div><div class="flight-hd">Lundi 20 juillet 2026</div></div>
     <div class="flight-body">
       <div class="flight-route">
-        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">16h40</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">16h40 🇫🇷</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
         <div class="flight-arrow">✈──</div>
-        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">09h15 +1j</div><div style="font-size:10px;color:var(--brown-mid)">Suvarnabhumi</div></div>
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">09h15 🇹🇭 +1j</div><div style="font-size:10px;color:var(--brown-mid)">(04h15 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">Vol direct</span><span class="ftag">~11h de vol</span><span class="ftag">Arrivée 21 juillet</span></div>
+      <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">Vol direct ~11h</span><span class="ftag">Arrivée 21 juillet</span></div>
     </div>
   </div>
 
@@ -597,11 +596,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="flight-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="flight-ht">✈ Bangkok DMK → Chiang Mai CNX</div><div class="flight-hd">Samedi 25 juillet 2026</div></div>
     <div class="flight-body">
       <div class="flight-route">
-        <div class="flight-city"><div class="flight-code">DMK</div><div class="flight-time">10h15</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2</div></div>
-        <div class="flight-arrow">──</div>
-        <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">11h25</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2</div></div>
+        <div class="flight-city"><div class="flight-code">DMK</div><div class="flight-time">10h10 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(05h10 🇫🇷) T2</div></div>
+        <div class="flight-arrow">✈──</div>
+        <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">11h25 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h25 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">AirAsia Move</span><span class="ftag">~1h10</span><span class="ftag">Check-out avant 11h</span></div>
+      <div class="flight-tags"><span class="ftag">✈ AirAsia Move</span><span class="ftag">~1h10</span><span class="ftag">Check-out 07h30</span></div>
     </div>
   </div>
 
@@ -611,20 +610,20 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
       <div style="margin-bottom:9px">
         <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">✈ Vol CNX → Surat Thani</div>
         <div class="flight-route">
-          <div class="flight-city"><div class="flight-code" style="font-size:16px">CNX</div><div class="flight-time">10h40</div></div>
-          <div class="flight-arrow">──</div>
-          <div class="flight-city"><div class="flight-code" style="font-size:16px">URT</div><div class="flight-time">12h30</div></div>
+          <div class="flight-city"><div class="flight-code" style="font-size:16px">CNX</div><div class="flight-time">10h40 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(05h40 🇫🇷)</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code" style="font-size:16px">URT</div><div class="flight-time">12h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(07h30 🇫🇷)</div></div>
         </div>
-        <div class="flight-tags" style="margin-top:5px"><span class="ftag">AirAsia</span></div>
+        <div class="flight-tags" style="margin-top:5px"><span class="ftag">✈ AirAsia Move</span></div>
       </div>
       <div style="border-top:1px solid var(--sand-mid);padding-top:9px">
         <div style="font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px">🚢 Ferry Tapee Pier → Mae Haad</div>
         <div class="flight-route">
-          <div class="flight-city"><div class="flight-code" style="font-size:14px">Tapee</div><div class="flight-time">15h30</div></div>
-          <div class="flight-arrow">──</div>
-          <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">~18h00</div></div>
+          <div class="flight-city"><div class="flight-code" style="font-size:14px">Tapee</div><div class="flight-time">15h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(10h30 🇫🇷)</div></div>
+          <div class="flight-arrow">🚢──</div>
+          <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">~18h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(~13h00 🇫🇷)</div></div>
         </div>
-        <div class="flight-tags" style="margin-top:5px"><span class="ftag">Direct Ferries</span></div>
+        <div class="flight-tags" style="margin-top:5px"><span class="ftag">🚢 Direct Ferries</span></div>
       </div>
     </div>
   </div>
@@ -633,11 +632,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="flight-hdr" style="background:linear-gradient(135deg,#D4A853,#B8883A)"><div class="flight-ht">🚢 Ferry Koh Tao → Koh Samui</div><div class="flight-hd">Dimanche 1er août 2026</div></div>
     <div class="flight-body">
       <div class="flight-route">
-        <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">11h30</div></div>
+        <div class="flight-city"><div class="flight-code" style="font-size:14px">Mae Haad</div><div class="flight-time">11h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h30 🇫🇷)</div></div>
         <div class="flight-arrow">🚢──</div>
-        <div class="flight-city"><div class="flight-code" style="font-size:14px">Bangrak</div><div class="flight-time">13h00</div></div>
+        <div class="flight-city"><div class="flight-code" style="font-size:14px">Bangrak</div><div class="flight-time">13h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(08h00 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">Check-out avant 10h</span></div>
+      <div class="flight-tags"><span class="ftag">🚢 Direct Ferries</span><span class="ftag">Lomprayah</span></div>
     </div>
   </div>
 
@@ -645,11 +644,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="flight-hdr" style="background:linear-gradient(135deg,#7A5C47,#3D2B1F)"><div class="flight-ht">✈ Koh Samui → Bangkok BKK</div><div class="flight-hd">Mercredi 5 août 2026</div></div>
     <div class="flight-body">
       <div class="flight-route">
-        <div class="flight-city"><div class="flight-code">USM</div><div class="flight-time">14h30</div></div>
-        <div class="flight-arrow">──</div>
-        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">15h30</div></div>
+        <div class="flight-city"><div class="flight-code">USM</div><div class="flight-time">14h20 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(09h20 🇫🇷)</div></div>
+        <div class="flight-arrow">✈──</div>
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">15h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(10h30 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">Bangkok Airways</span><span class="ftag">Hôtel: Grand BS Airport</span></div>
+      <div class="flight-tags"><span class="ftag">✈ Bangkok Airways</span></div>
     </div>
   </div>
 
@@ -657,11 +656,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div class="flight-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="flight-ht">✈ Bangkok BKK → Paris CDG</div><div class="flight-hd">Jeudi 6 août 2026</div></div>
     <div class="flight-body">
       <div class="flight-route">
-        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">11h25</div><div style="font-size:10px;color:var(--brown-mid)">Suvarnabhumi</div></div>
-        <div class="flight-arrow">──</div>
-        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">19h00</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+        <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">11h25 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h25 🇫🇷)</div></div>
+        <div class="flight-arrow">✈──</div>
+        <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">19h00 🇫🇷</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">~11h de vol</span><span class="ftag">Arrivée Paris 6 août</span></div>
+      <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">~11h de vol</span></div>
     </div>
   </div>
 </div>
@@ -688,22 +687,26 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 
   <!-- SUB-TABS -->
   <div class="prat-tabs">
-    <div class="prat-tab active" onclick="goP('info',this)"><span class="pti">ℹ️</span>Infos</div>
-    <div class="prat-tab" onclick="goP('outils',this)"><span class="pti">🛠</span>Outils</div>
+    <div class="prat-tab active" onclick="goP('outils',this)"><span class="pti">🛠</span>Outils</div>
     <div class="prat-tab" onclick="goP('pratique',this)"><span class="pti">📋</span>Pratique</div>
+    <div class="prat-tab" onclick="goP('info',this)"><span class="pti">ℹ️</span>Infos</div>
+    <div class="prat-tab" onclick="goP('avant',this)"><span class="pti">🗓</span>Avant</div>
     <div class="prat-tab" onclick="goP('photos',this)"><span class="pti">📸</span>Photos</div>
     <div class="prat-tab" onclick="goP('config',this)"><span class="pti">⚙️</span>Config</div>
   </div>
 
   <!-- ── SECTION INFO ── -->
-  <div class="prat-sec active" id="ps-info">
-    <div class="sec-title">💱 Convertisseur devises</div>
+  <div class="prat-sec" id="ps-info">
+    <div class="sec-title">🚨 Urgences rapides</div>
+    <div id="emergencies2"></div>
+    <!-- convertisseur moved to outils -->
     <div class="cur-card">
       <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
       <div class="cur-tabs">
         <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
         <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
         <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
+        <div class="cur-tab" onclick="setCur('THB_USD',this)">THB → USD</div>
       </div>
       <div class="cur-row">
         <div class="cur-lbl" id="cur-from">EUR</div>
@@ -740,7 +743,27 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
 
   <!-- ── SECTION OUTILS ── -->
-  <div class="prat-sec" id="ps-outils">
+  <div class="prat-sec active" id="ps-outils">
+    <div class="sec-title">💱 Convertisseur devises</div>
+    <div class="cur-card">
+      <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
+      <div class="cur-tabs">
+        <div class="cur-tab active" onclick="setCur('EUR',this)">EUR → THB</div>
+        <div class="cur-tab" onclick="setCur('USD',this)">USD → THB</div>
+        <div class="cur-tab" onclick="setCur('THB',this)">THB → EUR</div>
+        <div class="cur-tab" onclick="setCur('THB_USD',this)">THB → USD</div>
+      </div>
+      <div class="cur-row">
+        <div class="cur-lbl" id="cur-from">EUR</div>
+        <input class="cur-input" id="cur-in" type="number" placeholder="0" oninput="convertCur()">
+        <div class="cur-lbl">→</div>
+      </div>
+      <div class="cur-result">
+        <div class="cur-result-val" id="cur-res">—</div>
+        <div class="cur-result-lbl" id="cur-res-lbl">THB</div>
+      </div>
+      <div class="cur-rate" id="cur-rate">Chargement du taux…</div>
+    </div>
     <div class="sec-title">🗣 Traducteur thaï ↔ français</div>
     <div class="trans-card">
       <div class="trans-tabs">
@@ -783,12 +806,6 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
       </div>
       <div class="ai-msgs" id="ai-msgs">
         <div class="ai-msg assistant">Bonjour ! Je connais tout votre programme. Posez-moi vos questions — météo, restaurant, logistique, plan B… 🌴</div>
-      </div>
-      <div class="ai-sugg">
-        <div class="ai-s" onclick="aiAsk('Il pleut à Koh Tao, que faire ?')">🌧 Plan B pluie</div>
-        <div class="ai-s" onclick="aiAsk('Restaurant proche logement Chiang Mai ?')">🍜 Resto proche</div>
-        <div class="ai-s" onclick="aiAsk('Conseils snorkeling enfants Shark Bay ?')">🐠 Snorkeling</div>
-        <div class="ai-s" onclick="aiAsk('Que faire ce soir à Bangkok ?')">🌃 Soir Bangkok</div>
       </div>
       <div class="ai-input-row">
         <input class="ai-input" id="ai-in" placeholder="Votre question…" onkeydown="if(event.key==='Enter')aiSend()">
@@ -838,6 +855,35 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
     <div id="journal"></div>
   </div>
 
+
+  <!-- ── SECTION AVANT ── -->
+  <div class="prat-sec" id="ps-avant">
+    <div class="sec-title">🧳 Check-list valise</div>
+    <div class="bag-hdr">
+      <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
+      <div class="bag-w">4,1 kg <span style="font-size:14px;font-weight:400">de contenu max</span></div>
+      <div style="font-size:11px;opacity:.8">Format cabine · Machines à laver dans tous les logements</div>
+      <div class="bag-bar-wrap"><div class="bag-bar" id="bag-bar" style="width:0%"></div></div>
+      <div style="font-size:11px;opacity:.8;margin-top:5px" id="bag-prog">0 / 0 cochés</div>
+    </div>
+    <div id="bag-list"></div>
+    <div class="sec-title">💉 Vaccins &amp; santé</div>
+    <div id="vaccins"></div>
+    <div class="tip tip-red" style="margin-bottom:14px">
+      <span style="font-size:14px">🦟</span>
+      <div><div class="tip-lbl">Dengue — présente toute l'année</div>Répulsif DEET/Icaridine sur toute la famille, surtout au lever et coucher du soleil.</div>
+    </div>
+    <div class="sec-title">📄 Documents à préparer</div>
+    <div class="tip tip-red" style="margin-bottom:10px">
+      <span style="font-size:14px">⚠️</span>
+      <div><div class="tip-lbl">Priorité absolue</div>Passeports valides jusqu'au 06/02/2027 minimum · Pas de visa requis &lt; 30 jours</div>
+    </div>
+    <div class="info-card"><div class="info-title">Autorisation de sortie du territoire</div><div class="info-body">Pour chaque enfant : signée de l'autre parent + copie de sa carte d'identité</div></div>
+    <div class="info-card"><div class="info-title">Copies à préparer</div><div class="info-body">Scan passeports + 2 exemplaires papier · Assurance voyage · Adresses logements</div></div>
+    <div class="info-card"><div class="info-title">Livret de famille</div><div class="info-body">Copie pour chaque famille du groupe</div></div>
+    <div class="sec-title">🌡 Météo historique juillet-août</div>
+    <div id="histo-meteo"></div>
+  </div>
   <!-- ── SECTION PHOTOS ── -->
   <div class="prat-sec" id="ps-photos">
     <div class="sec-title">📸 Photos du voyage</div>
@@ -980,8 +1026,7 @@ const DATA = {
      items:[
        {t:"Matinée",n:"Arrivée BKK — Suvarnabhumi",
         d:"Transfert Airbnb 45–60 min. Check-in à partir de 14h.",
-        a:"Suvarnabhumi Airport, Bangkok",
-        al:"⚠️ 1 500 bahts — rien à payer au chauffeur · Payer au logement en liquide le lendemain"},
+        al:"1 500 bahts — rien à payer au chauffeur · Payer au logement en liquide le lendemain"},
        {t:"Déjeuner",n:"🏙 Rooftop Avani+ Riverside Bangkok",d:"",a:"Avani+ Riverside Bangkok Hotel · Taxi 28 min"},
        {t:"Après-midi",n:"🚤 Balade Chao Phraya",d:"Premier contact avec Bangkok. Bateaux, temples et skyline.",a:"Chao Phraya, Khlong San, Bangkok 10600 · À pied 7 min"},
        {t:"Soir",n:"Dîner au logement",d:"Maintenir les enfants éveillés jusqu'à 20h pour recaler les rythmes."},
@@ -995,6 +1040,7 @@ const DATA = {
        {t:"Matinée",n:"🏛 Grand Palais & Wat Phra Kaew",d:"Architecture la plus spectaculaire du pays.",a:"Na Phra Lan Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
        {t:"Déjeuner",n:"The Sixth 6th",d:"",a:"6 Maharat Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
        {t:"Après-midi",n:"🚤 Long-tail boat klongs — 1h",d:"Départ Tha Tien Pier · Wat Arun · Bangkok Noi Canal · Bangkok Yai Canal · Artist's House · Poissons géants · Retour Tha Tien Pier."},
+       {t:"Soirée",n:"Retour au logement",d:"",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700 · Taxi 30 min"},
        {t:"Soirée",n:"🌃 Asiatique Riverfront",d:"Grande roue · Spectacles · Street food · Pad thai · Poulet grillé.",a:"2194 Charoen Krung Rd, Bang Kho Laem, Bangkok 10120 · Taxi 20 min"},
      ]},
     // ── 23 juillet ──────────────────────────────
@@ -1014,9 +1060,10 @@ const DATA = {
     {date:"Vendredi 24 juillet",title:"Journée fun & Train Night Market",
      acts:[{l:"Siam Amazing Park (Option A)",m:"Siam Amazing Park Bangkok"},{l:"ICONSIAM (Option B)",m:"ICONSIAM Bangkok"},{l:"Train Night Market Srinakarin",m:"Train Night Market Srinakarin Bangkok"}],
      items:[
-       {t:"Matin",n:"🎢 Activité ludique",d:"Option A : Siam Amazing Park (parc aquatique)\nOption B : ICONSIAM · Marché flottant",
-        a:"Option A : 203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230 · Taxi 1h\nOption B : 299 Charoen Nakhon Rd, Khlong San, Bangkok 10600 · Taxi 30 min"},
+       {t:"Matin",n:"🎢 Option A — Siam Amazing Park",d:"Parc aquatique · Glissades géantes.",a:"203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230 · Taxi 1h"},
+       {t:"Matin",n:"🛍 Option B — ICONSIAM",d:"Marché flottant intérieur · Shopping · Climatisé.",a:"299 Charoen Nakhon Rd, Khlong San, Bangkok 10600 · Taxi 30 min"},
        {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme."},
+       {t:"Après-midi",n:"Retour au logement",d:"",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
        {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas.",
         a:"Train Night Market Srinakarin, Bangkok · Taxi 40 min"},
      ]},
@@ -1024,18 +1071,32 @@ const DATA = {
     {date:"Samedi 25 juillet",title:"✈ Départ vers Chiang Mai",
      acts:[{l:"Check-out & départ aéroport Don Mueang",m:"Don Mueang International Airport Bangkok"}],
      items:[
-       {t:"Avant 11h",n:"Check-out logement Bangkok",d:"Taxi pour l'aéroport Don Mueang : 30 min.",a:"Aéroport international Don Mueang, Bangkok · 30 min"},
-       {t:"10h15",n:"✈ Vol Don Mueang T2 → Chiang Mai",d:"AirAsia Move · Arrivée CNX 11h25 · Terminal 2"},
+       {t:"07h30",n:"Check-out logement Bangkok",d:"Taxi pour l'aéroport Don Mueang : 30 min.",a:"Aéroport international Don Mueang, Bangkok · Taxi 30 min"},
+       {t:"10h10",n:"✈ Vol Don Mueang T2 → Chiang Mai",d:"AirAsia Move · Arrivée CNX 11h25 · Terminal 2"},
+     ]},
+    // ── 5 août (retour Bangkok) ──────────────────
+    {date:"Mercredi 5 août",title:"✈ Retour Bangkok — Nuit avant vol",
+     acts:[{l:"Hôtel Grand BS Airport Suvarnabhumi",m:"Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok"}],
+     items:[
+       {t:"~16h00",n:"Arrivée BKK depuis Koh Samui",d:"Bangkok Airways · Vol depuis Koh Samui 14h20."},
+       {t:"Check-in ~16h",n:"🏨 Hôtel Grand BS Airport Hotel Suvarnabhumi",d:"2 chambres · Piscine l'après-midi.",a:"836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520"},
+     ]},
+    // ── 6 août (retour Paris) ────────────────────
+    {date:"Jeudi 6 août",title:"✈ Retour Paris",
+     acts:[{l:"Vol Bangkok → Paris CDG",m:"Suvarnabhumi Airport Bangkok"}],
+     items:[
+       {t:"Matin",n:"Check-out hôtel Grand BS",d:"Transfert aéroport Suvarnabhumi · ~15 min en taxi.",a:"Aéroport Suvarnabhumi (BKK), Bangkok"},
+       {t:"11h25",n:"✈ Vol Bangkok BKK → Paris CDG",d:"Air France · Vol direct · ~11h de vol.",al:"Arrivée CDG Terminal 2E à 19h00 (heure française · 01h00 heure thaï)"},
      ]},
   ],
   chiangmai:[
     // ── 25 juillet ──────────────────────────────
     {date:"Samedi 25 juillet",title:"Arrivée & installation",
-     tip:{c:"red",i:"📌",l:"À régler dès l'arrivée au logement en liquide",t:"Sanctuaire des éléphants : 13 600 THB"},
      acts:[{l:"Arrivée aéroport CNX",m:"Chiang Mai International Airport"},{l:"Wat Phra Singh",m:"Wat Phra Singh Chiang Mai"},{l:"Khao Soi Khun Yai (dîner)",m:"Khao Soi Khun Yai Chiang Mai"}],
      items:[
-       {t:"11h25",n:"Arrivée CNX Terminal 2",d:"",a:"Aéroport international de Chiang Mai, Terminal 2",
-        al:"⚠️ Taxi Airbnb organisé — 300 bahts en liquide directement au chauffeur"},
+       {t:"11h25",n:"Arrivée CNX Terminal 2",d:"",
+        al:"Taxi Airbnb organisé — 300 bahts en liquide directement au chauffeur"},
+       {t:"",n:"📌 À régler dès l'arrivée au logement en liquide",d:"Sanctuaire des éléphants : 13 600 THB",al:""},
        {t:"Après-midi",n:"🛕 Wat Phra Singh",d:"Élégant et accessible. Observer les moines en robe safran.",a:"2 Samlarn Rd, Si Phum, Mueang Chiang Mai 50200 · À pied 22 min"},
        {t:"Soirée",n:"🍜 Khao Soi Khun Yai — Spécialité du Nord",d:"LE plat emblématique de Chiang Mai : curry coco + nouilles croustillantes.",a:"Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200 · À pied 27 min"},
      ]},
@@ -1056,6 +1117,7 @@ const DATA = {
        {t:"Matinée tôt",n:"⛩ Doi Suthep",d:"Escalier serpent mythique · Vue panoramique sur Chiang Mai. Arriver tôt pour éviter chaleur et foule.",a:"Doi Suthep, Suthep, Mueang Chiang Mai 50200 · En voiture 1h"},
        {t:"Déjeuner",n:"No.39 Café",d:"Cadre tropical magnifique · Pontons · Lac · Ambiance jungle · Les ados adorent.",a:"No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200 · En taxi 15 min"},
        {t:"13h30–15h00",n:"🌿 Quartier Nimman",d:"Boutiques · Cafés · Glaces artisanales. Les ados aiment beaucoup.\nCheevit Cheeva — desserts et kakigori.",a:"Nimman Road, Su Thep, Mueang Chiang Mai · En taxi 20 min"},
+       {t:"Soirée",n:"Retour au logement",d:"",a:"1 Chang Moi Road Soi 2, Chiang Mai 50300 · Taxi 20 min"},
        {t:"Soirée",n:"🛍 Chiang Mai Night Bazaar",d:"Musique live, tables en plein air.",a:"Changklan Rd, Chang Moi, Mueang Chiang Mai 50100 · À pied 15 min"},
      ]},
     // ── 28 juillet ──────────────────────────────
@@ -1070,10 +1132,10 @@ const DATA = {
     {date:"Mercredi 29 juillet",title:"Trajet vers Koh Tao",
      acts:[{l:"Aéroport CNX — départ",m:"Chiang Mai International Airport"}],
      items:[
-       {t:"Avant 10h",n:"Check-out logement Chiang Mai",d:"",a:"60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200 · 15 min",
+       {t:"Avant 10h",n:"Check-out logement Chiang Mai",d:"Taxi pour l'aéroport CNX : 15 min.",a:"60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200",
         al:"✅ Taxi gratuit pris en charge par l'Airbnb"},
-       {t:"10h40",n:"✈ Vol CNX → Surat Thani",d:"AirAsia · Arrivée 12h30."},
-       {t:"15h30",n:"🚢 Ferry Tapee Pier → Mae Haad",d:"Direct Ferries · Arrivée ~18h · Chercher panneau avec votre nom dans le grand pavillon couvert.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360"},
+       {t:"10h40",n:"✈ Vol CNX T2 → Surat Thani",d:"AirAsia Move · Arrivée 12h30."},
+       {t:"15h30",n:"🚢 Ferry Tapee Pier → Mae Haad",d:"Direct Ferries · Arrivée ~18h.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360",al:"Chercher panneau avec notre nom dans le grand pavillon couvert"},
      ]},
   ],
   kohtao:[
@@ -1082,7 +1144,7 @@ const DATA = {
      acts:[{l:"Ferry Mae Haad — arrivée",m:"Mae Haad Pier Koh Tao"},{l:"Dîner au logement",m:"Ko Tao Surat Thani"}],
      items:[
        {t:"~18h00",n:"Arrivée Mae Haad Pier",d:"Check-in 15h.",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360",
-        al:"✅ Transport organisé par l'Airbnb en taxi depuis le ferry — 15 min"},
+        al:"Transport organisé par l'Airbnb en taxi depuis le ferry — 15 min"},
        {t:"Soirée",n:"Dîner au logement",d:"Repos après la longue journée de transport."},
      ],tip:{c:"turq",i:"😴",l:"Objectif",t:"Dormir tôt pour profiter du premier matin snorkeling à Shark Bay."}},
     // ── 30 juillet ──────────────────────────────
@@ -1101,15 +1163,16 @@ const DATA = {
      items:[
        {t:"Matinée",n:"🌊 Ao Leuk Beach",d:"La plus belle plage familiale de Koh Tao. Eau calme, beaucoup de poissons, entrée facile.\nEntrer sur la partie droite — nager parallèlement à la plage.\nCe qu'on peut voir : 🐠 poissons-perroquets · 🐟 poissons-papillons · 🐡 poissons-ballons · 🌿 coraux",a:"Ao Leuk, Ko Tao, Surat Thani · En voiture 10 min"},
        {t:"Fin matinée",n:"Pause smoothies — Aow Leuk 2",d:"Smoothie mangue · Smoothie pastèque."},
-       {t:"Soirée",n:"Dîner — Barracuda Restaurant",d:"Poisson grillé excellent.",a:"Barracuda Roof Top Restaurant, Koh Tao · À pied 10 min"},
+       {t:"Soirée",n:"Retour au logement",d:"",a:"13/35 Moo 2, Ko Tao, Surat Thani 84360 · Taxi"},
+       {t:"Soirée",n:"Dîner — Barracuda Restaurant",d:"Poisson grillé excellent.",a:"Barracuda Roof Top Restaurant, Koh Tao · À pied 30 min"},
      ]},
     // ── 1er août ────────────────────────────────
     {date:"Dimanche 1er août",title:"Snorkeling doux + départ ferry",
      acts:[{l:"Ao Leuk — session courte",m:"Ao Leuk Beach Koh Tao"},{l:"Ferry Mae Haad → Koh Samui",m:"Mae Haad Pier Koh Tao"}],
      items:[
        {t:"Matin",n:"🌊 Session courte Ao Leuk",d:"Éviter la fatigue avant le bateau. Check-out avant 10h."},
-       {t:"11h30",n:"🚢 Ferry Mae Haad → Bangrak Pier",d:"",a:"Mae Haad Pier, Koh Tao",
-        al:"✅ Transport organisé par l'Airbnb · Arrivée Bangrak Pier Koh Samui 13h"},
+       {t:"11h30",n:"🚢 Direct Ferries — Mae Haad → Bangrak Pier",d:"Arrivée Bangrak Pier Koh Samui 13h.",a:"Mae Haad Pier, Koh Tao",
+        al:"Transport organisé par l'Airbnb"},
      ]},
   ],
   kohsamui:[
@@ -1118,7 +1181,7 @@ const DATA = {
      acts:[{l:"Arrivée Bangrak Pier",m:"Bangrak Pier Koh Samui"},{l:"Lipa Noi Beach",m:"Lipa Noi Beach Koh Samui"},{l:"Think & Retro Cafe",m:"Think Retro Cafe Ko Samui"}],
      items:[
        {t:"13h00",n:"Arrivée Bangrak Pier",d:"",a:"57/57 Moo 5 Anthong, Nathon, Surathani 84140",
-        al:"✅ Transport organisé par l'Airbnb depuis le ferry"},
+        al:"Transport organisé par l'Airbnb depuis le ferry"},
        {t:"16h30–18h30",n:"🏖 Lipa Noi Beach ⭐⭐⭐⭐⭐",d:"Immense plage, eau peu profonde, très calme, idéale enfants. Superbe coucher de soleil.",a:"Lipa Noi Beach, Ko Samui, Surat Thani · En voiture"},
        {t:"19h00",n:"Think & Retro Cafe",d:"Ambiance familiale · Décoration originale · Cuisine simple.",a:"38/48 Lipa Noi, Ko Samui, Surat Thani 84140 · À pied 20 min"},
      ]},
@@ -1128,34 +1191,33 @@ const DATA = {
      items:[
        {t:"09h00–11h30",n:"🌊 Silver Beach ⭐⭐⭐⭐⭐",d:"Meilleur snorkeling de Samui. Arriver avant 10h.",a:"Silver Beach, 124/4 Maret, Ko Samui, Surat Thani 84310 · ~30 min de route",
         al:"Ne pas y aller en après-midi — l'eau devient agitée."},
-       {t:"Midi",n:"Café 69 (déjeuner)",d:"Cuisine créative, portions partageables.",a:"Café 69, Ko Samui"},
-       {t:"Après-midi",n:"Retour au logement",d:"Repos, piscine."},
-       {t:"Soirée",n:"🔥 Coco Tam's — Spectacle de feu",d:"Vers 19h30. Les enfants adorent.",a:"Coco Tam's, Bophut, Ko Samui"},
+       {t:"Midi",n:"Café 69 (déjeuner)",d:"Cuisine créative, portions partageables.",a:"Café 69, Ko Samui · En voiture 19 min"},
+       {t:"Après-midi",n:"Retour au logement",d:"Repos, piscine.",a:"57/57 Moo 5 Anthong, Nathon · En voiture 30 min"},
+       {t:"Soirée",n:"🔥 Coco Tam's — Spectacle de feu",d:"Vers 19h30. Les enfants adorent.",a:"Coco Tam's, Bophut, Ko Samui · En voiture 20 min"},
      ]},
     // ── 3 août ──────────────────────────────────
     {date:"Lundi 3 août",title:"Big Buddha + Cascades + Secret Garden",
      acts:[{l:"Big Buddha",m:"Big Buddha Koh Samui"},{l:"Cascades Na Muang",m:"Na Muang Waterfall Koh Samui"},{l:"Secret Buddha Garden",m:"Tarnim Magic Garden Koh Samui"}],
      items:[
-       {t:"Matin",n:"🙏 Big Buddha",d:"Les enfants aiment les grandes statues, les poissons, les couleurs.",a:"Wat Phra Yai, Bo Put, Ko Samui District, Surat Thani 84320 · À pied 20 min"},
+       {t:"Matin",n:"🙏 Big Buddha",d:"Les enfants aiment les grandes statues, les poissons, les couleurs.",a:"Wat Phra Yai, Bo Put, Ko Samui District, Surat Thani 84320 · En voiture 30 min"},
        {t:"Déjeuner",n:"The Mother Restaurant",d:"Cuisine thaïlandaise simple, très bon rapport qualité-prix.",a:"The Mother Restaurant, Bo Put, Ko Samui 84320 · En voiture 10 min"},
        {t:"Après-midi",n:"💧 Cascades Na Muang",d:"Baignade possible. À prévoir : baskets, serviettes, anti-moustique.",a:"Na Muang 2 Waterfall, Na Mueang, Ko Samui 84140 · En voiture 50 min"},
        {t:"Après-midi",n:"🌿 Secret Buddha Garden",d:"Lieu caché dans la jungle. Très différent des plages.",a:"Tarnim Magic Garden, Na Mueang, Ko Samui 84140 · En voiture 20 min"},
-       {t:"Fin après-midi",n:"Retour logement",d:""},
+       {t:"Fin après-midi",n:"Retour logement",d:"",a:"57/57 Moo 5 Anthong, Nathon, Surathani 84140 · En voiture 35 min"},
      ]},
     // ── 4 août ──────────────────────────────────
     {date:"Mardi 4 août",title:"Vraie journée de vacances",
      acts:[{l:"Logement + piscine — journée libre",m:"57/57 Moo 5 Anthong Nathon Ko Samui"}],
      items:[
        {t:"Journée",n:"🌴 Journée libre au logement",d:"Piscine, détente, lecture. Pas de programme imposé."},
-       {t:"Soirée",n:"The Road Less Travelled Samui",d:"",a:"11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140"},
+       {t:"Soirée",n:"The Road Less Travelled Samui",d:"",a:"11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140 · En voiture 10 min"},
      ]},
     // ── 5 août (retour Bangkok) ──────────────────
     {date:"Mercredi 5 août",title:"✈ Retour Bangkok",
      acts:[{l:"Vol Koh Samui → Bangkok BKK",m:"Samui Airport Ko Samui"},{l:"Hôtel Grand BS Airport Suvarnabhumi",m:"Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok"}],
      items:[
-       {t:"Matin",n:"Check-out logement Koh Samui",d:"Transfert vers l'aéroport organisé."},
-       {t:"14h30",n:"✈ Vol Koh Samui → Bangkok Suvarnabhumi",d:"Bangkok Airways · Arrivée BKK 15h30."},
-       {t:"Check-in ~16h",n:"🏨 Hôtel Grand BS Airport Hotel Suvarnabhumi",d:"2 chambres · Après-midi piscine de l'hôtel.",a:"836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520"},
+       {t:"10h00",n:"Check-out logement Koh Samui",d:"Transfert vers l'aéroport organisé.",a:"Aéroport de Koh Samui (USM), 9/10 Moo 5, Bo Phut, Ko Samui, Surat Thani 84320 · En voiture 45 min"},
+       {t:"14h20",n:"✈ Vol Koh Samui → Bangkok Suvarnabhumi",d:"Bangkok Airways · Arrivée BKK 15h30."},
      ]},
   ],
   urgences:[
@@ -2152,6 +2214,9 @@ async function syncManual(){
 
 // ═══ CONTACTS ═════════════════════════════════
 function renderContacts(){
+  // Also populate emergencies2 (in info tab)
+  const em2=document.getElementById('emergencies2');
+  if(em2)em2.innerHTML=DATA.urgences.map(u=>`<div class="em-card"><div><div class="em-name">${u.n}</div>${u.note?`<div class="em-note">${u.note}</div>`:''}</div><a class="call-btn" href="tel:${u.num}">📞 ${u.num}</a></div>`).join('');
   const el=document.getElementById('contacts');if(!el)return;
   el.innerHTML=DATA.contacts.map(cat=>`
     <div style="font-size:12px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin:12px 0 6px">${cat.cat}</div>
