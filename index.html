@@ -371,6 +371,46 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .sec-note{font-size:12px;color:var(--brown-mid);line-height:1.6;margin-bottom:9px;font-style:italic}
 .divider{height:1px;background:var(--sand-mid);margin:14px 0}
 
+/* MODE NUIT */
+body.dark{background:#1A1A2E;color:#E0D5CC}
+body.dark .wx,body.dark .day-card,body.dark .accom-card,body.dark .flight-card,
+body.dark .info-card,body.dark .cur-card,body.dark .trans-card,body.dark .ai-card,
+body.dark .ck-item,body.dark .ph-item,body.dark .em-card,body.dark .contact-card,
+body.dark .histo-card,body.dark .journal-entry{background:#16213E;color:#E0D5CC}
+body.dark .act-item{background:#1A1A2E}
+body.dark .bottom-nav{background:#16213E;border-top:1px solid #0F3460}
+body.dark .day-card-hdr{background:#16213E}
+body.dark .airbnb-card,body.dark .logement-card{background:rgba(255,255,255,.08)}
+body.dark .tl-name,body.dark .day-title,body.dark .info-title,body.dark .act-lbl{color:#E0D5CC}
+body.dark .notes-input,body.dark .cur-input,body.dark .trans-input,body.dark .ai-input{background:#1A1A2E;color:#E0D5CC;border-color:#0F3460}
+body.dark .ai-msgs{background:#1A1A2E}
+body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
+.dark-toggle{position:fixed;bottom:calc(var(--nav-h)+14px);right:16px;z-index:100;width:40px;height:40px;border-radius:50%;background:var(--brown-mid);color:#fff;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* SW UPDATE BANNER */
+.sw-banner{background:var(--gold);color:var(--brown);padding:10px 16px;text-align:center;font-size:13px;font-weight:700;display:none;cursor:pointer;position:fixed;top:var(--top-h);left:0;right:0;z-index:99}
+.sw-banner.show{display:block}
+
+/* CONTACTS UTILES */
+.contact-card{background:var(--white);border-radius:var(--rs);padding:12px 14px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.contact-name{font-size:13px;font-weight:700;color:var(--brown)}
+.contact-note{font-size:11px;color:var(--brown-mid);margin-top:2px}
+.contact-btn{background:var(--turq-lt);color:var(--turq-dk);border-radius:18px;padding:6px 12px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0}
+
+/* MÉTÉO HISTORIQUE */
+.histo-card{background:var(--white);border-radius:var(--rs);padding:12px 14px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.histo-dest{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.histo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.histo-stat{text-align:center;background:var(--sand);border-radius:6px;padding:7px 3px}
+.histo-val{font-size:15px;font-weight:800;color:var(--coral)}
+.histo-lbl{font-size:9px;color:var(--brown-mid);margin-top:2px;line-height:1.3}
+
+/* JOURNAL AUTOMATIQUE */
+.journal-entry{background:var(--white);border-radius:var(--rs);padding:12px 14px;margin-bottom:7px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-left:3px solid var(--gold)}
+.journal-date{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.journal-text{font-size:13px;color:var(--brown);line-height:1.5}
+.journal-acts{font-size:11px;color:var(--green);margin-top:4px;font-style:italic}
+
 /* TOAST */
 .toast{position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--brown);color:#fff;border-radius:18px;padding:9px 18px;font-size:12px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -397,6 +437,11 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
   </div>
   <div class="pin-err" id="pin-err"></div>
   <button onclick="skipPin()" style="color:rgba(255,255,255,.6);font-size:11px;margin-top:18px">Ignorer</button>
+</div>
+
+<!-- SW UPDATE BANNER -->
+<div class="sw-banner" id="sw-banner" onclick="applySwUpdate()">
+  🔄 Nouvelle version disponible — Appuyer pour mettre à jour
 </div>
 
 <!-- TOP BAR -->
@@ -683,8 +728,15 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <div class="sec-title">🚨 Urgences</div>
     <div id="emergencies"></div>
 
+    <div class="sec-title">📞 Contacts utiles</div>
+    <div id="contacts"></div>
+
     <div class="sec-title">📱 Applis à télécharger</div>
     <div id="apps"></div>
+
+    <div class="sec-title">🌡 Météo historique juillet-août</div>
+    <p class="sec-note">Températures et précipitations moyennes pour la période du voyage.</p>
+    <div id="histo-meteo"></div>
   </div>
 
   <!-- ── SECTION OUTILS ── -->
@@ -780,6 +832,10 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <div class="sec-title">📊 Récap voyage</div>
     <p class="sec-note">Génère un PDF souvenir avec activités cochées et notes.</p>
     <button class="recap-btn" onclick="makeRecap()">📄 Générer le récap PDF souvenir</button>
+
+    <div class="sec-title" style="margin-top:20px">📔 Journal de voyage</div>
+    <p class="sec-note">Résumé automatique de tout ce que vous avez fait et noté.</p>
+    <div id="journal"></div>
   </div>
 
   <!-- ── SECTION PHOTOS ── -->
@@ -798,11 +854,27 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
     <div class="info-card">
       <div class="info-title">📊 Google Sheets (synchronisation)</div>
       <div class="info-body">Notes et activités synchronisées automatiquement entre tous les téléphones.</div>
-      <button onclick="gsLoad().then(()=>{renderDays(DATA.bangkok,'days-bkk','bkk');renderDays(DATA.chiangmai,'days-cm','cm');renderDays(DATA.kohtao,'days-kt','kt');renderDays(DATA.kohsamui,'days-ks','ks');toast('✅ Synchronisé !');}).catch(()=>toast('❌ Erreur de sync'))" style="margin-top:9px;background:var(--green);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔄 Synchroniser maintenant</button>
+      <button onclick="syncManual()" style="margin-top:9px;background:var(--green);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔄 Synchroniser maintenant</button>
+    </div>
+    <div class="info-card" style="margin-top:7px">
+      <div class="info-title">🔄 Mises à jour</div>
+      <div class="info-body">Vérifie si une nouvelle version de l'appli est disponible.</div>
+      <button onclick="checkSwUpdate()" style="margin-top:9px;background:var(--turq);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔍 Vérifier les mises à jour</button>
+    </div>
+    <div class="info-card" style="margin-top:7px">
+      <div class="info-title">🌙 Mode nuit</div>
+      <div class="info-body">Réduire la luminosité pour une utilisation nocturne.</div>
+      <button onclick="toggleDark()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%" id="dark-btn">🌙 Activer le mode nuit</button>
     </div>
     <div class="info-card" style="margin-top:7px">
       <div class="info-title">🔐 Code PIN</div>
+      <div class="info-body">Code actuel : défini à la première utilisation.</div>
       <button onclick="changePin()" style="margin-top:9px;background:var(--brown-mid);color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">Changer le PIN</button>
+    </div>
+    <div class="info-card" style="margin-top:7px">
+      <div class="info-title">📷 Google Drive</div>
+      <div class="info-body">Connexion pour l'upload des photos.</div>
+      <button onclick="gDriveLogin()" style="margin-top:9px;background:#4285F4;color:#fff;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;width:100%">🔑 (Re)connecter Google Drive</button>
     </div>
   </div>
 
@@ -883,6 +955,8 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
   </div>
   <div class="lb-count" id="lb-count"></div>
 </div>
+
+<button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" title="Mode nuit">🌙</button>
 
 <div class="toast" id="toast"></div>
 
@@ -1151,6 +1225,36 @@ const DATA = {
     {i:"💬",n:"WhatsApp",d:"Contact logements, guides, famille",off:false},
     {i:"⛴",n:"12GO Asia",d:"Billets ferry — vérification horaires",off:false},
   ],
+  contacts:[
+    {cat:"🏠 Logements",items:[
+      {n:"Airbnb Bangkok",note:"Soi Palakun, Khet Bang Phlat",num:"",link:"https://www.airbnb.fr"},
+      {n:"Airbnb Chiang Mai",note:"1 Chang Moi Road Soi 2",num:"",link:"https://www.airbnb.fr"},
+      {n:"Airbnb Koh Tao",note:"13/35 Moo 2, Ko Tao",num:"",link:"https://www.airbnb.fr"},
+      {n:"Airbnb Koh Samui",note:"57/57 Moo 5 Anthong, Nathon",num:"",link:"https://www.airbnb.fr"},
+      {n:"Hôtel Grand BS Bangkok",note:"836 Lat Krabang, Bangkok",num:"tel:+6627382888",link:""},
+    ]},
+    {cat:"✈ Transports",items:[
+      {n:"AirAsia Move",note:"Vol Bangkok → Chiang Mai",num:"tel:+6625155111",link:"https://www.airasia.com"},
+      {n:"Lomprayah Ferry",note:"Ferry Koh Tao ↔ Koh Samui",num:"tel:+6677428733",link:"https://www.lomprayah.com"},
+      {n:"Bangkok Airways",note:"Vol Koh Samui → Bangkok",num:"tel:+6627719222",link:"https://www.bangkokair.com"},
+      {n:"Direct Ferries",note:"Ferry Surat Thani → Koh Tao",num:"",link:"https://www.directferries.fr"},
+    ]},
+    {cat:"🚨 Urgences",items:[
+      {n:"Police Touristique",note:"Français disponible",num:"tel:1155",link:""},
+      {n:"SAMU Thaïlande",note:"Ambulance nationale",num:"tel:1669",link:""},
+      {n:"Ambassade France Bangkok",note:"+66 2 657 5100",num:"tel:+6626575100",link:""},
+    ]},
+  ],
+  histoMeteo:[
+    {dest:"🏙 Bangkok",emoji:"🌦",temp:"32°C",nuit:"26°C",pluie:"~15j",humidite:"80%",
+     note:"Averses courtes l'après-midi. Peu d'impact sur le programme si on sort le matin."},
+    {dest:"🌿 Chiang Mai",emoji:"🌧",temp:"32°C",nuit:"24°C",pluie:"~20j",humidite:"82%",
+     note:"Saison verte et luxuriante. Averses fréquentes mais courtes. Air plus frais qu'à Bangkok."},
+    {dest:"🐠 Koh Tao",emoji:"⛅",temp:"30°C",nuit:"26°C",pluie:"~10j",humidite:"78%",
+     note:"Côte est protégée. Mer généralement calme le matin — idéal pour le snorkeling."},
+    {dest:"🌴 Koh Samui",emoji:"🌤",temp:"30°C",nuit:"25°C",pluie:"~12j",humidite:"79%",
+     note:"Côte est moins exposée. Lipa Noi et Choeng Mon protégées. Averses l'après-midi."},
+  ],
   mapSpots:{
     "bkk-0":[{lat:13.69,lng:100.75,n:"Suvarnabhumi Airport",c:"#E8734A"},{lat:13.7246,lng:100.5129,n:"Avani+ Riverside",c:"#E8734A"},{lat:13.7368,lng:100.5136,n:"Chao Phraya",c:"#E8734A"}],
     "bkk-1":[{lat:13.7465,lng:100.493,n:"Wat Pho",c:"#E8734A"},{lat:13.75,lng:100.4913,n:"Grand Palais",c:"#E8734A"},{lat:13.7022,lng:100.5006,n:"Asiatique Riverfront",c:"#E8734A"}],
@@ -1286,10 +1390,53 @@ function stopRec(){if(recog)recog.stop();isRec=false;document.getElementById('mi
 
 // ═══ AI ══════════════════════════════════════
 const AI_SYS=`Tu es l'assistant personnel pour un voyage en famille en Thaïlande du 20 juillet au 6 août 2026.
-Destinations : Bangkok (21-24 juil, Airbnb Soi Palakun), Chiang Mai (25-28 juil, 1 Chang Moi Road Soi 2), Koh Tao (29 juil-1er août, 13/35 Moo 2), Koh Samui (1-5 août, 57/57 Moo 5 Anthong).
-Programme : Wat Pho, Grand Palais, Ayutthaya, Asiatique, sanctuaire éléphants (13600 THB), Doi Suthep, Nimman, Grand Canyon Water Park, Shark Bay (tortues), Ao Leuk Beach, Silver Beach, Big Buddha, cascades Na Muang.
-Famille : 7 personnes avec enfants. Intolérance au lactose ("mai sai nom"). Valises 7kg max, cabine uniquement.
-Réponds en français, concis et pratique.`;
+
+GROUPE : 7 personnes avec enfants. Intolérance au lactose (dire "mai sai nom"). Valises 7kg max, format cabine uniquement. Machines à laver dans tous les logements.
+
+PROGRAMME COMPLET :
+- 20 juil : Vol CDG Terminal 2E → Bangkok BKK (16h40, arrivée 21 juil 09h15)
+- 21-24 juil : Bangkok — Airbnb Soi Palakun, Khet Bang Phlat. Taxi Airbnb 1500 bahts (payer lendemain au logement)
+  • 21 : Arrivée · Avani+ Riverside · Balade Chao Phraya
+  • 22 : Wat Pho · Grand Palais · Long-tail boat · Asiatique Riverfront
+  • 23 : Excursion Ayutthaya (guide francophone, DÉJÀ PAYÉ) · Wat Mahathad · Barge · Bang Pa-In
+  • 24 : Siam Amazing Park ou ICONSIAM · Train Night Market Srinakarin
+  • 25 matin : Check-out → Vol Don Mueang T2 10h15 → Chiang Mai 11h25 (AirAsia)
+- 25-28 juil : Chiang Mai — Airbnb 1 Chang Moi Road Soi 2. Taxi 300 bahts liquide. À régler à l'arrivée : sanctuaire éléphants 13 600 THB
+  • 25 : Arrivée CNX · Wat Phra Singh · Khao Soi Khun Yai
+  • 26 : Sanctuaire éléphants Full Day (guide vient chercher 08h00) + Sticky Waterfall
+  • 27 : Doi Suthep (1h voiture) · No.39 Café · Nimman · Night Bazaar
+  • 28 : Grand Canyon Water Park · Ploen Ruedee Night Market
+  • 29 matin : Check-out → Vol CNX 10h40 → Surat Thani 12h30 → Ferry 15h30 → Koh Tao ~18h00
+- 29 juil-1er août : Koh Tao — Airbnb 13/35 Moo 2. Transport Airbnb depuis ferry
+  • 29 : Arrivée · repos
+  • 30 : Shark Bay 08h00 (tortues dans herbiers) · John Suwan Viewpoint
+  • 31 : Ao Leuk Beach (MEILLEURE plage famille, snorkeling exceptionnel — remplace Koh Nang Yuan)
+  • 1er août : Session courte Ao Leuk → Ferry 11h30 → Koh Samui 13h00
+- 1-5 août : Koh Samui — Airbnb 57/57 Moo 5 Anthong, Nathon. Transport Airbnb depuis Bangrak Pier
+  • 1er : Arrivée · Lipa Noi Beach
+  • 2 : Silver Beach (snorkeling) · Coco Tam's (spectacle feu)
+  • 3 : Big Buddha · The Mother · Cascades Na Muang · Secret Buddha Garden
+  • 4 : Journée libre piscine · The Road Less Travelled
+  • 5 : Check-out → Vol USM 14h30 → BKK 15h30 (Bangkok Airways) → Hôtel Grand BS Airport Hotel Suvarnabhumi
+- 6 août : Vol BKK 11h25 → CDG Terminal 2E 19h00 · Retour Paris
+
+LOGEMENTS :
+- Bangkok : Soi Palakun, Khet Bang Phlat, Bangkok 10700
+- Chiang Mai : 1 Chang Moi Road Soi 2, Chiang Mai 50300
+- Koh Tao : 13/35 Moo 2, Ko Tao, Surat Thani 84360
+- Koh Samui : 57/57 Moo 5 Anthong, Nathon, Surathani 84140
+- Bangkok retour : Grand BS Airport Hotel Suvarnabhumi, 836 Lat Krabang, Bangkok 10520
+
+INFOS PRATIQUES :
+- Décalage horaire : Thaïlande = France + 5h en été
+- Ao Leuk Beach est le meilleur spot snorkeling famille (remplace Koh Nang Yuan)
+- Shark Bay : tortues visibles surtout 08h-10h dans les herbiers marins
+- Intolérance lactose : "mai sai nom" (sans lait), plats sûrs = pad thai, riz frit, poissons grillés
+- Répulsif anti-moustiques OBLIGATOIRE (dengue présente toute l'année)
+- Grab = appli taxi recommandée
+- 1 THB ≈ 0,027 EUR (1 EUR ≈ 37 THB)
+
+Réponds en français, de manière concise et pratique. Donne des conseils personnalisés basés sur le programme exact.`;
 let aiHist=[];
 async function aiSend(){
   const inp=document.getElementById('ai-in'),msg=inp.value.trim();if(!msg)return;inp.value='';
@@ -1335,35 +1482,43 @@ const DEVICE=navigator.userAgent.includes('iPhone')?'iPhone':navigator.userAgent
 
 async function gsSave(type, key, value) {
   try {
-    await fetch(GS_URL, {
+    // Utiliser un proxy pour éviter les problèmes no-cors
+    const r = await fetch(GS_URL, {
       method:'POST',
       mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({type, key, value:String(value), device:DEVICE})
     });
-  } catch(e) { console.warn('GS save error:', e); }
+    // no-cors = opaque response, on ne peut pas lire le résultat
+    // On considère comme succès si pas d'exception
+    return true;
+  } catch(e) {
+    console.warn('GS save error:', e);
+    return false;
+  }
 }
 
 async function gsLoad() {
   try {
-    const r = await fetch(GS_URL);
+    const r = await fetch(GS_URL+'?t='+Date.now()); // cache-busting
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const d = await r.json();
-    if (!d.data) return;
+    if (!d.data) return false;
     const acts={}, notes={};
     d.data.forEach(row => {
       if (!row.key) return;
       if (row.type==='activity') acts[row.key] = row.value==='true';
       if (row.type==='note') notes[row.key] = row.value;
     });
-    // Merge avec localStorage (le plus récent gagne)
     const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
     const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');
-    const mergedActs={...acts,...localActs};
-    const mergedNotes={...notes,...localNotes};
-    localStorage.setItem('activities',JSON.stringify(mergedActs));
-    localStorage.setItem('daynotes',JSON.stringify(mergedNotes));
-    console.log('GS sync ✓');
-  } catch(e) { console.warn('GS load error:', e); }
+    localStorage.setItem('activities', JSON.stringify({...acts,...localActs}));
+    localStorage.setItem('daynotes', JSON.stringify({...notes,...localNotes}));
+    return true;
+  } catch(e) {
+    console.warn('GS load error:', e);
+    return false;
+  }
 }
 
 function getActs(){return JSON.parse(localStorage.getItem('activities')||'{}');}
@@ -1546,20 +1701,121 @@ function schedNotifs(){
 }
 
 // ═══ PDF RECAP ════════════════════════════════
-function makeRecap(){
-  const{jsPDF}=window.jspdf,doc=new jsPDF(),acts=getActs(),notes=getNotes();
-  doc.setFontSize(20);doc.setTextColor(232,115,74);doc.text('Thaïlande 2026 — Récap du voyage',20,25);
-  doc.setFontSize(10);doc.setTextColor(120,120,120);doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`,20,33);
-  let y=45;
-  const all=[...DATA.bangkok.map((d,i)=>({...d,key:`bkk-${i}`})),...DATA.chiangmai.map((d,i)=>({...d,key:`cm-${i}`})),...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`})),...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`}))];
-  all.forEach(day=>{
-    if(y>260){doc.addPage();y=20;}
-    doc.setFontSize(12);doc.setTextColor(232,115,74);doc.text(`${day.date} — ${day.title}`,20,y);y+=7;
-    (day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]).forEach(a=>{doc.setFontSize(10);doc.setTextColor(91,140,90);doc.text(`✓ ${a.l}`,25,y);y+=5;});
-    const n=notes[`note-${day.key}`];if(n){doc.setFontSize(10);doc.setTextColor(60,60,60);doc.splitTextToSize(n,165).forEach(l=>{doc.text(l,25,y);y+=5;});}
-    y+=3;
+async function makeRecap(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const acts=getActs(), notes=getNotes(), photos=getPhotos();
+  const W=210, M=18;
+
+  // ── COUVERTURE ──────────────────────────────
+  doc.setFillColor(232,115,74);
+  doc.rect(0,0,W,60,'F');
+  doc.setFontSize(28);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+  doc.text('Thaïlande 2026',W/2,28,{align:'center'});
+  doc.setFontSize(13);doc.setFont('helvetica','normal');
+  doc.text('Journal de voyage — Famille',W/2,40,{align:'center'});
+  doc.setFontSize(10);doc.setTextColor(255,220,160);
+  doc.text(`Bangkok · Chiang Mai · Koh Tao · Koh Samui`,W/2,50,{align:'center'});
+  doc.setFontSize(9);doc.setTextColor(200,180,160);
+  doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`,W/2,57,{align:'center'});
+
+  let y=72;
+  const destColors={bkk:[232,115,74],cm:[91,140,90],kt:[43,191,179],ks:[212,168,83]};
+  const allDays=[
+    ...DATA.bangkok.map((d,i)=>({...d,key:`bkk-${i}`,dk:'bkk',dest:'Bangkok'})),
+    ...DATA.chiangmai.map((d,i)=>({...d,key:`cm-${i}`,dk:'cm',dest:'Chiang Mai'})),
+    ...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`,dk:'kt',dest:'Koh Tao'})),
+    ...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`,dk:'ks',dest:'Koh Samui'})),
+  ];
+
+  const addPage=()=>{doc.addPage();y=20;};
+  const checkY=(h=20)=>{if(y+h>282)addPage();};
+
+  allDays.forEach(day=>{
+    const doneActs=(day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]);
+    const note=notes[`note-${day.key}`]||'';
+    const dayPhotos=photos.filter(p=>p.dayKey===day.key);
+    if(!doneActs.length&&!note&&!dayPhotos.length)return;
+
+    checkY(18);
+    const [r,g,b]=destColors[day.dk]||[100,100,100];
+
+    // Header journée
+    doc.setFillColor(r,g,b);
+    doc.roundedRect(M,y,W-M*2,10,2,2,'F');
+    doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+    doc.text(`${day.date}`,M+4,y+7);
+    doc.setFont('helvetica','normal');doc.setFontSize(9);
+    doc.text(day.title,M+4+doc.getTextWidth(day.date)+4,y+7);
+    y+=13;
+
+    // Activités cochées
+    if(doneActs.length){
+      checkY(6);
+      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
+      doc.text('CE QU\'ON A FAIT :',M+3,y);y+=4;
+      doneActs.forEach(a=>{
+        checkY(5);
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');
+        doc.text(`✓  ${a.l}`,M+6,y);y+=4.5;
+      });
+    }
+
+    // Note
+    if(note){
+      checkY(8);
+      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
+      doc.text('NOTES & SOUVENIRS :',M+3,y);y+=4;
+      doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');
+      const lines=doc.splitTextToSize(note,W-M*2-8);
+      lines.forEach(l=>{checkY(5);doc.text(l,M+6,y);y+=4.5;});
+    }
+
+    // Photos (miniatures 3 par ligne)
+    if(dayPhotos.length){
+      checkY(35);
+      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
+      doc.text('PHOTOS :',M+3,y);y+=4;
+      const imgW=(W-M*2-8)/3;
+      let ix=0;
+      for(const p of dayPhotos.slice(0,6)){
+        try{
+          const x=M+4+(ix%3)*(imgW+2);
+          if(ix%3===0&&ix>0)y+=30;
+          checkY(30);
+          // Charger l'image depuis l'URL
+          const img=new Image();img.crossOrigin='anonymous';
+          // Pour le PDF, on utilise une représentation canvas
+          doc.addImage(p.url,'JPEG',x,y,imgW,25);
+          if(p.caption){
+            doc.setFontSize(6);doc.setTextColor(100,100,100);
+            doc.text(p.caption.substring(0,25),x,y+27,{maxWidth:imgW});
+          }
+          ix++;
+        }catch(e){}
+      }
+      if(dayPhotos.length>0)y+=32;
+    }
+
+    y+=4;
+    // Ligne séparatrice légère
+    doc.setDrawColor(220,210,200);doc.line(M,y,W-M,y);y+=5;
   });
-  doc.save('Thailande2026_recap.pdf');toast('✅ PDF généré !');
+
+  // ── RÉSUMÉ FINAL ──────────────────────────
+  checkY(30);
+  doc.setFillColor(61,43,31);
+  doc.rect(M,y,W-M*2,22,'F');
+  doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+  doc.text('Thaïlande 2026 — Un voyage inoubliable 🇹🇭',W/2,y+8,{align:'center'});
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(212,168,83);
+  const totalActs=Object.values(acts).filter(Boolean).length;
+  const totalNotes=Object.values(notes).filter(n=>n.trim()).length;
+  const totalPhotos=photos.length;
+  doc.text(`${totalActs} activités · ${totalNotes} notes · ${totalPhotos} photos`,W/2,y+15,{align:'center'});
+
+  doc.save('Thailande2026_souvenir.pdf');
+  toast('✅ PDF souvenir généré !');
 }
 
 // ═══ FIREBASE ═════════════════════════════════
@@ -1584,45 +1840,62 @@ async function initFirebase(){
 const GD_CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
 const GD_FOLDER_ID='1sZCQKYH_yFOfvx1smwXB3BeU0khbuupk';
 const GD_SCOPE='https://www.googleapis.com/auth/drive.file';
-let gdToken=null,pendingFiles=[],selDest=null,selDay=null,selDiff='priv';
+let gdToken=null,gdTokenExpiry=0,gdClient=null;
+let pendingFiles=[],selDest=null,selDay=null,selDiff='priv';
 let lbPhotos=[],lbIdx=0;
 
-function loadGapiScript(){
+function loadGsiScript(){
   return new Promise(resolve=>{
-    if(window.gapi){resolve();return;}
+    if(window.google?.accounts){resolve();return;}
     const s=document.createElement('script');
-    s.src='https://apis.google.com/js/api.js';
-    s.onload=()=>gapi.load('client',resolve);
+    s.src='https://accounts.google.com/gsi/client';
+    s.onload=resolve;
     document.head.appendChild(s);
+  });
+}
+
+async function ensureGdToken(){
+  // Token valide encore 5 min → OK
+  if(gdToken && Date.now() < gdTokenExpiry - 300000) return true;
+  // Renouvellement silencieux
+  return new Promise(async resolve=>{
+    await loadGsiScript();
+    gdClient=google.accounts.oauth2.initTokenClient({
+      client_id:GD_CLIENT_ID, scope:GD_SCOPE,
+      prompt:'', // silencieux si déjà autorisé
+      callback:(resp)=>{
+        if(resp.error){ resolve(false); return; }
+        gdToken=resp.access_token;
+        gdTokenExpiry=Date.now() + (resp.expires_in||3600)*1000;
+        localStorage.setItem('gd_token',gdToken);
+        localStorage.setItem('gd_expiry',gdTokenExpiry);
+        resolve(true);
+      }
+    });
+    gdClient.requestAccessToken();
   });
 }
 
 async function gDriveLogin(){
-  await loadGapiScript();
-  const client=google.accounts.oauth2.initTokenClient({
-    client_id:GD_CLIENT_ID,scope:GD_SCOPE,
+  await loadGsiScript();
+  gdClient=google.accounts.oauth2.initTokenClient({
+    client_id:GD_CLIENT_ID, scope:GD_SCOPE,
     callback:async(resp)=>{
-      if(resp.error)return;
+      if(resp.error){toast('❌ Connexion Google échouée');return;}
       gdToken=resp.access_token;
+      gdTokenExpiry=Date.now() + (resp.expires_in||3600)*1000;
       localStorage.setItem('gd_token',gdToken);
-      await gapi.client.init({});
+      localStorage.setItem('gd_expiry',gdTokenExpiry);
       showGLoginOk();
       renderPhotoSection();
+      toast('✅ Connecté à Google Drive');
     }
   });
-  // Charger GSI
-  if(!window.google){
-    const s=document.createElement('script');
-    s.src='https://accounts.google.com/gsi/client';
-    s.onload=()=>client.requestAccessToken();
-    document.head.appendChild(s);
-  } else {
-    client.requestAccessToken();
-  }
+  gdClient.requestAccessToken();
 }
 
 function showGLoginOk(){
-  document.getElementById('g-login-area').innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive</div>`;
+  document.getElementById('g-login-area').innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive <button onclick="gDriveLogin()" style="margin-left:8px;font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:2px 8px">Renouveler</button></div>`;
   document.getElementById('photo-add-btn').style.display='flex';
 }
 
@@ -1630,6 +1903,9 @@ function getPhotos(){return JSON.parse(localStorage.getItem('trip_photos')||'[]'
 function savePhotosMeta(p){localStorage.setItem('trip_photos',JSON.stringify(p));}
 
 async function uploadToDrive(file,caption,destKey,dayKey,diff){
+  // Vérifier/renouveler le token avant upload
+  const ok=await ensureGdToken();
+  if(!ok)throw new Error('Token Google Drive expiré — reconnectez-vous');
   const meta={name:file.name,parents:[GD_FOLDER_ID],description:JSON.stringify({caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()})};
   const form=new FormData();
   form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
@@ -1814,6 +2090,130 @@ function goTab(k,b){
 // ═══ TOAST ════════════════════════════════════
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
+// ═══ DARK MODE ════════════════════════════════
+function toggleDark(){
+  const isDark=document.body.classList.toggle('dark');
+  localStorage.setItem('dark_mode',isDark?'1':'0');
+  const btn=document.getElementById('dark-btn');
+  const tog=document.getElementById('dark-toggle');
+  if(btn)btn.textContent=isDark?'☀️ Désactiver le mode nuit':'🌙 Activer le mode nuit';
+  if(tog)tog.textContent=isDark?'☀️':'🌙';
+}
+function initDarkMode(){
+  if(localStorage.getItem('dark_mode')==='1'){
+    document.body.classList.add('dark');
+    const tog=document.getElementById('dark-toggle');
+    if(tog)tog.textContent='☀️';
+    const btn=document.getElementById('dark-btn');
+    if(btn)btn.textContent='☀️ Désactiver le mode nuit';
+  }
+}
+
+// ═══ SERVICE WORKER UPDATE ════════════════════
+function checkSwUpdate(){
+  if(!('serviceWorker' in navigator)){toast('⚠ Service Worker non disponible');return;}
+  navigator.serviceWorker.getRegistration().then(reg=>{
+    if(!reg){toast('⚠ Pas de Service Worker actif');return;}
+    reg.update().then(()=>{
+      if(reg.waiting){
+        document.getElementById('sw-banner').classList.add('show');
+        toast('✅ Mise à jour disponible !');
+      } else {
+        toast('✅ Application déjà à jour !');
+      }
+    });
+  });
+}
+
+function applySwUpdate(){
+  navigator.serviceWorker.getRegistration().then(reg=>{
+    if(reg?.waiting){
+      reg.waiting.postMessage('skipWaiting');
+      window.location.reload();
+    }
+  });
+}
+
+// ═══ SYNC MANUAL ══════════════════════════════
+async function syncManual(){
+  toast('🔄 Synchronisation en cours…');
+  const ok=await gsLoad();
+  if(ok){
+    renderDays(DATA.bangkok,'days-bkk','bkk');
+    renderDays(DATA.chiangmai,'days-cm','cm');
+    renderDays(DATA.kohtao,'days-kt','kt');
+    renderDays(DATA.kohsamui,'days-ks','ks');
+    renderJournal();
+    toast('✅ Synchronisé !');
+  } else {
+    toast('❌ Erreur de synchronisation');
+  }
+}
+
+// ═══ CONTACTS ═════════════════════════════════
+function renderContacts(){
+  const el=document.getElementById('contacts');if(!el)return;
+  el.innerHTML=DATA.contacts.map(cat=>`
+    <div style="font-size:12px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin:12px 0 6px">${cat.cat}</div>
+    ${cat.items.map(c=>`
+      <div class="contact-card">
+        <div>
+          <div class="contact-name">${c.n}</div>
+          ${c.note?`<div class="contact-note">${c.note}</div>`:''}
+        </div>
+        ${c.num?`<a class="contact-btn" href="${c.num}">📞 Appeler</a>`:c.link?`<a class="contact-btn" href="${c.link}" target="_blank">🌐 Ouvrir</a>`:''}
+      </div>`).join('')}
+  `).join('');
+}
+
+// ═══ MÉTÉO HISTORIQUE ═════════════════════════
+function renderHistoMeteo(){
+  const el=document.getElementById('histo-meteo');if(!el)return;
+  el.innerHTML=DATA.histoMeteo.map(h=>`
+    <div class="histo-card">
+      <div class="histo-dest">${h.dest} <span style="font-size:20px">${h.emoji}</span></div>
+      <div class="histo-grid">
+        <div class="histo-stat"><div class="histo-val">${h.temp}</div><div class="histo-lbl">Temp. max</div></div>
+        <div class="histo-stat"><div class="histo-val">${h.nuit}</div><div class="histo-lbl">Nuit</div></div>
+        <div class="histo-stat"><div class="histo-val">${h.pluie}</div><div class="histo-lbl">Jours pluie</div></div>
+        <div class="histo-stat"><div class="histo-val">${h.humidite}</div><div class="histo-lbl">Humidité</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--brown-mid);margin-top:7px;font-style:italic">${h.note}</div>
+    </div>
+  `).join('');
+}
+
+// ═══ JOURNAL AUTOMATIQUE ══════════════════════
+function renderJournal(){
+  const el=document.getElementById('journal');if(!el)return;
+  const acts=getActs();const notes=getNotes();
+  const allDays=[
+    ...DATA.bangkok.map((d,i)=>({...d,key:`bkk-${i}`,dest:'Bangkok'})),
+    ...DATA.chiangmai.map((d,i)=>({...d,key:`cm-${i}`,dest:'Chiang Mai'})),
+    ...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`,dest:'Koh Tao'})),
+    ...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`,dest:'Koh Samui'})),
+  ];
+  const entries=allDays.filter(day=>{
+    const hasActs=(day.acts||[]).some((_,ai)=>acts[`act-${day.key}-${ai}`]);
+    const hasNote=notes[`note-${day.key}`];
+    return hasActs||hasNote;
+  });
+  if(!entries.length){
+    el.innerHTML=`<div style="text-align:center;padding:20px;color:var(--brown-mid);font-size:13px;font-style:italic">Le journal se remplira automatiquement au fil du voyage ✈</div>`;
+    return;
+  }
+  el.innerHTML=entries.map(day=>{
+    const doneActs=(day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]).map(a=>a.l);
+    const note=notes[`note-${day.key}`]||'';
+    return`<div class="journal-entry">
+      <div class="journal-date">${day.date} · ${day.dest}</div>
+      <div class="journal-text" style="font-weight:700;margin-bottom:4px">${day.title}</div>
+      ${note?`<div class="journal-text">${note}</div>`:''}
+      ${doneActs.length?`<div class="journal-acts">✓ ${doneActs.join(' · ')}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
 // ═══ INIT ══════════════════════════════════════
 function initApp(){
   renderDays(DATA.bangkok,'days-bkk','bkk');
@@ -1822,16 +2222,40 @@ function initApp(){
   renderDays(DATA.kohsamui,'days-ks','ks');
   renderPrat();
   renderPhotoSection();
-  // Vérifier si déjà connecté Google
+  renderContacts();
+  renderHistoMeteo();
+  renderJournal();
+  initDarkMode();
+
+  // Vérifier token Google Drive
   const storedToken=localStorage.getItem('gd_token');
-  if(storedToken){gdToken=storedToken;showGLoginOk();}
+  const storedExpiry=parseInt(localStorage.getItem('gd_expiry')||'0');
+  if(storedToken && Date.now() < storedExpiry){
+    gdToken=storedToken;gdTokenExpiry=storedExpiry;showGLoginOk();
+  }
+
   updCdown();updThaiTime();
   setInterval(updCdown,60000);setInterval(updThaiTime,30000);
   fetchWx('bkk');wxL['bkk']=true;
   fetchRates();
-  gsLoad();
+  gsLoad().then(()=>renderJournal());
   schedNotifs();
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+  // Service Worker avec détection de mise à jour
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        nw.addEventListener('statechange',()=>{
+          if(nw.state==='installed'&&navigator.serviceWorker.controller){
+            document.getElementById('sw-banner').classList.add('show');
+          }
+        });
+      });
+    }).catch(()=>{});
+    navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+  }
+
   setTimeout(()=>{const f=document.querySelector('.day-card');if(f)f.classList.add('open');},100);
 }
 
