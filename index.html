@@ -1997,7 +1997,7 @@ async function publishPhotos(){
       const p=await uploadToDrive(file,caption,selDest,selDay,selDiff);
       photos.push(p);
       // Sync Google Sheets
-      gsSave('photo',`${selDest}-${selDay}-${p.id}`,JSON.stringify({url:p.url,caption,diff:selDiff}));
+      gsSave('photo',`${selDest}-${selDay}-${p.id}`,JSON.stringify({url:p.url,caption,diff:selDiff,dayKey:selDay,destKey:selDest}));
     }
     savePhotosMeta(photos);
     toast(`✅ ${pendingFiles.length} photo${pendingFiles.length>1?'s':''} publiée${pendingFiles.length>1?'s':''} !`);

@@ -306,7 +306,7 @@ function renderCurrentBanner(){
 // ═══════════════════════════════════════════
 async function loadPhotos(){
   try{
-    const r=await fetch(GS_URL);
+    const r=await fetch(GS_URL+'?t='+Date.now());
     const d=await r.json();
     if(!d.data)return{};
     const photos={};
@@ -316,14 +316,16 @@ async function loadPhotos(){
           const p=JSON.parse(row.value);
           // Afficher uniquement photos "all" ou "both"
           if(p.diff==='priv')return;
+          // Extraire dayKey depuis le JSON ou depuis la clé (format: dest-dayIdx-photoId)
           const dayKey=p.dayKey||row.key.split('-').slice(0,2).join('-');
           if(!photos[dayKey])photos[dayKey]=[];
-          photos[dayKey].push(p);
-        }catch(e){}
+          photos[dayKey].push({...p,dayKey});
+        }catch(e){console.warn('Photo parse error:',e,row);}
       }
     });
+    console.log('Photos chargées:', photos);
     return photos;
-  }catch(e){return{};}
+  }catch(e){console.warn('loadPhotos error:',e);return{};}
 }
 
 // ═══════════════════════════════════════════
