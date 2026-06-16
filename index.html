@@ -280,9 +280,9 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .wx-sm-st{font-size:10px;color:var(--brown-mid);line-height:1.4}
 
 /* LOGEMENT CARD DETACHEE */
-.logement-card{background:var(--white);border-radius:var(--r);padding:12px 14px;margin-top:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
-.logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--brown-mid);margin-bottom:3px}
-.logement-addr{font-size:12px;color:var(--brown);line-height:1.4}
+.logement-card{background:linear-gradient(135deg,rgba(43,191,179,.12),rgba(43,191,179,.06));border-radius:var(--r);padding:12px 14px;margin-top:10px;border:1.5px solid var(--turq);box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--turq-dk);margin-bottom:3px}
+.logement-addr{font-size:12px;color:var(--brown);line-height:1.4;font-weight:600}
 .logement-maps{display:inline-flex;align-items:center;gap:4px;background:var(--turq);color:var(--white);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;margin-top:6px;text-decoration:none}
 /* NOTE DANS ACTS */
 .act-note-item{background:var(--gold-lt);border-radius:var(--rs);padding:8px 12px;margin-bottom:4px;font-size:12px;color:var(--brown);border-left:3px solid var(--gold)}
@@ -588,7 +588,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
         <div class="flight-arrow">✈──</div>
         <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">09h15 🇹🇭 +1j</div><div style="font-size:10px;color:var(--brown-mid)">(04h15 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">Vol direct ~11h</span><span class="ftag">Arrivée 21 juillet</span></div>
+      <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">Vol direct ~11h</span></div>
     </div>
   </div>
 
@@ -600,7 +600,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
         <div class="flight-arrow">✈──</div>
         <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">11h25 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h25 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">✈ AirAsia Move</span><span class="ftag">~1h10</span><span class="ftag">Check-out 07h30</span></div>
+      <div class="flight-tags"><span class="ftag">✈ AirAsia Move</span><span class="ftag">~1h10</span></div>
     </div>
   </div>
 
@@ -636,7 +636,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
         <div class="flight-arrow">🚢──</div>
         <div class="flight-city"><div class="flight-code" style="font-size:14px">Bangrak</div><div class="flight-time">13h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(08h00 🇫🇷)</div></div>
       </div>
-      <div class="flight-tags"><span class="ftag">🚢 Direct Ferries</span><span class="ftag">Lomprayah</span></div>
+      <div class="flight-tags"><span class="ftag">🚢 Direct Ferries</span></div>
     </div>
   </div>
 
@@ -699,7 +699,9 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="prat-sec" id="ps-info">
     <div class="sec-title">🚨 Urgences rapides</div>
     <div id="emergencies2"></div>
-    <!-- convertisseur moved to outils -->
+    <div class="sec-title">🌡 Météo historique juillet-août</div>
+    <p class="sec-note" style="margin-top:-6px">Températures moyennes pour la période du voyage.</p>
+    <div id="histo-meteo-info"></div>
     <div class="cur-card">
       <div class="cur-title">EUR / USD ↔ Baht thaïlandais (THB)</div>
       <div class="cur-tabs">
@@ -858,6 +860,9 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 
   <!-- ── SECTION AVANT ── -->
   <div class="prat-sec" id="ps-avant">
+    <div class="sec-title">📱 Applis à télécharger</div>
+    <div id="apps"></div>
+    <div class="divider"></div>
     <div class="sec-title">🧳 Check-list valise</div>
     <div class="bag-hdr">
       <div style="font-size:12px;opacity:.8">7 kg max par personne · Valise : 2,9 kg</div>
@@ -1033,9 +1038,9 @@ const DATA = {
      ]},
     // ── 22 juillet ──────────────────────────────
     {date:"Mercredi 22 juillet",title:"Temples majeurs & klongs",
-     tip:{c:"red",i:"⚠️",l:"Dress code temples",t:"Épaules et genoux couverts obligatoirement. Prévoir un foulard léger."},
      acts:[{l:"Wat Pho — Bouddha couché",m:"Wat Pho Bangkok"},{l:"Grand Palais & Wat Phra Kaew",m:"Grand Palace Bangkok"},{l:"Déjeuner The Sixth 6th",m:"The Sixth Bangkok"},{l:"Long-tail boat klongs",m:"Tha Tien Pier Bangkok"},{l:"Asiatique Riverfront",m:"Asiatique The Riverfront Bangkok"}],
      items:[
+       {t:"",n:"👗 Dress code temples",d:"",al:"Épaules et genoux couverts obligatoirement · Prévoir un foulard léger"},
        {t:"Matinée",n:"🛕 Wat Pho — Bouddha couché",d:"Bouddha de 46m. Bols en métal = dons symboliques.",a:"2 Sanam Chai Rd, Phra Nakhon, Bangkok 10200 · Taxi 25 min"},
        {t:"Matinée",n:"🏛 Grand Palais & Wat Phra Kaew",d:"Architecture la plus spectaculaire du pays.",a:"Na Phra Lan Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
        {t:"Déjeuner",n:"The Sixth 6th",d:"",a:"6 Maharat Rd, Phra Nakhon, Bangkok 10200 · À pied 10 min"},
@@ -1048,7 +1053,7 @@ const DATA = {
      tip:{c:"gold",i:"🍬",l:"Spécialité locale",t:"Roti Sai Mai — barbe à papa enveloppée dans une crêpe sucrée. Incontournable à Ayutthaya !"},
      acts:[{l:"Wat Sri Sanphet + Wat Mahathad",m:"Ayutthaya Historical Park"},{l:"Wat Yai Chaimongkhol",m:"Wat Yai Chai Mongkhon Ayutthaya"},{l:"Musée Chao Sam Phraya",m:"Chao Sam Phraya Museum Ayutthaya"},{l:"Barge restaurant flottante",m:"Ayutthaya Boat Tour"},{l:"Bang Pa-In — Palais royal d'été",m:"Bang Pa-In Royal Palace"}],
      items:[
-       {t:"08h00",n:"Départ guide francophone au logement",d:"",al:"✅ DÉJÀ PAYÉ — Véhicule climatisé privé avec chauffeur"},
+       {t:"08h00",n:"Départ guide francophone au logement",d:"",al:"✅ DÉJÀ PAYÉ — Véhicule climatisé privé avec chauffeur — Guide francophone"},
        {t:"Matin",n:"🛕 Wat Sri Sanphet + Wat Mahathad",d:"En tuk-tuk. La tête de Bouddha dans les racines = site le plus photographié."},
        {t:"Matin",n:"🛕 Wat Yai Chaimongkhol",d:"L'un des plus grands chedi. Jardin magnifique."},
        {t:"Midi",n:"🏛 Musée Chao Sam Phraya",d:"Entièrement climatisé. Trésors inestimables des temples."},
@@ -1062,8 +1067,7 @@ const DATA = {
      items:[
        {t:"Matin",n:"🎢 Option A — Siam Amazing Park",d:"Parc aquatique · Glissades géantes.",a:"203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230 · Taxi 1h"},
        {t:"Matin",n:"🛍 Option B — ICONSIAM",d:"Marché flottant intérieur · Shopping · Climatisé.",a:"299 Charoen Nakhon Rd, Khlong San, Bangkok 10600 · Taxi 30 min"},
-       {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme."},
-       {t:"Après-midi",n:"Retour au logement",d:"",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
+       {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme.",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
        {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas.",
         a:"Train Night Market Srinakarin, Bangkok · Taxi 40 min"},
      ]},
@@ -1096,7 +1100,7 @@ const DATA = {
      items:[
        {t:"11h25",n:"Arrivée CNX Terminal 2",d:"",
         al:"Taxi Airbnb organisé — 300 bahts en liquide directement au chauffeur"},
-       {t:"",n:"📌 À régler dès l'arrivée au logement en liquide",d:"Sanctuaire des éléphants : 13 600 THB",al:""},
+       {t:"",n:"",d:"",al:"📌 À régler dès l'arrivée au logement en liquide : Sanctuaire des éléphants 13 600 THB"},
        {t:"Après-midi",n:"🛕 Wat Phra Singh",d:"Élégant et accessible. Observer les moines en robe safran.",a:"2 Samlarn Rd, Si Phum, Mueang Chiang Mai 50200 · À pied 22 min"},
        {t:"Soirée",n:"🍜 Khao Soi Khun Yai — Spécialité du Nord",d:"LE plat emblématique de Chiang Mai : curry coco + nouilles croustillantes.",a:"Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200 · À pied 27 min"},
      ]},
@@ -1111,9 +1115,9 @@ const DATA = {
      ]},
     // ── 27 juillet ──────────────────────────────
     {date:"Lundi 27 juillet",title:"Doi Suthep + Nimman + Night Bazaar",
-     tip:{c:"red",i:"⚠️",l:"Dress code",t:"Épaules et genoux couverts à Doi Suthep. Prévoir un foulard léger."},
      acts:[{l:"Doi Suthep",m:"Doi Suthep Temple Chiang Mai"},{l:"No.39 Café (déjeuner)",m:"No.39 Cafe Chiang Mai"},{l:"Quartier Nimman + Cheevit Cheeva",m:"Nimman Road Chiang Mai"},{l:"Chiang Mai Night Bazaar",m:"Chiang Mai Night Bazaar"}],
      items:[
+       {t:"",n:"👗 Dress code",d:"",al:"Épaules et genoux couverts à Doi Suthep · Prévoir un foulard léger"},
        {t:"Matinée tôt",n:"⛩ Doi Suthep",d:"Escalier serpent mythique · Vue panoramique sur Chiang Mai. Arriver tôt pour éviter chaleur et foule.",a:"Doi Suthep, Suthep, Mueang Chiang Mai 50200 · En voiture 1h"},
        {t:"Déjeuner",n:"No.39 Café",d:"Cadre tropical magnifique · Pontons · Lac · Ambiance jungle · Les ados adorent.",a:"No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200 · En taxi 15 min"},
        {t:"13h30–15h00",n:"🌿 Quartier Nimman",d:"Boutiques · Cafés · Glaces artisanales. Les ados aiment beaucoup.\nCheevit Cheeva — desserts et kakigori.",a:"Nimman Road, Su Thep, Mueang Chiang Mai · En taxi 20 min"},
@@ -1126,6 +1130,7 @@ const DATA = {
      items:[
        {t:"Matin",n:"🛌 Matinée lente",d:"Repos après deux jours actifs."},
        {t:"12h30",n:"🌊 Grand Canyon Water Park",d:"Ancienne carrière reconvertie · Parcours gonflables · 3–4h.",a:"202 Nam Phrae, Hang Dong, Chiang Mai 50230 · En voiture 30 min"},
+       {t:"Soirée",n:"Retour au logement",d:"",a:"1 Chang Moi Road Soi 2, Chiang Mai 50300"},
        {t:"Soirée",n:"Ploen Ruedee Night Market",d:"Food trucks · Pad thai · Brochettes · Riz frit.",a:"28/3-4 Changklan Rd, Chang Moi, Mueang Chiang Mai 50100 · À pied 15 min"},
      ]},
     // ── 29 juillet (trajet) ──────────────────────
@@ -1256,13 +1261,22 @@ const DATA = {
     {l:"Crème solaire reef-safe SPF50",c:"Soleil",kg:"0.2"},
     {l:"Stick lèvres SPF + casquette à cordon",c:"Soleil",kg:"0.1"},
     {l:"T-shirt UV",c:"Soleil",kg:"0.1"},
-    {l:"Serviette microfibre",c:"Plage",kg:"0.2"},
     {l:"Sac étanche téléphone/passeports",c:"Plage",kg:"0.1"},
     {l:"Gourde réutilisable",c:"Hydratation",kg:"0.2"},
-    {l:"Sandales légères",c:"Plage",kg:"0.3"},
-    {l:"2–3 t-shirts légers",c:"Vêtements",kg:"0.3"},
-    {l:"1 pantalon/jupe léger(e) (temples)",c:"Vêtements",kg:"0.2"},
-    {l:"Sous-vêtements × 4 (machines à laver dispo)",c:"Vêtements",kg:"0.2"},
+    {l:"Sandales légères",c:"Chaussures",kg:"0.3"},
+    {l:"1 paire de baskets",c:"Chaussures",kg:"0.4"},
+    {l:"2–3 t-shirts légers",c:"Vêtements",kg:"0.2"},
+    {l:"1 ou 2 shorts",c:"Vêtements",kg:"0.2"},
+    {l:"1 jupe légère",c:"Vêtements",kg:"0.1"},
+    {l:"1 robe légère",c:"Vêtements",kg:"0.1"},
+    {l:"1 pantalon léger (temples)",c:"Vêtements",kg:"0.2"},
+    {l:"Sous-vêtements × 10 (machines à laver dispo)",c:"Vêtements",kg:"0.3"},
+    {l:"3 paires de chaussettes",c:"Vêtements",kg:"0.1"},
+    {l:"1 pyjama léger",c:"Vêtements",kg:"0.1"},
+    {l:"Lisseur compact",c:"Beauté",kg:"0.3"},
+    {l:"Maquillage (minimaliste)",c:"Beauté",kg:"0.2"},
+    {l:"Démaquillant",c:"Beauté",kg:"0.1"},
+    {l:"Sac à dos léger",c:"Accessoires",kg:"0.3"},
     {l:"Imodium + Smecta + sérum réhydratation",c:"Pharmacie",kg:"0.1"},
     {l:"Paracétamol adultes + enfants",c:"Pharmacie",kg:"0.1"},
     {l:"Répulsif DEET/Icaridine",c:"Pharmacie ⚠",kg:"0.1"},
@@ -1680,7 +1694,7 @@ function renderDays(days,cid,dk){
           <span class="info-row-txt">${addr}${duration?` · <b>${duration}</b>`:''}</span>
           ${addr?`<a class="info-row-maps" href="${mapsUrl}" target="_blank">🗺 Maps</a>`:''}
         </div>`:''}
-        ${it.al?`<div class="tip tip-red" style="margin-top:6px"><span style="font-size:13px">⚠️</span><div><div class="tip-text">${it.al}</div></div></div>`:''}
+        ${it.al?`<div class="tip ${it.al.startsWith('✅')?'tip-green':'tip-red'}" style="margin-top:6px"><span style="font-size:13px">${it.al.startsWith('✅')?'✅':it.al.startsWith('📌')?'📌':'⚠️'}</span><div><div class="tip-text">${it.al.replace(/^✅\s*/,'').replace(/^📌\s*/,'')}</div></div></div>`:''}
         ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}
       </div>`;
     }).join('');
@@ -2233,19 +2247,22 @@ function renderContacts(){
 
 // ═══ MÉTÉO HISTORIQUE ═════════════════════════
 function renderHistoMeteo(){
-  const el=document.getElementById('histo-meteo');if(!el)return;
-  el.innerHTML=DATA.histoMeteo.map(h=>`
-    <div class="histo-card">
-      <div class="histo-dest">${h.dest} <span style="font-size:20px">${h.emoji}</span></div>
-      <div class="histo-grid">
-        <div class="histo-stat"><div class="histo-val">${h.temp}</div><div class="histo-lbl">Temp. max</div></div>
-        <div class="histo-stat"><div class="histo-val">${h.nuit}</div><div class="histo-lbl">Nuit</div></div>
-        <div class="histo-stat"><div class="histo-val">${h.pluie}</div><div class="histo-lbl">Jours pluie</div></div>
-        <div class="histo-stat"><div class="histo-val">${h.humidite}</div><div class="histo-lbl">Humidité</div></div>
-      </div>
-      <div style="font-size:11px;color:var(--brown-mid);margin-top:7px;font-style:italic">${h.note}</div>
-    </div>
-  `).join('');
+  const render=(id)=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=DATA.histoMeteo.map(h=>`
+      <div class="histo-card">
+        <div class="histo-dest">${h.dest} <span style="font-size:20px">${h.emoji}</span></div>
+        <div class="histo-grid">
+          <div class="histo-stat"><div class="histo-val">${h.temp}</div><div class="histo-lbl">Temp. max</div></div>
+          <div class="histo-stat"><div class="histo-val">${h.nuit}</div><div class="histo-lbl">Nuit</div></div>
+          <div class="histo-stat"><div class="histo-val">${h.pluie}</div><div class="histo-lbl">Jours pluie</div></div>
+          <div class="histo-stat"><div class="histo-val">${h.humidite}</div><div class="histo-lbl">Humidité</div></div>
+        </div>
+        <div style="font-size:11px;color:var(--brown-mid);margin-top:7px;font-style:italic">${h.note}</div>
+      </div>`).join('');
+  };
+  render('histo-meteo');
+  render('histo-meteo-info');
 }
 
 // ═══ JOURNAL AUTOMATIQUE ══════════════════════
