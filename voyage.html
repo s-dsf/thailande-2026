@@ -486,59 +486,45 @@ function renderCurrentBanner(){
 // ═══════════════════════════════════════════
 async function loadPhotos(){
   try{
-    const r=await fetch(GS_URL+'?action=get&t='+Date.now(),{
-      method:'GET',headers:{'Accept':'application/json'},mode:'cors'
-    });
+    const r=await fetch(GS_URL+'?t='+Date.now());
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     if(!d.data){console.warn('Pas de données');return{};}
     const photos={};
     d.data.forEach(row=>{
+      // Lire aussi le type photos_voyage (liste complète)
+      if(row.type==='photos_voyage'&&row.key==='all_photos'&&row.value){
+        try{
+          const list=JSON.parse(row.value);
+          list.forEach(p=>{
+            if(p.diff==='priv')return;
+            const dayKey=p.dayKey;
+            if(!dayKey)return;
+            if(!photos[dayKey])photos[dayKey]=[];
+            // Éviter les doublons
+            if(!photos[dayKey].find(x=>x.id===p.id))
+              photos[dayKey].push(p);
+          });
+        }catch(e){console.warn('photos_voyage parse error:',e.message);}
+      }
+      // Lire aussi les lignes individuelles type=photo
       if(row.type==='photo'&&row.key&&row.value){
         try{
           const p=JSON.parse(row.value);
           if(p.diff==='priv')return;
-          const parts=row.key.split('-');
-          const dayKey=p.dayKey||(parts.length>=2?parts[0]+'-'+parts[1]:'');
+          const dayKey=p.dayKey;
           if(!dayKey)return;
           if(!photos[dayKey])photos[dayKey]=[];
-          // Stocker l'ID Drive pour charger avec le token utilisateur
-          photos[dayKey].push({...p,dayKey,driveId:p.id});
+          if(!photos[dayKey].find(x=>x.id===p.id))
+            photos[dayKey].push(p);
         }catch(e){console.warn('Photo parse error:',e.message);}
       }
     });
-    console.log('✅ Photos chargées:', Object.keys(photos).length,'journées');
+    console.log('✅ Photos chargées:',Object.keys(photos).length,'journées',photos);
     return photos;
-  }catch(e){console.warn('❌ loadPhotos:',e.message);return{};}
-}
-
-// Génère une URL d'image Drive avec le token de l'utilisateur connecté
-function getDriveImgUrl(photo){
-  if(photo.driveId && userToken){
-    // URL avec token Bearer — chargée dans un blob pour affichage
-    return `https://www.googleapis.com/drive/v3/files/${photo.driveId}?alt=media`;
-  }
-  return photo.url||'';
-}
-
-// Charge une image Drive privée dans un élément img
-async function loadPrivateImg(imgEl, photo){
-  if(!photo.driveId || !userToken){
-    imgEl.src=photo.url||'';
-    return;
-  }
-  try{
-    const ok=await ensureToken();
-    if(!ok){imgEl.src=photo.url||'';return;}
-    const r=await fetch(`https://www.googleapis.com/drive/v3/files/${photo.driveId}?alt=media`,{
-      headers:{Authorization:'Bearer '+userToken}
-    });
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const blob=await r.blob();
-    imgEl.src=URL.createObjectURL(blob);
   }catch(e){
-    console.warn('loadPrivateImg error:',e.message);
-    imgEl.src=photo.url||'';
+    console.warn('❌ loadPhotos:',e.message);
+    return{};
   }
 }
 
@@ -685,9 +671,8 @@ async function renderTimeline(){
         html+=`<div class="photo-grid ${gridClass}">`;
         dayPhotos.slice(0,shown).forEach((p,i)=>{
           const isLast=i===shown-1&&extra>0;
-          const imgId=`img-${day.key}-${i}`;
           html+=`<div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
-            <img id="${imgId}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="${p.caption||''}" loading="lazy" style="background:var(--sand-mid)">
+            <img src="${p.url}" alt="${p.caption||''}" loading="lazy" onerror="this.style.background='var(--sand-mid)'">
             ${p.caption&&i===0?`<div class="photo-caption">${p.caption}</div>`:''}
             ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
           </div>`;
@@ -735,17 +720,6 @@ async function renderTimeline(){
   </div>`;
 
   timeline.innerHTML=html;
-
-  // Charger les images privées depuis Drive avec le token utilisateur
-  DESTINATIONS.forEach(dest=>{
-    dest.days.forEach(day=>{
-      const dayPhotos=photos[day.key]||[];
-      dayPhotos.slice(0,6).forEach((p,i)=>{
-        const imgEl=document.getElementById(`img-${day.key}-${i}`);
-        if(imgEl) loadPrivateImg(imgEl, p);
-      });
-    });
-  });
 }
 
 // ═══════════════════════════════════════════
