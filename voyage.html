@@ -339,7 +339,7 @@ const DESTINATIONS=[
    hotel:{
      label:'Logement Airbnb',
      addr:'Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700',
-     note:'Taxi réservé par l\'Airbnb · 1 500 bahts — rien à payer au chauffeur · Régler au logement le lendemain',
+     note:'',
      maps:'Soi+Palakun+Khet+Bang+Phlat+Bangkok'
    },
    days:[
@@ -354,7 +354,7 @@ const DESTINATIONS=[
    hotel:{
      label:'Logement Airbnb',
      addr:'1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300',
-     note:'Taxi organisé par l\'Airbnb · 300 bahts en liquide au chauffeur',
+     note:'',
      maps:'1+Chang+Moi+Road+Soi+2+Chiang+Mai'
    },
    days:[
@@ -369,7 +369,7 @@ const DESTINATIONS=[
    hotel:{
      label:'Logement Airbnb',
      addr:'13/35 Moo 2, Ko Tao, Surat Thani 84360',
-     note:'Transport Airbnb depuis le ferry · Chercher panneau avec votre nom dans le grand pavillon couvert',
+     note:'',
      maps:'Ko+Tao+Surat+Thani+84360'
    },
    days:[
@@ -383,7 +383,7 @@ const DESTINATIONS=[
    hotel:{
      label:'Logement Airbnb',
      addr:'57/57 Moo 5 Anthong, Nathon, Surathani 84140',
-     note:'Transport organisé par l\'Airbnb depuis le ferry · Arrivée Bangrak Pier 13h',
+     note:'',
      maps:'57+Moo+5+Anthong+Nathon+Ko+Samui'
    },
    days:[
@@ -429,13 +429,7 @@ const TRANSPORTS=[
   {after:'kt',type:'🚢 Ferry',from:'Koh Tao Mae Haad',to:'Koh Samui Bangrak',
    date:'Dim 1er août',company:'Direct Ferries',
    dep:'11h30',arr:'13h00'},
-  {after:'ks',type:'✈ Vol + ✈ Vol',from:'Koh Samui',to:'Paris CDG',
-   date:'Mer 5 – Jeu 6 août',company:'Bangkok Airways + Air France',
-   details:[
-     {label:'✈ Vol Koh Samui (USM) → Bangkok BKK',dep:'14h20',arr:'15h30'},
-     {label:'🏨 Nuit hôtel Grand BS Airport Suvarnabhumi',dep:'',arr:''},
-     {label:'✈ Vol Bangkok BKK → Paris CDG T2E',dep:'11h25',arr:'19h00 🇫🇷'},
-   ]},
+  {after:'ks',type:'ks_to_paris',from:'Koh Samui',to:'Paris'},
 ];
 
 // ═══════════════════════════════════════════
@@ -491,40 +485,30 @@ async function loadPhotos(){
     const d=await r.json();
     if(!d.data){console.warn('Pas de données');return{};}
     const photos={};
+    // Collecter toutes les lignes photos_voyage (prendre la dernière = la plus complète)
+    let lastPhotoVoyage = null;
     d.data.forEach(row=>{
-      // Les données ont les clés A,B,C,D,E (colonnes Sheet)
       const type = row.type || row.B;
       const key  = row.key  || row.C;
       const value= row.value|| row.D;
-
-      // Lire les lignes photos_voyage (liste complète)
       if(type==='photos_voyage' && key==='all_photos' && value){
-        try{
-          const list=JSON.parse(value);
-          list.forEach(p=>{
-            if(p.diff==='priv')return;
-            const dayKey=p.dayKey;
-            if(!dayKey)return;
-            if(!photos[dayKey])photos[dayKey]=[];
-            if(!photos[dayKey].find(x=>x.id===p.id))
-              photos[dayKey].push(p);
-          });
-        }catch(e){console.warn('photos_voyage parse error:',e.message);}
+        lastPhotoVoyage = value; // garder la dernière occurrence
       }
+    });
 
-      // Lire les lignes individuelles type=photo
-      if(type==='photo' && key && value){
-        try{
-          const p=JSON.parse(value);
+    // Lire la liste complète depuis photos_voyage
+    if(lastPhotoVoyage){
+      try{
+        const list=JSON.parse(lastPhotoVoyage);
+        list.forEach(p=>{
           if(p.diff==='priv')return;
           const dayKey=p.dayKey;
           if(!dayKey)return;
           if(!photos[dayKey])photos[dayKey]=[];
-          if(!photos[dayKey].find(x=>x.id===p.id))
-            photos[dayKey].push(p);
-        }catch(e){console.warn('Photo parse error:',e.message);}
-      }
-    });
+          photos[dayKey].push(p);
+        });
+      }catch(e){console.warn('photos_voyage parse error:',e.message);}
+    }
     console.log('✅ Photos chargées:',Object.keys(photos).length,'journées',photos);
     return photos;
   }catch(e){
@@ -566,6 +550,45 @@ async function sendReaction(type,key,value=''){
 //  RENDER TRANSPORT CARD
 // ═══════════════════════════════════════════
 function renderTransport(t){
+  // 3 bandeaux séparés pour Koh Samui → Paris
+  if(t.type==='ks_to_paris'){
+    return`
+    <div class="transport-card" style="background:linear-gradient(135deg,#D4A853,#B8883A);margin-bottom:8px">
+      <div class="transport-type">✈ Vol · Mercredi 5 août 2026</div>
+      <div class="transport-route">
+        <span class="transport-city">Koh Samui USM</span>
+        <span class="transport-arrow">→</span>
+        <span class="transport-city">Bangkok BKK</span>
+      </div>
+      <div class="transport-details">
+        <div class="transport-row">Départ <b>14h20 🇹🇭</b> (09h20 🇫🇷) → Arrivée <b>15h30 🇹🇭</b> (10h30 🇫🇷)</div>
+      </div>
+      <span class="transport-company">✈ Bangkok Airways</span>
+    </div>
+    <div class="transport-card" style="background:linear-gradient(135deg,#7A5C47,#3D2B1F);margin-bottom:8px">
+      <div class="transport-type">🏨 Nuit à Bangkok · 5 août</div>
+      <div class="transport-route">
+        <span class="transport-city" style="font-size:14px">Grand BS Airport Hotel</span>
+      </div>
+      <div class="transport-details">
+        <div class="transport-row">836, 11 Lat Krabang 30/4 Alley, Bangkok 10520</div>
+        <div class="transport-row">Check-in 16h · Check-out avant 12h</div>
+      </div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;margin-top:5px;text-decoration:none">🗺 Maps</a>
+    </div>
+    <div class="transport-card" style="background:linear-gradient(135deg,#E8734A,#C85A32);margin-bottom:8px">
+      <div class="transport-type">✈ Vol retour · Jeudi 6 août 2026</div>
+      <div class="transport-route">
+        <span class="transport-city">Bangkok BKK</span>
+        <span class="transport-arrow">→</span>
+        <span class="transport-city">Paris CDG</span>
+      </div>
+      <div class="transport-details">
+        <div class="transport-row">Départ <b>11h25 🇹🇭</b> (06h25 🇫🇷) → Arrivée <b>19h00 🇫🇷</b> Terminal 2E</div>
+      </div>
+      <span class="transport-company">✈ Air France · Vol direct ~11h</span>
+    </div>`;
+  }
   if(t.details){
     const rows=t.details.map(d=>{
       if(!d.dep&&!d.arr)return`<div class="transport-row">🏨 ${d.label}</div>`;
@@ -648,7 +671,7 @@ async function renderTimeline(){
         <div style="flex:1">
           <div class="airbnb-label">${dest.hotel.label}</div>
           <div class="airbnb-addr">${dest.hotel.addr}</div>
-          <div class="airbnb-note">${dest.hotel.note}</div>
+          ${dest.hotel.note?`<div class="airbnb-note">${dest.hotel.note}</div>`:''}
           <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.hotel.maps}" target="_blank">🗺 Maps</a>
         </div>
       </div>`;
@@ -678,7 +701,7 @@ async function renderTimeline(){
           const isLast=i===shown-1&&extra>0;
           html+=`<div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
             <img src="${p.url}" alt="${p.caption||''}" loading="lazy" onerror="this.style.background='var(--sand-mid)'">
-            ${p.caption&&i===0?`<div class="photo-caption">${p.caption}</div>`:''}
+            ${p.caption?`<div class="photo-caption">${p.caption}</div>`:''}
             ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
           </div>`;
         });
