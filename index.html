@@ -2099,8 +2099,45 @@ function toggleBag(el,k){el.classList.toggle('checked');const s=JSON.parse(local
 function updBagProg(){const s=JSON.parse(localStorage.getItem('bag_checks')||'{}'),tot=DATA.bagages.length,done=Object.values(s).filter(Boolean).length,pct=tot>0?Math.round(done/tot*100):0;const b=document.getElementById('bag-bar'),p=document.getElementById('bag-prog');if(b)b.style.width=pct+'%';if(p)p.textContent=`${done} / ${tot} cochés`;}
 
 // ═══ PHRASES ══════════════════════════════════
+// ═══ PHRASES ══════════════════════════════════
 function spkPhrase(t){const u=new SpeechSynthesisUtterance(t);u.lang='th-TH';u.rate=0.8;speechSynthesis.speak(u);}
 function cpyPhrase(b,t){navigator.clipboard.writeText(t).then(()=>{b.textContent='✓ Copié';b.classList.add('copied');setTimeout(()=>{b.textContent='Copier';b.classList.remove('copied');},1500)});}
+
+function renderPhrases(){
+  const el=document.getElementById('phrases');if(!el)return;
+  const q=document.getElementById('phrase-search')?.value||'';
+  if(q.trim()){filterPhrases(q);return;}
+  const cats=[...new Set(DATA.phrases.map(p=>p.c))];
+  el.innerHTML=cats.map(cat=>`
+    <div style="margin-bottom:3px">
+      <div style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${cat}</div>
+      ${DATA.phrases.filter(p=>p.c===cat).map(p=>`
+        <div class="ph-item">
+          <div class="ph-fr">${p.f}</div>
+          <div class="ph-th">${p.t}</div>
+          <button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button>
+          <button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function filterPhrases(q){
+  const el=document.getElementById('phrases');if(!el)return;
+  if(!q.trim()){renderPhrases();return;}
+  const lq=q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const matches=DATA.phrases.filter(p=>{
+    const fr=p.f.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return fr.includes(lq)||p.t.toLowerCase().includes(lq)||p.c.toLowerCase().includes(lq);
+  });
+  if(!matches.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--brown-mid);font-size:13px">Aucune phrase trouvée</div>';return;}
+  el.innerHTML=matches.map(p=>`
+    <div class="ph-item">
+      <div class="ph-fr">${p.f}</div>
+      <div class="ph-th">${p.t}</div>
+      <button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button>
+      <button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button>
+    </div>`).join('');
+}
 
 // ═══ NOTIFICATIONS ════════════════════════════
 function schedNotifs(){
