@@ -482,12 +482,6 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </button>
 </div>
 
-<!-- USER BADGE -->
-<div class="g-user-badge" id="g-user-badge" onclick="confirmGLogout()">
-  <img class="g-avatar" id="g-avatar" src="" alt="">
-  <span class="g-uname" id="g-uname"></span>
-</div>
-
 <!-- HOME SCREEN -->
 <div class="home-overlay" id="home-overlay">
   <div class="home-header">
@@ -544,14 +538,21 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
 </div>
 
 <!-- TOP BAR -->
-<header class="topbar">
-  <div style="cursor:pointer" onclick="showHomeScreen()" title="Retour accueil"><div class="topbar-title">🏠 Thaïlande 2026</div><div class="topbar-sub">Guide Famille · Tap pour accueil</div></div>
+<header class="topbar" style="position:relative">
+  <div style="cursor:pointer;flex:1" onclick="showHomeScreen()" title="Retour accueil">
+    <div class="topbar-title">🏠 Thaïlande 2026</div>
+    <div class="topbar-sub">Guide Famille · Tap pour accueil</div>
+  </div>
   <div class="topbar-right">
     <div class="time-badges">
       <div class="time-badge time-th" id="thai-time">🇹🇭 --:--</div>
       <div class="time-badge time-fr" id="fr-time">🇫🇷 --:--</div>
     </div>
     <div class="countdown-badge" id="countdown">J–?</div>
+    <div class="g-user-badge" id="g-user-badge" onclick="confirmGLogout()" style="display:none;position:static;transform:none;background:rgba(0,0,0,.2)">
+      <img class="g-avatar" id="g-avatar" src="" alt="">
+      <span class="g-uname" id="g-uname"></span>
+    </div>
   </div>
 </header>
 
@@ -2626,21 +2627,31 @@ function goP(key,btn){
   const sec=document.getElementById('ps-'+key);
   if(sec)sec.classList.add('active');
   if(btn)btn.classList.add('active');
-  // Re-rendre si section vide ou au besoin
-  if(key==='pratique'){
-    renderPhrases();
-    renderContacts();
-    renderCoutumes();
-  }
-  if(key==='info') renderHistoMeteo();
-  if(key==='avant'){
-    renderPrat();
-    renderHistoMeteo();
-  }
-  if(key==='outils'){
-    renderPhrases();
-    fetchRates();
-  }
+  try{
+    if(key==='pratique'){
+      renderPhrases();
+      renderContacts();
+      renderCoutumes();
+    }
+    if(key==='info') renderHistoMeteo();
+    if(key==='avant'){
+      // Bag
+      const bagEl=document.getElementById('bag-list');
+      if(bagEl){
+        const bs=JSON.parse(localStorage.getItem('bag_checks')||'{}');
+        bagEl.innerHTML=DATA.bagages.map((it,i)=>{const k=`bag-${i}`,ch=bs[k]?'checked':'';return`<div class="ck-item ${ch}" onclick="toggleBag(this,'${k}')"><div class="ck-box"></div><div><div class="ck-lbl">${it.l}</div><div class="ck-cat">${it.c}</div>${parseFloat(it.kg)>0?`<div class="ck-kg">~${it.kg} kg</div>`:''}</div></div>`;}).join('');
+        updBagProg();
+      }
+      // Vaccins
+      const vacEl=document.getElementById('vaccins');
+      if(vacEl) vacEl.innerHTML=DATA.vaccins.map(v=>`<div class="info-card"><div class="info-title">${v.n}<span class="badge ${v.s==='green'?'b-green':v.s==='grey'?'b-grey':'b-orange'}">${v.s==='green'?'Recommandé':v.s==='grey'?'Optionnel':'À vérifier'}</span></div><div class="info-body">${v.r}</div></div>`).join('');
+      // Apps
+      const appsEl=document.getElementById('apps');
+      if(appsEl) appsEl.innerHTML=DATA.apps.map(a=>`<div class="app-item"><div class="app-icon">${a.i}</div><div><div class="app-name">${a.n}</div><div class="app-desc">${a.d}</div><span class="app-bdg ${a.off?'app-off':'app-on'}">${a.off?'✓ Offline':'Connexion requise'}</span></div></div>`).join('');
+      renderHistoMeteo();
+    }
+    if(key==='outils') fetchRates();
+  }catch(e){console.warn('goP render error:',e);}
 }
 
 function goTab(k,b){
