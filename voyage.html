@@ -464,9 +464,9 @@ const DESTINATIONS=[
   {key:'bkk2',emoji:'🏨',name:'Bangkok — Retour',color:'#7A5C47',
    dates:'5 – 6 août 2026',start:new Date('2026-08-05'),end:new Date('2026-08-07'),
    hotel:{
-     label:'Hôtel nuit avant vol',
-     addr:'Grand BS Airport Hotel Suvarnabhumi · 836, 11 Lat Krabang 30/4 Alley, Bangkok 10520',
-     note:'Check-in 16h · Check-out avant 12h · Vol retour 11h25',
+     label:'Hôtel Grand BS Airport',
+     addr:'836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520',
+     note:'',
      maps:'Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok'
    },
    days:[
@@ -746,7 +746,7 @@ async function renderTimeline(){
           <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.hotel.maps}" target="_blank">🗺 Maps</a>
         </div>
       </div>
-      ${(dest.key==='kt'||dest.key==='ks')?`<div id="sea-v-${dest.key}"><div style="padding:8px 0;font-size:11px;color:var(--brown-mid);font-style:italic">🌊 Chargement conditions mer…</div></div>`:''}`;
+`;
 
     // Photos par journée
     dest.days.forEach(day=>{
@@ -825,13 +825,7 @@ async function renderTimeline(){
 
   timeline.innerHTML=html;
 
-  // Charger les conditions de mer pour Koh Tao et Koh Samui
-  ['kt','ks'].forEach(async dest=>{
-    const el=document.getElementById(`sea-v-${dest}`);
-    if(!el)return;
-    const seaHtml=await fetchSeaVoyage(dest);
-    el.innerHTML=seaHtml||'';
-  });
+
 }
 
 // ═══════════════════════════════════════════
