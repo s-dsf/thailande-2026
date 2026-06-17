@@ -1436,6 +1436,7 @@ async function gIndexLogin(){
         document.getElementById('g-user-badge').style.display='flex';
         // Sauvegarder le prénom pour les notes
         localStorage.setItem('idx_user_name', u.given_name||u.name||'Moi');
+        localStorage.setItem('idx_user_avatar', u.picture||'');
         // Transmettre token au module Drive
         gdToken=idxToken; gdTokenExpiry=idxTokenExpiry;
       }catch(e){}
@@ -1461,7 +1462,7 @@ function confirmGLogout(){
 function showHomeScreen(){
   const ho=document.getElementById('home-overlay');
   ho.classList.add('show');
-  // Mettre à jour les temps sur l'accueil
+  // Mettre à jour les temps immédiatement
   const updHome=()=>{
     const now=new Date();
     const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
@@ -1470,10 +1471,16 @@ function showHomeScreen(){
     const hf=document.getElementById('home-time-fr');if(hf)hf.textContent='🇫🇷 '+fr;
     const dep=new Date(DATA.depart),diff=dep-now;
     const hc=document.getElementById('home-cdown');
-    if(hc){if(diff<=0){const d=Math.floor((now-dep)/864e5);hc.textContent=d===0?'🎉 Bon vol !':'Jour '+d+' du voyage';}
-    else{const d=Math.floor(diff/864e5);hc.textContent=d===0?'Départ aujourd\'hui !':'J – '+d+' avant le départ';}}
+    if(hc){
+      if(diff<=0){const d=Math.floor((now-dep)/864e5);hc.textContent=d===0?'🎉 Bon vol !':'Jour '+d+' du voyage';}
+      else{const d=Math.floor(diff/864e5);hc.textContent=d===0?'Départ aujourd\'hui !':'J – '+d+' avant le départ';}
+    }
   };
-  updHome();setInterval(updHome,30000);
+  updHome();
+  if(!window._homeInterval) window._homeInterval=setInterval(updHome,30000);
+  // Mettre à jour aussi la topbar
+  updThaiTime();
+  updCdown();
   if(!document.getElementById('days-bkk').innerHTML) initApp();
 }
 
@@ -2104,10 +2111,8 @@ async function makeRecap(){
   // ── Charger toutes les photos en base64 via fetch+canvas ──
   async function loadImgBase64(url){
     try{
-      // Fetch avec token si URL Drive proxy
-      const headers={};
-      if(url.includes('workers.dev')&&gdToken) headers['Authorization']='Bearer '+gdToken;
-      const r=await fetch(url,{headers});
+      // Fetch photo via Worker (secret dans l'URL, pas de token nécessaire)
+      const r=await fetch(url);
       if(!r.ok)throw new Error('HTTP '+r.status);
       const blob=await r.blob();
       return new Promise((res,rej)=>{
@@ -2281,6 +2286,7 @@ async function initFirebase(){
 // ═══ GOOGLE DRIVE PHOTOS ══════════════════════
 const GD_CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
 const GD_FOLDER_ID='1sZCQKYH_yFOfvx1smwXB3BeU0khbuupk';
+const PHOTO_SECRET='THAI2026SECRET'; // secret partagé avec le Worker
 const GD_SCOPE='https://www.googleapis.com/auth/drive.file';
 let gdToken=null,gdTokenExpiry=0,gdClient=null;
 let pendingFiles=[],selDest=null,selDay=null,selDiff='priv';
@@ -2359,7 +2365,7 @@ async function uploadToDrive(file,caption,destKey,dayKey,diff){
 
   // Photo reste PRIVÉE dans Drive
   // L'URL passe par le Worker Cloudflare qui authentifie via Service Account
-  const imgUrl=`https://claude-proxy-thailande.s-desferet.workers.dev/photo?id=${d.id}`;
+  const imgUrl=`https://claude-proxy-thailande.s-desferet.workers.dev/photo?id=${d.id}&secret=${PHOTO_SECRET}`;
   return{id:d.id,url:imgUrl,caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()};
 }
 
@@ -2751,6 +2757,10 @@ function initNotesLists(){
 }
 
 function initApp(){
+  // Mettre à jour les temps immédiatement
+  updCdown();updThaiTime();
+  setInterval(updCdown,60000);setInterval(updThaiTime,30000);
+
   renderDays(DATA.bangkok,'days-bkk','bkk');
   renderDays(DATA.chiangmai,'days-cm','cm');
   renderDays(DATA.kohtao,'days-kt','kt');
@@ -2771,8 +2781,6 @@ function initApp(){
     gdToken=storedToken;gdTokenExpiry=storedExpiry;showGLoginOk();
   }
 
-  updCdown();updThaiTime();
-  setInterval(updCdown,60000);setInterval(updThaiTime,30000);
   fetchWx('bkk');wxL['bkk']=true;
   fetchRates();
   gsLoad().then(ok=>{
@@ -2827,19 +2835,64 @@ function initApp(){
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
-  // Vérifier si token Google encore valide
   const savedToken=localStorage.getItem('idx_token');
   const expiry=parseInt(localStorage.getItem('idx_token_expiry')||'0');
+  const userName=localStorage.getItem('idx_user_name')||'';
+  const userAvatar=localStorage.getItem('idx_user_avatar')||'';
+
   if(savedToken && Date.now() < expiry-60000){
     idxToken=savedToken;idxTokenExpiry=expiry;
     gdToken=savedToken;gdTokenExpiry=expiry;
-    // Restaurer badge utilisateur si possible
-    document.getElementById('g-user-badge').style.display='flex';
+    // Restaurer badge avec prénom et photo
+    const badge=document.getElementById('g-user-badge');
+    const avatar=document.getElementById('g-avatar');
+    const uname=document.getElementById('g-uname');
+    if(badge) badge.style.display='flex';
+    if(avatar && userAvatar) avatar.src=userAvatar;
+    if(uname && userName) uname.textContent=userName;
     document.getElementById('g-login-overlay').style.display='none';
     showHomeScreen();
   } else {
-    // Afficher écran de connexion
-    document.getElementById('g-login-overlay').style.display='flex';
+    // Token expiré ou absent — tenter renouvellement silencieux
+    document.getElementById('g-login-overlay').style.display='none';
+    // Afficher un écran intermédiaire pendant la tentative
+    document.getElementById('home-overlay').classList.add('show');
+    // Tenter reconnexion silencieuse si on a déjà un compte
+    if(userName && savedToken){
+      loadGsi().then(()=>{
+        const client=google.accounts.oauth2.initTokenClient({
+          client_id:GD_CLIENT_ID_IDX, scope:GD_SCOPE_IDX, prompt:'',
+          callback:async(resp)=>{
+            if(resp.error){
+              // Échec silencieux → montrer le login
+              document.getElementById('home-overlay').classList.remove('show');
+              document.getElementById('g-login-overlay').style.display='flex';
+              return;
+            }
+            idxToken=resp.access_token;
+            idxTokenExpiry=Date.now()+(resp.expires_in||3600)*1000;
+            gdToken=idxToken;gdTokenExpiry=idxTokenExpiry;
+            localStorage.setItem('idx_token',idxToken);
+            localStorage.setItem('idx_token_expiry',idxTokenExpiry);
+            // Restaurer badge
+            const badge=document.getElementById('g-user-badge');
+            const avatar=document.getElementById('g-avatar');
+            const uname=document.getElementById('g-uname');
+            if(badge) badge.style.display='flex';
+            if(avatar && userAvatar) avatar.src=userAvatar;
+            if(uname && userName) uname.textContent=userName;
+            showHomeScreen();
+          }
+        });
+        client.requestAccessToken();
+      }).catch(()=>{
+        document.getElementById('home-overlay').classList.remove('show');
+        document.getElementById('g-login-overlay').style.display='flex';
+      });
+    } else {
+      document.getElementById('home-overlay').classList.remove('show');
+      document.getElementById('g-login-overlay').style.display='flex';
+    }
   }
 });
 </script>
