@@ -1,4 +1,4 @@
-const CACHE = 'thailand-2026-v3';
+const CACHE = 'thailand-2026-v4';
 const ASSETS = ['/', '/index.html', '/voyage.html'];
 
 self.addEventListener('install', e => {
