@@ -23,7 +23,7 @@ button{border:none;cursor:pointer;font:inherit}
 a{color:inherit;text-decoration:none}
 
 /* HEADER */
-.header{background:linear-gradient(135deg,var(--coral),var(--coral-dk));padding:28px 20px 22px;text-align:center;position:relative;overflow:hidden}
+.header{background:linear-gradient(135deg,var(--coral),var(--coral-dk));padding:28px 20px 22px;text-align:center;position:relative;overflow:hidden;padding-top:52px}
 .header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
 .header-title{font-size:28px;font-weight:800;color:var(--white);letter-spacing:-.3px;position:relative}
 .header-sub{font-size:13px;color:rgba(255,255,255,.8);margin-top:5px;position:relative}
@@ -78,13 +78,13 @@ a{color:inherit;text-decoration:none}
 .day-date-label{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;padding:0 2px;margin-bottom:5px}
 
 /* PHOTO GRID */
-.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:10px;overflow:hidden}
-.photo-grid.one{grid-template-columns:1fr}
-.photo-grid.two{grid-template-columns:1fr 1fr}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:10px;overflow:hidden;max-width:480px}
+.photo-grid.one{grid-template-columns:1fr;max-width:200px}
+.photo-grid.two{grid-template-columns:1fr 1fr;max-width:320px}
 .photo-cell{position:relative;aspect-ratio:1;background:var(--sand-mid);overflow:hidden;cursor:pointer}
 .photo-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
 .photo-cell:hover img{transform:scale(1.04)}
-.photo-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:10px;padding:18px 7px 6px;line-height:1.3}
+.photo-caption{font-size:11px;color:var(--brown-mid);padding:4px 2px 2px;line-height:1.3;font-style:italic}
 .photo-count-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800}
 .day-empty{background:var(--white);border-radius:10px;padding:22px;text-align:center;color:var(--grey);font-size:12px;border:1.5px dashed #e0d6cc}
 .day-empty-icon{font-size:22px;margin-bottom:5px;opacity:.4}
@@ -101,11 +101,22 @@ a{color:inherit;text-decoration:none}
 
 /* COMMENTS */
 .comments-list{padding:8px 12px;background:var(--white);border-top:1px solid var(--sand-mid)}
-.comment-item{display:flex;gap:7px;margin-bottom:6px;align-items:flex-start}
+.comment-item{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
 .comment-item:last-child{margin-bottom:0}
-.comment-author{font-size:11px;font-weight:700;color:var(--coral);flex-shrink:0}
-.comment-text{font-size:12px;color:var(--brown);line-height:1.4}
-.comment-time{font-size:10px;color:var(--grey);margin-top:1px}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.comment-bubble{background:var(--sand-mid);border-radius:0 12px 12px 12px;padding:7px 10px;flex:1;min-width:0}
+.comment-author{font-size:11px;font-weight:700;color:var(--coral)}
+.comment-text{font-size:12px;color:var(--brown);line-height:1.4;margin-top:2px}
+.comment-time{font-size:10px;color:var(--grey);margin-top:3px}
+
+/* SEA CONDITIONS VOYAGE */
+.sea-card-v{background:linear-gradient(135deg,#1A8F85,#2BBFB3);border-radius:10px;padding:11px 14px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.sea-card-v-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:rgba(255,255,255,.7);margin-bottom:6px}
+.sea-card-v-row{display:flex;gap:10px;align-items:center}
+.sea-card-v-stat{text-align:center;flex:1}
+.sea-card-v-val{font-size:16px;font-weight:800;color:#fff}
+.sea-card-v-lbl{font-size:9px;color:rgba(255,255,255,.7);margin-top:1px}
+.sea-card-v-cond{font-size:12px;font-weight:700;color:#fff;margin-left:auto;text-align:right}
 
 /* LIGHTBOX */
 .lb{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.93);display:none;flex-direction:column;align-items:center;justify-content:center}
@@ -125,7 +136,7 @@ a{color:inherit;text-decoration:none}
 .login-info{font-size:12px;color:rgba(255,255,255,.6);margin-bottom:32px;line-height:1.6;max-width:300px}
 .login-btn{background:#fff;color:var(--brown);border-radius:14px;padding:14px 28px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);border:none;margin:0 auto}
 .login-error{color:rgba(255,255,255,.9);font-size:13px;margin-top:16px;background:rgba(0,0,0,.2);border-radius:8px;padding:8px 16px;display:none}
-.user-badge{position:fixed;top:8px;right:12px;z-index:200;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 10px 4px 4px;display:flex;align-items:center;gap:6px;cursor:pointer}
+.user-badge{position:absolute;top:12px;right:12px;z-index:200;background:rgba(0,0,0,.25);border-radius:20px;padding:4px 10px 4px 4px;display:flex;align-items:center;gap:6px;cursor:pointer}
 .user-avatar{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.5)}
 .user-name{font-size:11px;font-weight:700;color:#fff;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
@@ -148,6 +159,10 @@ a{color:inherit;text-decoration:none}
   <div class="login-sub">Suivez le voyage en temps réel</div>
   <div class="login-info">
     Connectez-vous avec votre compte Google<br>pour accéder aux photos et aux nouvelles du voyage
+    <br><br>
+    🔒 Les photos sont privées et sécurisées<br>
+    📸 Visibles uniquement après connexion<br>
+    ❤️ Réagissez et commentez chaque journée
   </div>
   <button class="login-btn" onclick="googleLogin()">
     <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
@@ -172,6 +187,12 @@ a{color:inherit;text-decoration:none}
   </div>
   <div class="header-cdown" id="cdown">Chargement…</div>
 </header>
+
+<!-- VISITORS PANEL -->
+<div id="visitors-bar" style="background:var(--white);padding:8px 16px;display:none;border-bottom:1px solid var(--sand-mid);overflow-x:auto;white-space:nowrap">
+  <span style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px">👥 Connectés : </span>
+  <span id="visitors-list" style="font-size:12px;color:var(--brown)"></span>
+</div>
 
 <!-- CURRENT DEST -->
 <div id="current-banner"></div>
@@ -278,7 +299,54 @@ function showApp(){
   if(!localStorage.getItem('intro_seen')){
     document.getElementById('intro-banner').style.display='block';
   }
+  // Enregistrer la visite
+  const userName=localStorage.getItem('voyage_user_name')||'Proche';
+  const visitKey='visitor-'+userName.toLowerCase().replace(/[^a-z0-9]/g,'');
+  sendReaction('visitor', visitKey, JSON.stringify({
+    name:userName,
+    avatar:document.getElementById('user-avatar')?.src||'',
+    lastSeen:new Date().toISOString()
+  }));
+  // Charger la liste des visiteurs
+  loadVisitors();
   renderTimeline();
+}
+
+async function loadVisitors(){
+  try{
+    const r=await fetch(GS_URL+'?t='+Date.now());
+    const d=await r.json();
+    if(!d.data)return;
+    const visitors={};
+    const now=Date.now();
+    d.data.forEach(row=>{
+      const type=row.type||row.B;
+      const value=row.value||row.D;
+      if(type==='visitor'&&value){
+        try{
+          const v=JSON.parse(value);
+          // Garder uniquement les visites des dernières 24h
+          const lastSeen=new Date(v.lastSeen).getTime();
+          if((now-lastSeen)/3600000<24){
+            if(!visitors[v.name]||lastSeen>new Date(visitors[v.name].lastSeen).getTime()){
+              visitors[v.name]=v;
+            }
+          }
+        }catch(e){}
+      }
+    });
+    const names=Object.values(visitors).map(v=>v.name);
+    const bar=document.getElementById('visitors-bar');
+    const list=document.getElementById('visitors-list');
+    if(bar&&list){
+      if(names.length>0){
+        bar.style.display='block';
+        list.textContent=names.join(' · ');
+      } else {
+        bar.style.display='none';
+      }
+    }
+  }catch(e){}
 }
 
 function confirmLogout(){
@@ -408,7 +476,9 @@ const DESTINATIONS=[
 
 // Décalage horaire TH/FR : +5h en été (heure d'été française)
 function thToFr(hhmm){
-  const[h,m]=hhmm.split(':').map(Number);
+  // Accepte "10h40", "10:40", "10h4000" etc.
+  const clean=hhmm.replace(/[h:]/,':').replace(/[^0-9:]/g,'').split(':');
+  const h=parseInt(clean[0]||0), m=parseInt((clean[1]||'00').substring(0,2));
   let fh=h-5;if(fh<0)fh+=24;
   return`${String(fh).padStart(2,'0')}h${String(m).padStart(2,'0')}`;
 }
@@ -674,7 +744,8 @@ async function renderTimeline(){
           ${dest.hotel.note?`<div class="airbnb-note">${dest.hotel.note}</div>`:''}
           <a class="airbnb-maps" href="https://www.google.com/maps/search/?api=1&query=${dest.hotel.maps}" target="_blank">🗺 Maps</a>
         </div>
-      </div>`;
+      </div>
+      ${(dest.key==='kt'||dest.key==='ks')?`<div id="sea-v-${dest.key}"><div style="padding:8px 0;font-size:11px;color:var(--brown-mid);font-style:italic">🌊 Chargement conditions mer…</div></div>`:''}`;
 
     // Photos par journée
     dest.days.forEach(day=>{
@@ -699,23 +770,27 @@ async function renderTimeline(){
         html+=`<div class="photo-grid ${gridClass}">`;
         dayPhotos.slice(0,shown).forEach((p,i)=>{
           const isLast=i===shown-1&&extra>0;
-          html+=`<div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
-            <img src="${p.url}" alt="${p.caption||''}" loading="lazy" onerror="this.style.background='var(--sand-mid)'">
+          html+=`<div style="display:flex;flex-direction:column;">
             ${p.caption?`<div class="photo-caption">${p.caption}</div>`:''}
-            ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
+            <div class="photo-cell" onclick="openLb('${day.key}',${i},${JSON.stringify(dayPhotos).replace(/"/g,'&quot;')})">
+              <img src="${p.url}" alt="${p.caption||''}" loading="lazy" onerror="this.style.background='var(--sand-mid)'">
+              ${isLast?`<div class="photo-count-overlay">+${extra+1}</div>`:''}
+            </div>
           </div>`;
         });
         html+=`</div>`;
 
         // Réactions + commentaires
-        const commentsHtml=dayComments.map(c=>`
-          <div class="comment-item">
-            <div>
-              <span class="comment-author">${c.author||'Proche'}</span>
-              <span class="comment-text"> ${c.text}</span>
+        const commentsHtml=dayComments.map(c=>{
+          const initials=(c.author||'P').charAt(0).toUpperCase();
+          return`<div class="comment-item">
+            <div class="comment-avatar">${initials}</div>
+            <div class="comment-bubble">
+              <div class="comment-author">${c.author||'Proche'}</div>
+              <div class="comment-text">${c.text}</div>
               <div class="comment-time">${c.time||''}</div>
             </div>
-          </div>`).join('');
+          </div>`;}).join('');
 
         html+=`
           ${commentsHtml?`<div class="comments-list">${commentsHtml}</div>`:''}
@@ -748,6 +823,14 @@ async function renderTimeline(){
   </div>`;
 
   timeline.innerHTML=html;
+
+  // Charger les conditions de mer pour Koh Tao et Koh Samui
+  ['kt','ks'].forEach(async dest=>{
+    const el=document.getElementById(`sea-v-${dest}`);
+    if(!el)return;
+    const seaHtml=await fetchSeaVoyage(dest);
+    el.innerHTML=seaHtml||'';
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -780,7 +863,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();if(e.key==
 //  REACTIONS
 // ═══════════════════════════════════════════
 async function sendLike(key,btn){
+  if(btn.classList.contains('liked')){
+    showToast('💛 Déjà liké !');return;
+  }
   btn.classList.add('liked');
+  btn.style.transform='scale(1.3)';
+  setTimeout(()=>btn.style.transform='',300);
   await sendReaction('like',key);
   const span=btn.querySelector('.reaction-count');
   const n=parseInt(span.textContent||'0')+1;
@@ -794,9 +882,38 @@ async function sendComment(dayKey){
   if(!txt)return;
   const userName=localStorage.getItem('voyage_user_name')||'Proche';
   const comment={author:userName,text:txt,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})};
-  await sendReaction('comment',dayKey,JSON.stringify(comment));
+  // Afficher immédiatement sans attendre le Sheet
+  const commentsList=inp.closest('.reactions-bar').previousElementSibling;
+  if(commentsList&&commentsList.classList.contains('comments-list')){
+    const initials=userName.charAt(0).toUpperCase();
+    const newComment=document.createElement('div');
+    newComment.className='comment-item';
+    newComment.innerHTML=`<div class="comment-avatar">${initials}</div>
+      <div class="comment-bubble">
+        <div class="comment-author">${userName}</div>
+        <div class="comment-text">${txt}</div>
+        <div class="comment-time">${comment.time}</div>
+      </div>`;
+    commentsList.appendChild(newComment);
+  } else {
+    // Créer la liste si elle n'existe pas
+    const bar=document.getElementById('ci-'+dayKey).closest('.reactions-bar');
+    if(bar){
+      const list=document.createElement('div');
+      list.className='comments-list';
+      const initials=userName.charAt(0).toUpperCase();
+      list.innerHTML=`<div class="comment-item"><div class="comment-avatar">${initials}</div>
+        <div class="comment-bubble">
+          <div class="comment-author">${userName}</div>
+          <div class="comment-text">${txt}</div>
+          <div class="comment-time">${comment.time}</div>
+        </div></div>`;
+      bar.parentNode.insertBefore(list,bar);
+    }
+  }
   inp.value='';
-  showToast('💬 Commentaire envoyé !');
+  await sendReaction('comment',dayKey,JSON.stringify(comment));
+  showToast('💬 Commentaire publié !');
 }
 
 // ═══════════════════════════════════════════
@@ -815,8 +932,50 @@ function refreshPage(){
   renderTimeline();
 }
 
+async function fetchSeaVoyage(dest){
+  const cfg={
+    kt:{lat:10.10,lon:99.84,name:'Koh Tao'},
+    ks:{lat:9.54,lon:100.06,name:'Koh Samui'}
+  }[dest];
+  if(!cfg)return'';
+  try{
+    const r=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${cfg.lat}&longitude=${cfg.lon}&current=wave_height,wind_wave_height,sea_surface_temperature&timezone=Asia%2FBangkok`);
+    const d=await r.json();
+    const wh=d.current.wave_height||0;
+    const sst=d.current.sea_surface_temperature;
+    const cond=wh<0.5?'🟢 Mer calme':wh<1.0?'🟡 Mer légère':wh<1.5?'🟠 Mer modérée':'🔴 Mer agitée';
+    const adv=wh<0.5?'Idéal pour le snorkeling':wh<1.0?'Bonnes conditions':wh<1.5?'Prudence conseillée':'Éviter les sorties';
+    const sstStr=sst?`${sst.toFixed(1)}°C`:'28°C';
+    return`<div class="sea-card-v">
+      <div class="sea-card-v-title">🌊 Conditions mer — ${cfg.name}</div>
+      <div class="sea-card-v-row">
+        <div class="sea-card-v-stat"><div class="sea-card-v-val">${wh.toFixed(1)}m</div><div class="sea-card-v-lbl">Vagues</div></div>
+        <div class="sea-card-v-stat"><div class="sea-card-v-val">${sstStr}</div><div class="sea-card-v-lbl">Temp. mer</div></div>
+        <div class="sea-card-v-cond">${cond}<br><span style="font-size:10px;font-weight:400;opacity:.85">${adv}</span></div>
+      </div>
+    </div>`;
+  }catch(e){return'';}
+}
+
 // Démarrage — vérifier si déjà connecté
 window.addEventListener('DOMContentLoaded', initAuth);
+
+// Vérifier nouvelles photos toutes les 5 minutes
+setInterval(async ()=>{
+  if(!userToken) return;
+  const photos=await loadPhotos();
+  const total=Object.values(photos).reduce((a,b)=>a+b.length,0);
+  const last=parseInt(localStorage.getItem('last_photo_count')||'0');
+  if(total>last&&last>0){
+    const banner=document.createElement('div');
+    banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:999;background:var(--turq);color:#fff;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;cursor:pointer';
+    banner.textContent='📸 Nouvelles photos disponibles ! Appuyer pour actualiser';
+    banner.onclick=()=>{document.body.removeChild(banner);refreshPage();};
+    document.body.appendChild(banner);
+    setTimeout(()=>{if(document.body.contains(banner))document.body.removeChild(banner);},8000);
+  }
+  localStorage.setItem('last_photo_count',total);
+},300000);
 </script>
 </body>
 </html>

@@ -103,8 +103,17 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .notes-input{width:100%;border:1.5px solid var(--sand-mid);border-radius:var(--rs);padding:9px 11px;font-size:12px;color:var(--brown);background:var(--sand);font-family:inherit;resize:none;outline:none;line-height:1.5;transition:border-color .2s}
 .notes-input:focus{border-color:var(--coral);background:#fff}
 .notes-input::placeholder{color:#bbb}
-.notes-save{margin-top:5px;float:right;background:var(--coral);color:#fff;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700}
+.notes-save{margin-top:5px;float:right;background:var(--coral);color:#fff;border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;border:none}
 .notes-saved{margin-top:5px;float:right;background:var(--green-lt);color:var(--green);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:700}
+/* Notes liste avec auteur */
+.note-item{background:var(--sand);border-radius:var(--rs);padding:9px 11px;margin-bottom:6px;position:relative}
+.note-item-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.note-item-author{font-size:10px;font-weight:700;color:var(--coral);display:flex;align-items:center;gap:4px}
+.note-item-time{font-size:10px;color:var(--brown-mid)}
+.note-item-text{font-size:12px;color:var(--brown);line-height:1.5}
+.note-item-actions{display:flex;gap:4px}
+.note-act{font-size:10px;background:none;border:1px solid var(--sand-mid);border-radius:5px;padding:2px 6px;cursor:pointer;color:var(--brown-mid)}
+.note-act-del{color:var(--red);border-color:var(--red)}
 .cf{clear:both}
 
 /* WEATHER */
@@ -529,9 +538,14 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   🔄 Nouvelle version disponible — Appuyer pour mettre à jour
 </div>
 
+<!-- OFFLINE BANNER -->
+<div class="sw-banner" id="offline-banner" style="background:var(--brown-mid);display:none">
+  📵 Hors connexion — Données mises en cache affichées
+</div>
+
 <!-- TOP BAR -->
 <header class="topbar">
-  <div><div class="topbar-title">Thaïlande 2026</div><div class="topbar-sub">Guide Famille</div></div>
+  <div style="cursor:pointer" onclick="showHomeScreen()" title="Retour accueil"><div class="topbar-title">🏠 Thaïlande 2026</div><div class="topbar-sub">Guide Famille · Tap pour accueil</div></div>
   <div class="topbar-right">
     <div class="time-badges">
       <div class="time-badge time-th" id="thai-time">🇹🇭 --:--</div>
@@ -864,6 +878,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="prat-sec" id="ps-pratique">
     <div class="sec-title">🗣 Phrases utiles</div>
     <p class="sec-note">Tap 🔊 pour écouter · « Copier » pour envoyer en message</p>
+    <input type="search" id="phrase-search" placeholder="🔍 Chercher une phrase…" oninput="filterPhrases(this.value)" style="width:100%;border:1.5px solid var(--sand-mid);border-radius:10px;padding:8px 12px;font-size:13px;margin-bottom:10px;outline:none;font-family:inherit;color:var(--brown);background:var(--sand)">
     <div id="phrases"></div>
     <div class="sec-title" style="margin-top:16px">📞 Contacts utiles</div>
     <div id="contacts"></div>
@@ -1337,34 +1352,35 @@ const DATA = {
     {i:"⛴",n:"12GO Asia",d:"Billets ferry — vérification horaires",off:false},
   ],
   contacts:[
-    {cat:"🏠 Logements",items:[
-      {n:"Airbnb Bangkok",note:"Soi Palakun, Khet Bang Phlat",num:"",link:"https://www.airbnb.fr"},
-      {n:"Airbnb Chiang Mai",note:"1 Chang Moi Road Soi 2",num:"",link:"https://www.airbnb.fr"},
-      {n:"Airbnb Koh Tao",note:"13/35 Moo 2, Ko Tao",num:"",link:"https://www.airbnb.fr"},
-      {n:"Airbnb Koh Samui",note:"57/57 Moo 5 Anthong, Nathon",num:"",link:"https://www.airbnb.fr"},
-      {n:"Hôtel Grand BS Bangkok",note:"836 Lat Krabang, Bangkok",num:"tel:+6627382888",link:""},
-    ]},
     {cat:"✈ Transports",items:[
       {n:"AirAsia Move",note:"Vol Bangkok → Chiang Mai",num:"tel:+6625155111",link:"https://www.airasia.com"},
       {n:"Lomprayah Ferry",note:"Ferry Koh Tao ↔ Koh Samui",num:"tel:+6677428733",link:"https://www.lomprayah.com"},
       {n:"Bangkok Airways",note:"Vol Koh Samui → Bangkok",num:"tel:+6627719222",link:"https://www.bangkokair.com"},
       {n:"Direct Ferries",note:"Ferry Surat Thani → Koh Tao",num:"",link:"https://www.directferries.fr"},
+      {n:"Grab Thailand",note:"Taxi VTC — appli recommandée",num:"",link:"https://www.grab.com"},
     ]},
     {cat:"🚨 Urgences",items:[
       {n:"Police Touristique",note:"Français disponible",num:"tel:1155",link:""},
       {n:"SAMU Thaïlande",note:"Ambulance nationale",num:"tel:1669",link:""},
+      {n:"Pompiers",note:"",num:"tel:199",link:""},
+      {n:"Police nationale",note:"",num:"tel:191",link:""},
       {n:"Ambassade France Bangkok",note:"+66 2 657 5100",num:"tel:+6626575100",link:""},
+    ]},
+    {cat:"🏥 Santé",items:[
+      {n:"Bangkok Hospital Samui",note:"Urgences Koh Samui",num:"tel:+6677429500",link:""},
+      {n:"Bangkok Hospital Koh Tao",note:"Clinique Mae Haad",num:"tel:+6677456604",link:""},
+      {n:"Chiang Mai Ram Hospital",note:"Urgences Chiang Mai",num:"tel:+6653920300",link:""},
     ]},
   ],
   histoMeteo:[
-    {dest:"🏙 Bangkok",emoji:"🌦",temp:"32°C",nuit:"26°C",pluie:"~15j",humidite:"80%",
-     note:"Averses courtes l'après-midi. Peu d'impact sur le programme si on sort le matin."},
-    {dest:"🌿 Chiang Mai",emoji:"🌧",temp:"32°C",nuit:"24°C",pluie:"~20j",humidite:"82%",
+    {dest:"🏙 Bangkok",emoji:"🌦",temp:"32°C",nuit:"26°C",pluie:"~15j",humidite:"80%",mer:null,
+     note:"Averses courtes l'après-midi. Peu d'impact si on sort le matin. Privilégier les temples tôt."},
+    {dest:"🌿 Chiang Mai",emoji:"🌧",temp:"32°C",nuit:"24°C",pluie:"~20j",humidite:"82%",mer:null,
      note:"Saison verte et luxuriante. Averses fréquentes mais courtes. Air plus frais qu'à Bangkok."},
-    {dest:"🐠 Koh Tao",emoji:"⛅",temp:"30°C",nuit:"26°C",pluie:"~10j",humidite:"78%",
-     note:"Côte est protégée. Mer généralement calme le matin — idéal pour le snorkeling."},
-    {dest:"🌴 Koh Samui",emoji:"🌤",temp:"30°C",nuit:"25°C",pluie:"~12j",humidite:"79%",
-     note:"Côte est moins exposée. Lipa Noi et Choeng Mon protégées. Averses l'après-midi."},
+    {dest:"🐠 Koh Tao",emoji:"⛅",temp:"30°C",nuit:"26°C",pluie:"~10j",humidite:"78%",mer:"28°C",
+     note:"Côte est protégée. Mer calme le matin — idéal snorkeling. Visibilité 10–15m en juillet-août."},
+    {dest:"🌴 Koh Samui",emoji:"🌤",temp:"30°C",nuit:"25°C",pluie:"~12j",humidite:"79%",mer:"28°C",
+     note:"Côte est protégée. Lipa Noi et Silver Beach idéales. Averses courtes l'après-midi."},
   ],
   mapSpots:{
     "bkk-0":[{lat:13.69,lng:100.75,n:"Suvarnabhumi Airport",c:"#E8734A"},{lat:13.7246,lng:100.5129,n:"Avani+ Riverside",c:"#E8734A"},{lat:13.7368,lng:100.5136,n:"Chao Phraya",c:"#E8734A"}],
@@ -1418,6 +1434,8 @@ async function gIndexLogin(){
         document.getElementById('g-avatar').src=u.picture||'';
         document.getElementById('g-uname').textContent=u.given_name||u.name||'';
         document.getElementById('g-user-badge').style.display='flex';
+        // Sauvegarder le prénom pour les notes
+        localStorage.setItem('idx_user_name', u.given_name||u.name||'Moi');
         // Transmettre token au module Drive
         gdToken=idxToken; gdTokenExpiry=idxTokenExpiry;
       }catch(e){}
@@ -1601,11 +1619,48 @@ async function fetchSea(dest){
 // ═══ CURRENCY ════════════════════════════════
 let curRates={EUR:35.5,USD:33.0},curMode='EUR';
 async function fetchRates(){
-  try{const r=await fetch('https://api.exchangerate-api.com/v4/latest/THB'),d=await r.json();curRates.EUR=1/d.rates.EUR;curRates.USD=1/d.rates.USD;document.getElementById('cur-rate').textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;}
-  catch(e){document.getElementById('cur-rate').textContent=`Taux indicatifs : 1 EUR ≈ ${curRates.EUR} THB · 1 USD ≈ ${curRates.USD} THB`;}
+  try{
+    const r=await fetch('https://api.exchangerate-api.com/v4/latest/THB');
+    if(!r.ok)throw new Error();
+    const d=await r.json();
+    curRates.EUR=1/d.rates.EUR;curRates.USD=1/d.rates.USD;
+    localStorage.setItem('cached_rates',JSON.stringify({EUR:curRates.EUR,USD:curRates.USD,ts:Date.now()}));
+    const el=document.getElementById('cur-rate');
+    if(el)el.textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;
+  }catch(e){
+    // Utiliser le cache si disponible
+    const cached=localStorage.getItem('cached_rates');
+    if(cached){
+      const c=JSON.parse(cached);
+      curRates.EUR=c.EUR;curRates.USD=c.USD;
+      const age=Math.round((Date.now()-c.ts)/3600000);
+      const el=document.getElementById('cur-rate');
+      if(el)el.textContent=`Taux indicatifs (mis à jour il y a ${age}h) : 1 EUR ≈ ${curRates.EUR.toFixed(1)} THB`;
+    } else {
+      const el=document.getElementById('cur-rate');
+      if(el)el.textContent=`Taux indicatifs : 1 EUR ≈ ${curRates.EUR} THB · 1 USD ≈ ${curRates.USD} THB`;
+    }
+  }
 }
-function setCur(m,b){curMode=m;document.querySelectorAll('.cur-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const rl={EUR:'EUR',USD:'USD',THB:'THB'},rr={EUR:'THB',USD:'THB',THB:'EUR'};document.getElementById('cur-from').textContent=rl[m];document.getElementById('cur-res-lbl').textContent=rr[m];convertCur();}
-function convertCur(){const v=parseFloat(document.getElementById('cur-in').value)||0;let res;if(curMode==='EUR')res=v*curRates.EUR;else if(curMode==='USD')res=v*curRates.USD;else res=v/curRates.EUR;document.getElementById('cur-res').textContent=res>0?Math.round(res).toLocaleString('fr-FR'):'—';}
+function setCur(m,b){
+  curMode=m;
+  document.querySelectorAll('.cur-tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const labels={EUR:'EUR',USD:'USD',THB:'THB',THB_USD:'THB'};
+  const results={EUR:'THB',USD:'THB',THB:'EUR',THB_USD:'USD'};
+  document.getElementById('cur-from').textContent=labels[m]||m;
+  document.getElementById('cur-res-lbl').textContent=results[m]||'THB';
+  convertCur();
+}
+function convertCur(){
+  const v=parseFloat(document.getElementById('cur-in').value)||0;
+  let res=0;
+  if(curMode==='EUR') res=v*curRates.EUR;
+  else if(curMode==='USD') res=v*curRates.USD;
+  else if(curMode==='THB') res=v/curRates.EUR;
+  else if(curMode==='THB_USD') res=v/curRates.USD;
+  document.getElementById('cur-res').textContent=res>0?res.toLocaleString('fr-FR',{maximumFractionDigits:curMode.includes('THB')?0:2}):'—';
+}
 
 // ═══ TRANSLATOR ══════════════════════════════
 let tMode='text',tDir='fr-th',lastTrans='',lastVoice='',recog=null,isRec=false;
@@ -1756,26 +1811,31 @@ async function gsSave(type, key, value) {
 
 async function gsLoad() {
   try {
-    const r = await fetch(GS_URL+'?t='+Date.now()); // cache-busting
+    const r = await fetch(GS_URL+'?t='+Date.now());
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d = await r.json();
     if (!d.data) return false;
+    // Dédupliquer — garder la DERNIÈRE valeur par (type+key)
+    const latest={};
+    d.data.forEach(row=>{
+      const type=row.type||row.B;
+      const key=row.key||row.C;
+      const value=row.value||row.D;
+      if(!type||!key)return;
+      latest[type+'::'+key]={type,key,value};
+    });
     const acts={}, notes={};
-    d.data.forEach(row => {
-      const type = row.type || row.B;
-      const key  = row.key  || row.C;
-      const value= row.value|| row.D;
-      if (!key) return;
-      if (type==='activity') acts[key] = value==='true';
-      if (type==='note') notes[key] = value;
+    Object.values(latest).forEach(({type,key,value})=>{
+      if(type==='activity') acts[key]=value==='true';
+      if(type==='note') notes[key]=value;
     });
     const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
     const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');
-    localStorage.setItem('activities', JSON.stringify({...acts,...localActs}));
-    localStorage.setItem('daynotes', JSON.stringify({...notes,...localNotes}));
+    localStorage.setItem('activities',JSON.stringify({...acts,...localActs}));
+    localStorage.setItem('daynotes',JSON.stringify({...notes,...localNotes}));
     return true;
   } catch(e) {
-    console.warn('GS load error:', e);
+    console.warn('GS load error:',e);
     return false;
   }
 }
@@ -1785,29 +1845,86 @@ function saveActs(d){
   localStorage.setItem('activities',JSON.stringify(d));
 }
 function getNotes(){return JSON.parse(localStorage.getItem('daynotes')||'{}');}
-function saveNotes(d){
-  localStorage.setItem('daynotes',JSON.stringify(d));
+function saveNotes(d){localStorage.setItem('daynotes',JSON.stringify(d));}
+
+function getDayNotes(dk,i){
+  const key=`note-${dk}-${i}`;
+  const raw=getNotes()[key];
+  if(!raw)return[];
+  if(typeof raw==='string')return raw.trim()?[{id:'legacy',text:raw,author:'Moi',time:''}]:[];
+  return Array.isArray(raw)?raw:[];
 }
+
 function toggleAct(key){
   const el=document.getElementById(key),saved=getActs();
   el.classList.toggle('done');
   saved[key]=el.classList.contains('done');
   saveActs(saved);
-  gsSave('activity', key, saved[key]);
+  gsSave('activity',key,saved[key]);
 }
+
 function saveNote(dk,i){
-  const key=`note-${dk}-${i}`,val=document.getElementById(`ni-${dk}-${i}`).value,saved=getNotes();
-  saved[key]=val;
+  const val=document.getElementById(`ni-${dk}-${i}`).value.trim();
+  if(!val)return;
+  const key=`note-${dk}-${i}`;
+  const saved=getNotes();
+  const existing=getDayNotes(dk,i);
+  const userName=localStorage.getItem('idx_user_name')||'Moi';
+  const time=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
+  existing.push({id:'n'+Date.now(),text:val,author:userName,time});
+  saved[key]=existing;
   saveNotes(saved);
-  gsSave("note", key, val);
-  // Afficher dans la liste "ce quon a fait"
+  gsSave('note',key,JSON.stringify(existing));
+  document.getElementById(`ni-${dk}-${i}`).value='';
+  document.getElementById(`ni-${dk}-${i}`).rows=3;
+  renderNotesList(dk,i);
+  renderNotesInActs(dk,i,existing);
+  toast('✅ Note sauvegardée !');
+}
+
+function deleteNote(dk,i,noteId){
+  const key=`note-${dk}-${i}`;
+  const saved=getNotes();
+  const notes=getDayNotes(dk,i).filter(n=>n.id!==noteId);
+  saved[key]=notes;
+  saveNotes(saved);
+  gsSave('note',key,JSON.stringify(notes));
+  renderNotesList(dk,i);
+  renderNotesInActs(dk,i,notes);
+}
+
+function editNote(dk,i,noteId){
+  const note=getDayNotes(dk,i).find(n=>n.id===noteId);
+  if(!note)return;
+  const inp=document.getElementById(`ni-${dk}-${i}`);
+  inp.value=note.text;
+  inp.rows=Math.max(3,note.text.split('\n').length+1);
+  inp.focus();
+  deleteNote(dk,i,noteId);
+}
+
+function renderNotesList(dk,i){
+  const el=document.getElementById(`notes-list-${dk}-${i}`);
+  if(!el)return;
+  const notes=getDayNotes(dk,i);
+  if(!notes.length){el.innerHTML='';return;}
+  el.innerHTML=notes.map(n=>`<div class="note-item">
+    <div class="note-item-header">
+      <span class="note-item-author">✍️ ${n.author}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="note-item-time">${n.time}</span>
+        <button class="note-act" onclick="editNote('${dk}',${i},'${n.id}')">✏️</button>
+        <button class="note-act note-act-del" onclick="deleteNote('${dk}',${i},'${n.id}')">🗑</button>
+      </div>
+    </div>
+    <div class="note-item-text">${n.text.replace(/\n/g,'<br>')}</div>
+  </div>`).join('');
+}
+
+function renderNotesInActs(dk,i,notes){
   const ac=document.getElementById(`notes-acts-${dk}-${i}`);
-  if(ac&&val.trim()){
-    const t=new Intl.DateTimeFormat("fr-FR",{timeZone:"Asia/Bangkok",hour:"2-digit",minute:"2-digit"}).format(new Date());
-    ac.innerHTML=val.split("\n").filter(l=>l.trim()).map(l=>`<div class="act-note-item">📝 ${l}<div class="act-note-time">Ajouté à ${t} (heure TH)</div></div>`).join("");
-  }
-  const b=document.querySelector(`#card-${dk}-${i} .notes-save`);
-  if(b){b.className="notes-saved";b.textContent="✓ Sauvegardé";setTimeout(()=>{b.className="notes-save";b.textContent="Sauvegarder";},2000);}
+  if(!ac)return;
+  ac.innerHTML=notes.map(n=>`<div class="act-note-item">📝 ${n.text}<div class="act-note-time">Par ${n.author}${n.time?' · '+n.time:''}</div></div>`).join('');
 }
 
 // ═══ RENDER DAYS ═════════════════════════════
@@ -1857,8 +1974,14 @@ function renderDays(days,cid,dk){
     <div id="notes-acts-${dk}-${i}"></div>
     </div>`:'';
 
-    // Notes — textarea auto-expand + ajout à la liste ce qu'on a fait
-    const notesH=`<div class="notes-section"><div class="notes-lbl">📝 Notes & souvenirs</div><textarea class="notes-input" id="ni-${dk}-${i}" rows="${sn?Math.max(3,sn.split('\n').length+1):3}" placeholder="On a aussi découvert… le resto était… les enfants ont adoré…" oninput="this.rows=Math.max(3,this.value.split('\\n').length+1)">${sn}</textarea><button class="notes-save" onclick="saveNote('${dk}',${i})">Sauvegarder</button><div class="cf"></div></div>`;
+    // Notes — liste avec auteur + nouvelle note
+    const notesH=`<div class="notes-section">
+      <div class="notes-lbl">📝 Notes & souvenirs</div>
+      <div id="notes-list-${dk}-${i}"></div>
+      <textarea class="notes-input" id="ni-${dk}-${i}" rows="2" placeholder="Ajouter une note ou un souvenir…" oninput="this.rows=Math.max(2,this.value.split('\\n').length+1)"></textarea>
+      <button class="notes-save" onclick="saveNote('${dk}',${i})">+ Ajouter</button>
+      <div class="cf"></div>
+    </div>`;
 
     // Timeline items with uniform info-row for address + duration
     const tlH=day.items.map(it=>{
@@ -1931,11 +2054,7 @@ function renderPrat(){
   if(emEl) emEl.innerHTML=DATA.urgences.map(u=>`<div class="em-card"><div><div class="em-name">${u.n}</div>${u.note?`<div class="em-note">${u.note}</div>`:''}</div><a class="call-btn" href="tel:${u.num}">📞 ${u.num}</a></div>`).join('');
 
   // Phrases
-  const phEl=document.getElementById('phrases');
-  if(phEl){
-    const cats=[...new Set(DATA.phrases.map(p=>p.c))];
-    phEl.innerHTML=cats.map(cat=>`<div style="margin-bottom:3px"><div style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${cat}</div>${DATA.phrases.filter(p=>p.c===cat).map(p=>`<div class="ph-item"><div class="ph-fr">${p.f}</div><div class="ph-th">${p.t}</div><button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button><button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button></div>`).join('')}</div>`).join('');
-  }
+  renderPhrases();
 
   // Bag
   const bagEl=document.getElementById('bag-list');
@@ -1974,10 +2093,34 @@ function schedNotifs(){
 
 // ═══ PDF RECAP ════════════════════════════════
 async function makeRecap(){
+  toast('⏳ Génération du PDF en cours…');
+  await new Promise(r=>setTimeout(r,100)); // laisser le toast s'afficher
+
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const acts=getActs(), notes=getNotes(), photos=getPhotos();
   const W=210, M=18;
+
+  // ── Charger toutes les photos en base64 via fetch+canvas ──
+  async function loadImgBase64(url){
+    try{
+      // Fetch avec token si URL Drive proxy
+      const headers={};
+      if(url.includes('workers.dev')&&gdToken) headers['Authorization']='Bearer '+gdToken;
+      const r=await fetch(url,{headers});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const blob=await r.blob();
+      return new Promise((res,rej)=>{
+        const reader=new FileReader();
+        reader.onload=()=>res(reader.result);
+        reader.onerror=rej;
+        reader.readAsDataURL(blob);
+      });
+    }catch(e){
+      console.warn('Photo PDF error:',e.message,url);
+      return null;
+    }
+  }
 
   // ── COUVERTURE ──────────────────────────────
   doc.setFillColor(232,115,74);
@@ -1987,7 +2130,7 @@ async function makeRecap(){
   doc.setFontSize(13);doc.setFont('helvetica','normal');
   doc.text('Journal de voyage — Famille',W/2,40,{align:'center'});
   doc.setFontSize(10);doc.setTextColor(255,220,160);
-  doc.text(`Bangkok · Chiang Mai · Koh Tao · Koh Samui`,W/2,50,{align:'center'});
+  doc.text('Bangkok · Chiang Mai · Koh Tao · Koh Samui',W/2,50,{align:'center'});
   doc.setFontSize(9);doc.setTextColor(200,180,160);
   doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`,W/2,57,{align:'center'});
 
@@ -2003,11 +2146,13 @@ async function makeRecap(){
   const addPage=()=>{doc.addPage();y=20;};
   const checkY=(h=20)=>{if(y+h>282)addPage();};
 
-  allDays.forEach(day=>{
+  for(const day of allDays){
     const doneActs=(day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]);
-    const note=notes[`note-${day.key}`]||'';
+    // Notes — nouveau format (tableau) ou ancien (string)
+    const rawNote=notes[`note-${day.key}`];
+    const dayNotes=Array.isArray(rawNote)?rawNote:(rawNote&&rawNote.trim()?[{text:rawNote,author:''}]:[]);
     const dayPhotos=photos.filter(p=>p.dayKey===day.key);
-    if(!doneActs.length&&!note&&!dayPhotos.length)return;
+    if(!doneActs.length&&!dayNotes.length&&!dayPhotos.length)continue;
 
     checkY(18);
     const [r,g,b]=destColors[day.dk]||[100,100,100];
@@ -2018,7 +2163,8 @@ async function makeRecap(){
     doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
     doc.text(`${day.date}`,M+4,y+7);
     doc.setFont('helvetica','normal');doc.setFontSize(9);
-    doc.text(day.title,M+4+doc.getTextWidth(day.date)+4,y+7);
+    const titleX=M+4+doc.getTextWidth(day.date)+4;
+    doc.text(day.title,titleX,y+7,{maxWidth:W-M*2-titleX+M-4});
     y+=13;
 
     // Activités cochées
@@ -2033,58 +2179,82 @@ async function makeRecap(){
       });
     }
 
-    // Note
-    if(note){
+    // Notes & souvenirs (avec auteur)
+    if(dayNotes.length){
       checkY(8);
       doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
       doc.text('NOTES & SOUVENIRS :',M+3,y);y+=4;
-      doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');
-      const lines=doc.splitTextToSize(note,W-M*2-8);
-      lines.forEach(l=>{checkY(5);doc.text(l,M+6,y);y+=4.5;});
+      dayNotes.forEach(n=>{
+        checkY(5);
+        if(n.author){
+          doc.setTextColor(r,g,b);doc.setFontSize(7);doc.setFont('helvetica','bold');
+          doc.text(`${n.author} :`,M+6,y);y+=3.5;
+        }
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');doc.setFontSize(8);
+        const lines=doc.splitTextToSize(n.text,W-M*2-10);
+        lines.forEach(l=>{checkY(5);doc.text(l,M+6,y);y+=4.5;});
+      });
     }
 
-    // Photos (miniatures 3 par ligne)
+    // Photos — chargées via fetch+canvas
     if(dayPhotos.length){
       checkY(35);
       doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
       doc.text('PHOTOS :',M+3,y);y+=4;
       const imgW=(W-M*2-8)/3;
       let ix=0;
+      let rowStartY=y;
+
       for(const p of dayPhotos.slice(0,6)){
-        try{
-          const x=M+4+(ix%3)*(imgW+2);
-          if(ix%3===0&&ix>0)y+=30;
-          checkY(30);
-          // Charger l'image depuis l'URL
-          const img=new Image();img.crossOrigin='anonymous';
-          // Pour le PDF, on utilise une représentation canvas
-          doc.addImage(p.url,'JPEG',x,y,imgW,25);
-          if(p.caption){
-            doc.setFontSize(6);doc.setTextColor(100,100,100);
-            doc.text(p.caption.substring(0,25),x,y+27,{maxWidth:imgW});
+        const col=ix%3;
+        if(col===0&&ix>0){y+=30;rowStartY=y;}
+        checkY(30);
+        const x=M+4+col*(imgW+2);
+
+        const b64=await loadImgBase64(p.url);
+        if(b64){
+          try{
+            const fmt=b64.includes('png')?'PNG':'JPEG';
+            doc.addImage(b64,fmt,x,y,imgW,25);
+          }catch(e){
+            // Photo invalide — placeholder
+            doc.setFillColor(240,235,228);
+            doc.rect(x,y,imgW,25,'F');
+            doc.setFontSize(6);doc.setTextColor(180,160,140);
+            doc.text('📷',x+imgW/2,y+14,{align:'center'});
           }
-          ix++;
-        }catch(e){}
+        } else {
+          // Placeholder si photo non chargée
+          doc.setFillColor(240,235,228);
+          doc.rect(x,y,imgW,25,'F');
+          doc.setFontSize(6);doc.setTextColor(180,160,140);
+          doc.text('📷',x+imgW/2,y+14,{align:'center'});
+        }
+
+        if(p.caption){
+          doc.setFontSize(5.5);doc.setTextColor(100,100,100);
+          doc.text(p.caption.substring(0,28),x,y+27,{maxWidth:imgW});
+        }
+        ix++;
       }
-      if(dayPhotos.length>0)y+=32;
+      y+=32;
     }
 
     y+=4;
-    // Ligne séparatrice légère
     doc.setDrawColor(220,210,200);doc.line(M,y,W-M,y);y+=5;
-  });
+  }
 
   // ── RÉSUMÉ FINAL ──────────────────────────
   checkY(30);
   doc.setFillColor(61,43,31);
   doc.rect(M,y,W-M*2,22,'F');
   doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
-  doc.text('Thaïlande 2026 — Un voyage inoubliable 🇹🇭',W/2,y+8,{align:'center'});
+  doc.text('Thaïlande 2026 — Un voyage inoubliable',W/2,y+8,{align:'center'});
   doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(212,168,83);
   const totalActs=Object.values(acts).filter(Boolean).length;
-  const totalNotes=Object.values(notes).filter(n=>n.trim()).length;
   const totalPhotos=photos.length;
-  doc.text(`${totalActs} activités · ${totalNotes} notes · ${totalPhotos} photos`,W/2,y+15,{align:'center'});
+  const totalNotes=photos.length>0?photos.length:0;
+  doc.text(`${totalActs} activités · ${totalPhotos} photos`,W/2,y+15,{align:'center'});
 
   doc.save('Thailande2026_souvenir.pdf');
   toast('✅ PDF souvenir généré !');
@@ -2372,7 +2542,9 @@ function rmFile(i){pendingFiles.splice(i,1);handleFiles([]);}
 function openLb(dayKey,idx){
   const photos=getPhotos().filter(p=>p.dayKey===dayKey);
   if(!photos.length)return;
-  lbPhotos=photos;lbIdx=idx;showLb();
+  lbPhotos=photos;
+  lbIdx=Math.min(idx,photos.length-1);
+  showLb();
   document.getElementById('lb').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -2509,11 +2681,12 @@ function renderHistoMeteo(){
     el.innerHTML=DATA.histoMeteo.map(h=>`
       <div class="histo-card">
         <div class="histo-dest">${h.dest} <span style="font-size:20px">${h.emoji}</span></div>
-        <div class="histo-grid">
+        <div class="histo-grid" style="grid-template-columns:repeat(${h.mer?'5':'4'},1fr)">
           <div class="histo-stat"><div class="histo-val">${h.temp}</div><div class="histo-lbl">Temp. max</div></div>
           <div class="histo-stat"><div class="histo-val">${h.nuit}</div><div class="histo-lbl">Nuit</div></div>
           <div class="histo-stat"><div class="histo-val">${h.pluie}</div><div class="histo-lbl">Jours pluie</div></div>
           <div class="histo-stat"><div class="histo-val">${h.humidite}</div><div class="histo-lbl">Humidité</div></div>
+          ${h.mer?`<div class="histo-stat"><div class="histo-val" style="color:var(--turq)">${h.mer}</div><div class="histo-lbl">🌊 Mer</div></div>`:''}
         </div>
         <div style="font-size:11px;color:var(--brown-mid);margin-top:7px;font-style:italic">${h.note}</div>
       </div>`).join('');
@@ -2554,11 +2727,35 @@ function renderJournal(){
 }
 
 // ═══ INIT ══════════════════════════════════════
+// ═══ MIGRATION NOTES ANCIEN FORMAT ══════════
+function migrateOldNotes(){
+  const saved=getNotes();
+  let changed=false;
+  Object.keys(saved).forEach(key=>{
+    if(typeof saved[key]==='string'&&saved[key].trim()){
+      saved[key]=[{id:'legacy',text:saved[key],author:'Moi',time:''}];
+      changed=true;
+    }
+  });
+  if(changed){saveNotes(saved);console.log('Notes migrées ✓');}
+}
+
+function initNotesLists(){
+  ['bkk','cm','kt','ks'].forEach(dk=>{
+    const data={bkk:DATA.bangkok,cm:DATA.chiangmai,kt:DATA.kohtao,ks:DATA.kohsamui}[dk];
+    data.forEach((_,i)=>{
+      renderNotesList(dk,i);
+      renderNotesInActs(dk,i,getDayNotes(dk,i));
+    });
+  });
+}
+
 function initApp(){
   renderDays(DATA.bangkok,'days-bkk','bkk');
   renderDays(DATA.chiangmai,'days-cm','cm');
   renderDays(DATA.kohtao,'days-kt','kt');
   renderDays(DATA.kohsamui,'days-ks','ks');
+  initNotesLists();
   renderPrat();
   renderPhotoSection();
   renderContacts();
@@ -2578,10 +2775,21 @@ function initApp(){
   setInterval(updCdown,60000);setInterval(updThaiTime,30000);
   fetchWx('bkk');wxL['bkk']=true;
   fetchRates();
-  gsLoad().then(()=>renderJournal());
+  gsLoad().then(ok=>{
+    migrateOldNotes();
+    initNotesLists();
+    renderJournal();
+    if(ok) console.log('✅ Données synchronisées depuis Google Sheets');
+  });
   schedNotifs();
 
   // Service Worker avec détection de mise à jour
+  // Détection connexion
+  const offlineBanner=document.getElementById('offline-banner');
+  window.addEventListener('offline',()=>{if(offlineBanner)offlineBanner.style.display='block';});
+  window.addEventListener('online',()=>{if(offlineBanner)offlineBanner.style.display='none';fetchWx(currentTab||'bkk');fetchRates();});
+  if(!navigator.onLine&&offlineBanner)offlineBanner.style.display='block';
+
   if('serviceWorker' in navigator){
     navigator.serviceWorker.register('sw.js').then(reg=>{
       reg.addEventListener('updatefound',()=>{
@@ -2596,7 +2804,26 @@ function initApp(){
     navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
   }
 
-  setTimeout(()=>{const f=document.querySelector('.day-card');if(f)f.classList.add('open');},100);
+  setTimeout(()=>{
+    // Ouvrir la journée du jour ou la première
+    const now=new Date();
+    const allCards=document.querySelectorAll('.day-card');
+    let opened=false;
+    // Chercher la date d'aujourd'hui dans les titres
+    const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    const todayStr=now.getDate()+' '+months[now.getMonth()];
+    allCards.forEach(card=>{
+      const dateEl=card.querySelector('.day-date');
+      if(dateEl&&dateEl.textContent.toLowerCase().includes(todayStr.toLowerCase())&&!opened){
+        card.classList.add('open');
+        const mapEl=card.querySelector('.day-map-wrap');
+        if(mapEl)setTimeout(()=>initDayMap(mapEl.id),300);
+        card.scrollIntoView({behavior:'smooth',block:'start'});
+        opened=true;
+      }
+    });
+    if(!opened&&allCards.length)allCards[0].classList.add('open');
+  },200);
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
