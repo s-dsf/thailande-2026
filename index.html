@@ -1895,19 +1895,32 @@ function toggleDayCard(id){
 
 // ═══ RENDER PRATIQUE ═════════════════════════
 function renderPrat(){
-  // Urgences
-  document.getElementById('emergencies').innerHTML=DATA.urgences.map(u=>`<div class="em-card"><div><div class="em-name">${u.n}</div>${u.note?`<div class="em-note">${u.note}</div>`:''}</div><a class="call-btn" href="tel:${u.num}">📞 ${u.num}</a></div>`).join('');
+  // Urgences (avec vérification — l'élément peut ne plus exister)
+  const emEl=document.getElementById('emergencies');
+  if(emEl) emEl.innerHTML=DATA.urgences.map(u=>`<div class="em-card"><div><div class="em-name">${u.n}</div>${u.note?`<div class="em-note">${u.note}</div>`:''}</div><a class="call-btn" href="tel:${u.num}">📞 ${u.num}</a></div>`).join('');
+
   // Phrases
-  const cats=[...new Set(DATA.phrases.map(p=>p.c))];
-  document.getElementById('phrases').innerHTML=cats.map(cat=>`<div style="margin-bottom:3px"><div style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${cat}</div>${DATA.phrases.filter(p=>p.c===cat).map(p=>`<div class="ph-item"><div class="ph-fr">${p.f}</div><div class="ph-th">${p.t}</div><button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button><button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button></div>`).join('')}</div>`).join('');
+  const phEl=document.getElementById('phrases');
+  if(phEl){
+    const cats=[...new Set(DATA.phrases.map(p=>p.c))];
+    phEl.innerHTML=cats.map(cat=>`<div style="margin-bottom:3px"><div style="font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 5px">${cat}</div>${DATA.phrases.filter(p=>p.c===cat).map(p=>`<div class="ph-item"><div class="ph-fr">${p.f}</div><div class="ph-th">${p.t}</div><button class="ph-speak" onclick="spkPhrase('${p.t}')">🔊</button><button class="ph-copy" onclick="cpyPhrase(this,'${p.t}')">Copier</button></div>`).join('')}</div>`).join('');
+  }
+
   // Bag
-  const bs=JSON.parse(localStorage.getItem('bag_checks')||'{}');
-  document.getElementById('bag-list').innerHTML=DATA.bagages.map((it,i)=>{const k=`bag-${i}`,ch=bs[k]?'checked':'';return`<div class="ck-item ${ch}" onclick="toggleBag(this,'${k}')"><div class="ck-box"></div><div><div class="ck-lbl">${it.l}</div><div class="ck-cat">${it.c}</div>${parseFloat(it.kg)>0?`<div class="ck-kg">~${it.kg} kg</div>`:''}</div></div>`;}).join('');
-  updBagProg();
+  const bagEl=document.getElementById('bag-list');
+  if(bagEl){
+    const bs=JSON.parse(localStorage.getItem('bag_checks')||'{}');
+    bagEl.innerHTML=DATA.bagages.map((it,i)=>{const k=`bag-${i}`,ch=bs[k]?'checked':'';return`<div class="ck-item ${ch}" onclick="toggleBag(this,'${k}')"><div class="ck-box"></div><div><div class="ck-lbl">${it.l}</div><div class="ck-cat">${it.c}</div>${parseFloat(it.kg)>0?`<div class="ck-kg">~${it.kg} kg</div>`:''}</div></div>`;}).join('');
+    updBagProg();
+  }
+
   // Vaccins
-  document.getElementById('vaccins').innerHTML=DATA.vaccins.map(v=>`<div class="info-card"><div class="info-title">${v.n}<span class="badge ${v.s==='green'?'b-green':v.s==='grey'?'b-grey':'b-orange'}">${v.s==='green'?'Recommandé':v.s==='grey'?'Optionnel':'À vérifier'}</span></div><div class="info-body">${v.r}</div></div>`).join('');
+  const vacEl=document.getElementById('vaccins');
+  if(vacEl) vacEl.innerHTML=DATA.vaccins.map(v=>`<div class="info-card"><div class="info-title">${v.n}<span class="badge ${v.s==='green'?'b-green':v.s==='grey'?'b-grey':'b-orange'}">${v.s==='green'?'Recommandé':v.s==='grey'?'Optionnel':'À vérifier'}</span></div><div class="info-body">${v.r}</div></div>`).join('');
+
   // Apps
-  document.getElementById('apps').innerHTML=DATA.apps.map(a=>`<div class="app-item"><div class="app-icon">${a.i}</div><div><div class="app-name">${a.n}</div><div class="app-desc">${a.d}</div><span class="app-bdg ${a.off?'app-off':'app-on'}">${a.off?'✓ Offline':'Connexion requise'}</span></div></div>`).join('');
+  const appsEl=document.getElementById('apps');
+  if(appsEl) appsEl.innerHTML=DATA.apps.map(a=>`<div class="app-item"><div class="app-icon">${a.i}</div><div><div class="app-name">${a.n}</div><div class="app-desc">${a.d}</div><span class="app-bdg ${a.off?'app-off':'app-on'}">${a.off?'✓ Offline':'Connexion requise'}</span></div></div>`).join('');
 }
 
 // ═══ BAG ══════════════════════════════════════
