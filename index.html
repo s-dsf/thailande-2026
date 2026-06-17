@@ -1734,9 +1734,12 @@ async function gsLoad() {
     if (!d.data) return false;
     const acts={}, notes={};
     d.data.forEach(row => {
-      if (!row.key) return;
-      if (row.type==='activity') acts[row.key] = row.value==='true';
-      if (row.type==='note') notes[row.key] = row.value;
+      const type = row.type || row.B;
+      const key  = row.key  || row.C;
+      const value= row.value|| row.D;
+      if (!key) return;
+      if (type==='activity') acts[key] = value==='true';
+      if (type==='note') notes[key] = value;
     });
     const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
     const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');

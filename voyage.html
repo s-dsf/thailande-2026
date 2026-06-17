@@ -492,25 +492,30 @@ async function loadPhotos(){
     if(!d.data){console.warn('Pas de données');return{};}
     const photos={};
     d.data.forEach(row=>{
-      // Lire aussi le type photos_voyage (liste complète)
-      if(row.type==='photos_voyage'&&row.key==='all_photos'&&row.value){
+      // Les données ont les clés A,B,C,D,E (colonnes Sheet)
+      const type = row.type || row.B;
+      const key  = row.key  || row.C;
+      const value= row.value|| row.D;
+
+      // Lire les lignes photos_voyage (liste complète)
+      if(type==='photos_voyage' && key==='all_photos' && value){
         try{
-          const list=JSON.parse(row.value);
+          const list=JSON.parse(value);
           list.forEach(p=>{
             if(p.diff==='priv')return;
             const dayKey=p.dayKey;
             if(!dayKey)return;
             if(!photos[dayKey])photos[dayKey]=[];
-            // Éviter les doublons
             if(!photos[dayKey].find(x=>x.id===p.id))
               photos[dayKey].push(p);
           });
         }catch(e){console.warn('photos_voyage parse error:',e.message);}
       }
-      // Lire aussi les lignes individuelles type=photo
-      if(row.type==='photo'&&row.key&&row.value){
+
+      // Lire les lignes individuelles type=photo
+      if(type==='photo' && key && value){
         try{
-          const p=JSON.parse(row.value);
+          const p=JSON.parse(value);
           if(p.diff==='priv')return;
           const dayKey=p.dayKey;
           if(!dayKey)return;
