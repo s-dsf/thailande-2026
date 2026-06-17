@@ -2144,21 +2144,21 @@ function getPhotos(){return JSON.parse(localStorage.getItem('trip_photos')||'[]'
 function savePhotosMeta(p){localStorage.setItem('trip_photos',JSON.stringify(p));}
 
 async function uploadToDrive(file,caption,destKey,dayKey,diff){
-  // Vérifier/renouveler le token avant upload
   const ok=await ensureGdToken();
   if(!ok)throw new Error('Token Google Drive expiré — reconnectez-vous');
   const meta={name:file.name,parents:[GD_FOLDER_ID],description:JSON.stringify({caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()})};
   const form=new FormData();
   form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
   form.append('file',file);
-  const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webContentLink,webViewLink',{
+  const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{
     method:'POST',headers:{Authorization:'Bearer '+gdToken},body:form
   });
   const d=await r.json();
   if(!d.id) throw new Error('Upload Drive échoué: '+JSON.stringify(d));
-  // NE PAS rendre public — les photos restent privées dans Drive
-  // L'accès se fait via le token OAuth de chaque utilisateur connecté sur voyage.html
-  const imgUrl=`https://drive.google.com/uc?export=view&id=${d.id}`;
+
+  // Photo reste PRIVÉE dans Drive
+  // L'URL passe par le Worker Cloudflare qui authentifie via Service Account
+  const imgUrl=`https://claude-proxy-thailande.s-desferet.workers.dev/photo?id=${d.id}`;
   return{id:d.id,url:imgUrl,caption,destKey,dayKey,diff,uploadedAt:new Date().toISOString()};
 }
 
