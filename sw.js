@@ -1,5 +1,5 @@
-const CACHE = 'thailand-2026-v5';
-const ASSETS = ['/', '/index.html', '/voyage.html'];
+const CACHE = 'thailand-2026-v8';
+const ASSETS = ['/', '/index.html', '/voyage.html', '/docx.umd.js'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -23,7 +23,6 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// Message pour forcer la mise à jour
 self.addEventListener('message', e => {
   if (e.data === 'skipWaiting') self.skipWaiting();
 });
