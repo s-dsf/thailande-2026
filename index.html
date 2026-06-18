@@ -2739,15 +2739,14 @@ async function makeRecap(){
     }],
   });
 
-  const buf=await Packer.toBuffer(doc);
-  const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
-  const url=URL.createObjectURL(blob);
+  // toBase64String fonctionne dans tous les navigateurs
+  const b64=await Packer.toBase64String(doc);
   const a=document.createElement('a');
-  a.href=url;a.download='Thailande2026_souvenir.docx';
+  a.href='data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,'+b64;
+  a.download='Thailande2026_souvenir.docx';
   document.body.appendChild(a);a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  toast('✅ Document Word téléchargé !');
+  setTimeout(()=>document.body.removeChild(a),100);
+  toast('✅ Journal Word téléchargé !');
 }
 
 
