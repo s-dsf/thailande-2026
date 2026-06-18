@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#E8734A">
+<meta name="app-version" content="2.1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Thaïlande 2026">
 <title>Thaïlande 2026 — Guide Famille</title>
@@ -1730,7 +1731,7 @@ function getAddrTh(addr){
 }
 
 // ═══ CURRENCY ════════════════════════════════
-let curRates={EUR:38.0,USD:32.5},curMode='EUR';
+let curRates={EUR:38.0,USD:32.5},curMode='THB';
 async function fetchRates(){
   try{
     const cached=localStorage.getItem('cached_rates');
@@ -2330,217 +2331,361 @@ function filterPhrases(q){
 }
 
 // ═══ NOTIFICATIONS ════════════════════════════
+// Stratégie : vérification au chargement + toutes les heures
+// (setTimeout ne survit pas à la fermeture du navigateur)
+const NOTIF_EVENTS=[
+  {d:'2026-07-20',h:8,  m:'📦 J-1 départ ! Vérifiez les valises, passeports et assurances.'},
+  {d:'2026-07-21',h:5,  m:'✈ Aujourd\'hui : départ Paris CDG → Bangkok ! Vol 07h20.'},
+  {d:'2026-07-25',h:7,  m:'✈ Aujourd\'hui : vol Bangkok → Chiang Mai à 10h15. Check-out avant 11h !'},
+  {d:'2026-07-26',h:7,  m:'🐘 Aujourd\'hui : sanctuaire d\'éléphants ! Départ 08h00.'},
+  {d:'2026-07-29',h:7,  m:'✈ Aujourd\'hui : vol CNX → Surat Thani à 10h40. Check-out avant 10h !'},
+  {d:'2026-07-30',h:6,  m:'🐢 Ce matin : Shark Bay ! Partir avant 08h pour voir les tortues.'},
+  {d:'2026-08-01',h:8,  m:'🚢 Aujourd\'hui : ferry Mae Haad → Koh Samui à 11h30. Check-out avant 10h !'},
+  {d:'2026-08-05',h:11, m:'✈ Aujourd\'hui : vol Koh Samui → Bangkok à 14h30. Check-out matin.'},
+  {d:'2026-08-06',h:7,  m:'✈ Vol retour Bangkok → Paris CDG à 11h25. Dernier jour en Thaïlande !'},
+];
+
+function checkAndShowNotifs(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  // Heure locale Thaïlande (UTC+7)
+  const now=new Date();
+  const thaiNow=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Bangkok'}));
+  const todayStr=thaiNow.toISOString().slice(0,10); // YYYY-MM-DD
+  const todayH=thaiNow.getHours();
+
+  const shown=JSON.parse(localStorage.getItem('notifs_shown')||'{}');
+
+  NOTIF_EVENTS.forEach(ev=>{
+    const key=`${ev.d}-${ev.h}`;
+    if(shown[key])return; // déjà montrée
+    if(ev.d!==todayStr)return; // pas aujourd'hui
+    if(todayH<ev.h)return; // pas encore l'heure
+    // Montrer la notification
+    try{
+      new Notification('🇹🇭 Thaïlande 2026',{
+        body:ev.m,
+        icon:'/thailande-2026/icon-192.png',
+        badge:'/thailande-2026/icon-192.png',
+        tag:key,
+        renotify:false,
+      });
+      shown[key]=Date.now();
+      localStorage.setItem('notifs_shown',JSON.stringify(shown));
+    }catch(e){console.warn('Notif error',e);}
+  });
+}
+
 function schedNotifs(){
   if(!('Notification' in window))return;
   Notification.requestPermission().then(p=>{
     if(p!=='granted')return;
-    [{d:'2026-07-25T08:30:00',m:'✈ Aujourd\'hui : vol Bangkok → Chiang Mai à 10h15. Check-out avant 11h !'},{d:'2026-07-26T07:30:00',m:'🐘 Aujourd\'hui : sanctuaire d\'éléphants ! 08h00.'},{d:'2026-07-29T08:00:00',m:'✈ Aujourd\'hui : vol CNX → Surat Thani à 10h40. Check-out avant 10h !'},{d:'2026-07-30T07:00:00',m:'🐢 Ce matin : Shark Bay ! Partir avant 08h pour voir les tortues.'},{d:'2026-08-01T09:00:00',m:'🚢 Aujourd\'hui : ferry Mae Haad → Koh Samui à 11h30. Check-out avant 10h !'},{d:'2026-08-05T12:00:00',m:'✈ Aujourd\'hui : vol Koh Samui → Bangkok à 14h30.'},{d:'2026-08-06T08:00:00',m:'✈ Aujourd\'hui : vol retour Bangkok → Paris CDG à 11h25 !'}]
-    .forEach(r=>{const t=new Date(r.d)-new Date();if(t>0)setTimeout(()=>new Notification('🇹🇭 Thaïlande 2026',{body:r.m}),t);});
+    // Vérification immédiate puis toutes les heures
+    checkAndShowNotifs();
+    setInterval(checkAndShowNotifs,60*60*1000);
   });
 }
 
 // ═══ PDF RECAP ════════════════════════════════
 async function makeRecap(){
   toast('⏳ Génération du PDF en cours…');
-  await new Promise(r=>setTimeout(r,100)); // laisser le toast s'afficher
-
+  await new Promise(r=>setTimeout(r,100));
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const acts=getActs(), notes=getNotes(), photos=getPhotos();
-  const W=210, M=18;
+  const acts=getActs(),notes=getNotes(),photos=getPhotos();
+  const W=210,H=297;
 
-  // ── Charger toutes les photos en base64 via fetch+canvas ──
-  async function loadImgBase64(url){
-    // Méthode canvas — contourne les restrictions CORS de jsPDF
-    return new Promise((resolve)=>{
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
+  // Couleurs
+  const CORAL=[232,115,74],CORAL_DK=[200,90,50],CORAL_LT=[252,236,228];
+  const GREEN=[91,140,90],GREEN_LT=[234,244,234];
+  const TURQ=[43,191,179],TURQ_LT=[229,249,248];
+  const GOLD=[212,168,83],GOLD_LT=[245,230,195];
+  const BROWN=[61,43,31],BROWN_MID=[122,92,71];
+  const SAND=[255,248,240],SAND_MID=[245,237,222];
+  const WHITE=[255,255,255],GREY=[160,150,140],GREY_LT=[230,222,214];
+
+  // Helpers
+  function fr(x,y,w,h,c){doc.setFillColor(...c);doc.rect(x,y,w,h,'F');}
+  function rr(x,y,w,h,r,c){doc.setFillColor(...c);doc.roundedRect(x,y,w,h,r,r,'F');}
+  function sf(style,size,color){doc.setFont('helvetica',style);doc.setFontSize(size);if(color)doc.setTextColor(...color);}
+  function ln(x1,y1,x2,y2,c,w){doc.setDrawColor(...(c||GREY_LT));doc.setLineWidth(w||0.3);doc.line(x1,y1,x2,y2);}
+  function orn(cx,y,hw){ln(cx-hw,y,cx-4,y,GOLD,0.5);ln(cx+4,y,cx+hw,y,GOLD,0.5);doc.setFillColor(...GOLD);doc.circle(cx,y,1.2,'F');}
+  // Nettoyer emojis et chars spéciaux pour jsPDF (helvetica = latin seulement)
+  function clean(s){
+    if(!s)return '';
+    return s.replace(/[\u{1F000}-\u{1FFFF}]/gu,'')
+            .replace(/[\u2600-\u27FF]/g,'')
+            .replace(/[\u{1F300}-\u{1F9FF}]/gu,'')
+            .replace(/[✈🐘🐢🚢🏙🌿🐠🌴🛕🏛🚤🎢🛍🐋🌊🎭🔥💧🙏🌅⛰🗺📍⚠️✅📌✅🌤📷❌]/g,'')
+            .replace(/\s+/g,' ').trim();
+  }
+
+  // Collecter notes réelles
+  function getDayNotesPDF(dayKey){
+    return Object.keys(notes)
+      .filter(k=>k.startsWith('note-'+dayKey+'-'))
+      .flatMap(k=>{const v=notes[k];return Array.isArray(v)?v:(v&&v.trim?[{text:v,author:''}]:[]);})
+      .filter(n=>n.text&&n.text.trim());
+  }
+
+  // ══════════════════════════════════════════════
+  // PAGE DE GARDE
+  // ══════════════════════════════════════════════
+  fr(0,0,W,H,SAND);
+  // Bandes top/bottom
+  fr(0,0,W,5,CORAL); fr(0,5,W,1.2,GOLD);
+  fr(0,H-5,W,5,CORAL); fr(0,H-6.2,W,1.2,GOLD);
+
+  // Grand titre
+  sf('bold',54,BROWN);
+  doc.setCharSpace(5);
+  doc.text('THAILANDE',W/2,85,{align:'center'});
+  doc.setCharSpace(0);
+  // Tréma manuel
+  sf('bold',54,BROWN);
+  doc.text('ï',W/2+2.5,85); // jsPDF gère le latin étendu
+
+  // Re-faire correctement avec le bon caractère
+  doc.setPage(1);
+  fr(55,60,100,30,SAND); // effacer
+  sf('bold',48,BROWN);
+  doc.setCharSpace(4);
+  doc.text('THA\u00CFLANDE',W/2,83,{align:'center'});
+  doc.setCharSpace(0);
+
+  // Ornement
+  orn(W/2,90,30);
+
+  // Sous-titre
+  sf('bolditalic',15,CORAL_DK);
+  doc.text('Une parenth\u00E8se hors du temps',W/2,102,{align:'center'});
+
+  // Ligne fine
+  ln(W/2-30,107,W/2+30,107,GOLD,0.5);
+
+  // Dates
+  sf('normal',9,BROWN_MID);
+  doc.setCharSpace(2);
+  doc.text('21 JUILLET  \u2022  6 AO\u00DBT 2026',W/2,116,{align:'center'});
+  doc.setCharSpace(0);
+
+  // Destinations
+  sf('normal',8,BROWN_MID);
+  doc.setCharSpace(1.5);
+  doc.text('BANGKOK  \u2022  CHIANG MAI  \u2022  KOH TAO  \u2022  KOH SAMUI',W/2,126,{align:'center'});
+  doc.setCharSpace(0);
+
+  // Losange central déco
+  doc.setFillColor(...GOLD);
+  doc.setDrawColor(...GOLD);
+  doc.setLineWidth(0.5);
+  doc.circle(W/2,140,3,'F');
+  ln(W/2-15,140,W/2-4,140,GOLD,0.4);
+  ln(W/2+4,140,W/2+15,140,GOLD,0.4);
+
+  // Citation
+  sf('bold',18,GOLD);
+  doc.text('\u201C',W/2-28,260);
+  doc.text('\u201D',W/2+22,272);
+  sf('bolditalic',10,BROWN_MID);
+  doc.text('Les plus beaux souvenirs ne se racontent pas.',W/2,264,{align:'center'});
+  doc.text('Ils se revivent.',W/2,272,{align:'center'});
+
+  // Date génération
+  sf('normal',7,GREY);
+  doc.text('G\u00E9n\u00E9r\u00E9 le '+new Date().toLocaleDateString('fr-FR'),W/2,283,{align:'center'});
+
+  // ══════════════════════════════════════════════
+  // PAGES JOURNEES
+  // ══════════════════════════════════════════════
+  async function loadImg(url){
+    return new Promise(res=>{
+      const img=new Image();img.crossOrigin='anonymous';
+      img.onload=()=>{
         try{
-          const canvas = document.createElement('canvas');
-          const maxW = 800, maxH = 600;
-          let w = img.naturalWidth || maxW;
-          let h = img.naturalHeight || maxH;
-          if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
-          if(h > maxH){ w = Math.round(w * maxH / h); h = maxH; }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.8));
-        }catch(e){ resolve(null); }
+          const c=document.createElement('canvas');
+          let w=img.naturalWidth,h=img.naturalHeight;
+          const mx=900,my=700;
+          if(w>mx){h=Math.round(h*mx/w);w=mx;}
+          if(h>my){w=Math.round(w*my/h);h=my;}
+          c.width=w;c.height=h;
+          c.getContext('2d').drawImage(img,0,0,w,h);
+          res(c.toDataURL('image/jpeg',0.85));
+        }catch(e){res(null);}
       };
-      img.onerror = () => {
-        console.warn('Image load error:', url);
-        resolve(null);
-      };
-      img.src = url;
+      img.onerror=()=>res(null);
+      img.src=url;
     });
   }
 
-  // ── COUVERTURE ──────────────────────────────
-  doc.setFillColor(232,115,74);
-  doc.rect(0,0,W,60,'F');
-  doc.setFontSize(28);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
-  doc.text('Thaïlande 2026',W/2,28,{align:'center'});
-  doc.setFontSize(13);doc.setFont('helvetica','normal');
-  doc.text('Journal de voyage — Famille',W/2,40,{align:'center'});
-  doc.setFontSize(10);doc.setTextColor(255,220,160);
-  doc.text('Bangkok · Chiang Mai · Koh Tao · Koh Samui',W/2,50,{align:'center'});
-  doc.setFontSize(9);doc.setTextColor(200,180,160);
-  doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`,W/2,57,{align:'center'});
+  const DEST={
+    bkk:{color:CORAL,lt:CORAL_LT,label:'Bangkok'},
+    cm: {color:GREEN, lt:GREEN_LT, label:'Chiang Mai'},
+    kt: {color:TURQ,  lt:TURQ_LT,  label:'Koh Tao'},
+    ks: {color:GOLD,  lt:GOLD_LT,  label:'Koh Samui'},
+  };
 
-  let y=72;
-  const destColors={bkk:[232,115,74],cm:[91,140,90],kt:[43,191,179],ks:[212,168,83]};
   const allDays=[
-    ...DATA.bangkok.map((d,i)=>({...d,key:`bkk-${i}`,dk:'bkk',dest:'Bangkok'})),
-    ...DATA.chiangmai.map((d,i)=>({...d,key:`cm-${i}`,dk:'cm',dest:'Chiang Mai'})),
-    ...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`,dk:'kt',dest:'Koh Tao'})),
-    ...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`,dk:'ks',dest:'Koh Samui'})),
+    ...DATA.bangkok.map((d,i)=>({...d,key:'bkk-'+i,dk:'bkk'})),
+    ...DATA.chiangmai.map((d,i)=>({...d,key:'cm-'+i,dk:'cm'})),
+    ...DATA.kohtao.map((d,i)=>({...d,key:'kt-'+i,dk:'kt'})),
+    ...DATA.kohsamui.map((d,i)=>({...d,key:'ks-'+i,dk:'ks'})),
   ];
 
-  const addPage=()=>{doc.addPage();y=20;};
-  const checkY=(h=20)=>{if(y+h>282)addPage();};
+  let pageNum=0;
 
   for(const day of allDays){
-    const doneActs=(day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]);
-    // Notes — nouveau format (tableau) ou ancien (string)
-    const rawNote=notes[`note-${day.key}`];
-    const dayNotes=Array.isArray(rawNote)?rawNote:(rawNote&&rawNote.trim()?[{text:rawNote,author:''}]:[]);
+    const doneActs=(day.acts||[]).filter((_,ai)=>acts['act-'+day.key+'-'+ai]);
+    const dayNotes=getDayNotesPDF(day.key);
     const dayPhotos=photos.filter(p=>p.dayKey===day.key);
-    if(!doneActs.length&&!dayNotes.length&&!dayPhotos.length&&!(day.items&&day.items.length))continue;
+    if(!doneActs.length&&!dayNotes.length&&!dayPhotos.length)continue;
 
-    checkY(18);
-    const [r,g,b]=destColors[day.dk]||[100,100,100];
+    doc.addPage();
+    pageNum++;
+    const D=DEST[day.dk]||{color:CORAL,lt:CORAL_LT};
+    const COL=D.color,LT=D.lt;
+    const M=14,CW=(W-M*2-6)/2; // largeur colonne
+    const LX=M,RX=M+CW+6;      // x colonne gauche/droite
 
-    // Header journée
-    doc.setFillColor(r,g,b);
-    doc.roundedRect(M,y,W-M*2,10,2,2,'F');
-    doc.setFontSize(10);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
-    doc.text(`${day.date}`,M+4,y+7);
-    doc.setFont('helvetica','normal');doc.setFontSize(9);
-    const titleX=M+4+doc.getTextWidth(day.date)+4;
-    doc.text(day.title,titleX,y+7,{maxWidth:W-M*2-titleX+M-4});
-    y+=13;
+    // Fond
+    fr(0,0,W,H,SAND);
+    fr(0,0,W,3,COL); fr(0,3,W,0.8,GOLD);
+    fr(0,H-3,W,3,COL); fr(0,H-3.8,W,0.8,GOLD);
 
-    // Détail de la journée (items)
-    if(day.items&&day.items.length){
-      checkY(6);
-      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
-      doc.text('PROGRAMME :',M+3,y);y+=4;
-      day.items.forEach(it=>{
-        if(!it.n||it.n==='')return;
-        checkY(5);
-        doc.setFont('helvetica','bold');doc.setTextColor(r,g,b);doc.setFontSize(7.5);
-        if(it.t)doc.text(it.t,M+6,y);
-        doc.setFont('helvetica','normal');doc.setTextColor(60,60,60);
-        const nameX=it.t?M+6+doc.getTextWidth(it.t)+3:M+6;
-        doc.text(it.n,nameX,y,{maxWidth:W-M*2-nameX+M-4});
-        y+=4;
-        if(it.a){
-          doc.setFontSize(7);doc.setTextColor(120,120,120);
-          const aLines=doc.splitTextToSize('📍 '+it.a,W-M*2-12);
-          aLines.forEach(l=>{checkY(4);doc.text(l,M+10,y);y+=3.5;});
-        }
-        if(it.al){
-          doc.setFontSize(7);doc.setTextColor(r,g,b);
-          const alLines=doc.splitTextToSize('• '+it.al,W-M*2-12);
-          alLines.forEach(l=>{checkY(4);doc.text(l,M+10,y);y+=3.5;});
-        }
-      });
-      y+=2;
-    }
+    // ─ EN-TETE ─
+    // "JOUR N" label
+    sf('normal',7,GOLD);doc.setCharSpace(2);
+    doc.text('JOUR '+pageNum,W/2,13,{align:'center'});
+    doc.setCharSpace(0);
+    orn(W/2,16,20);
 
-    // Activités cochées
+    // Titre journée (sans emojis)
+    const rawTitle=clean(day.title||'');
+    const parts=rawTitle.split('—');
+    sf('bold',20,BROWN);doc.setCharSpace(1);
+    doc.text((parts[0]||'').trim().toUpperCase(),W/2,26,{align:'center'});
+    doc.setCharSpace(0);
+    if(parts[1]){sf('bolditalic',12,COL);doc.text((parts[1]||'').trim(),W/2,34,{align:'center'});}
+
+    // Date
+    sf('normal',8,BROWN_MID);doc.setCharSpace(1.5);
+    doc.text(clean(day.date||'').toUpperCase(),W/2,41,{align:'center'});
+    doc.setCharSpace(0);
+    orn(W/2,44.5,40);
+
+    // ─ COLONNE GAUCHE ─
+    let LY=52;
+
+    // Section "Aujourd'hui nous avons..." (activités cochées)
     if(doneActs.length){
-      checkY(6);
-      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
-      doc.text('CE QU\'ON A FAIT :',M+3,y);y+=4;
+      sf('bold',6.5,COL);doc.setCharSpace(1);
+      doc.text("AUJOURD'HUI NOUS AVONS...",LX,LY);
+      doc.setCharSpace(0);
+      ln(LX,LY+1.5,LX+CW,LY+1.5,COL,0.35);
+      LY+=6;
       doneActs.forEach(a=>{
-        checkY(5);
-        doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');
-        doc.text(`✓  ${a.l}`,M+6,y);y+=4.5;
+        if(LY>H-28)return;
+        doc.setFillColor(...COL);doc.circle(LX+1.5,LY-1.2,1.0,'F');
+        sf('normal',8,BROWN);
+        const lines=doc.splitTextToSize(clean(a.l),CW-6);
+        lines.slice(0,2).forEach(l=>{doc.text(l,LX+5,LY);LY+=4.5;});
       });
+      LY+=3;
     }
 
-    // Notes & souvenirs (avec auteur)
+    // Section "Notre souvenir préféré" (notes)
     if(dayNotes.length){
-      checkY(8);
-      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
-      doc.text('NOTES & SOUVENIRS :',M+3,y);y+=4;
-      dayNotes.forEach(n=>{
-        checkY(5);
-        if(n.author){
-          doc.setTextColor(r,g,b);doc.setFontSize(7);doc.setFont('helvetica','bold');
-          doc.text(`${n.author} :`,M+6,y);y+=3.5;
+      if(LY>H-40)LY=52; // overflow
+      sf('bold',6.5,COL);doc.setCharSpace(1);
+      doc.text('NOTRE SOUVENIR PREFERE',LX,LY);
+      doc.setCharSpace(0);
+      // Petit diamant déco
+      doc.setFillColor(...GOLD);
+      doc.circle(LX+doc.getTextWidth('NOTRE SOUVENIR PREFERE')+4,LY-1,1,'F');
+      ln(LX,LY+1.5,LX+CW,LY+1.5,COL,0.35);
+      LY+=6;
+      dayNotes.slice(0,2).forEach((n,ni)=>{
+        if(LY>H-25)return;
+        if(n.author&&n.author!=='Moi'){
+          sf('bold',7,COL);doc.text(n.author+' :',LX+2,LY);LY+=4;
         }
-        doc.setTextColor(60,60,60);doc.setFont('helvetica','normal');doc.setFontSize(8);
-        const lines=doc.splitTextToSize(n.text,W-M*2-10);
-        lines.forEach(l=>{checkY(5);doc.text(l,M+6,y);y+=4.5;});
+        sf('bolditalic',8.5,BROWN_MID);
+        const lines=doc.splitTextToSize(clean(n.text),CW-4);
+        lines.slice(0,5).forEach(l=>{if(LY<H-25){doc.text(l,LX+2,LY);LY+=4.8;}});
+        if(ni===0&&dayNotes.length>1){
+          LY+=2;sf('bold',6.5,COL);doc.setCharSpace(1);
+          doc.text('NOS ANECDOTES',LX,LY);doc.setCharSpace(0);
+          doc.setFillColor(...GOLD);
+          doc.circle(LX+doc.getTextWidth('NOS ANECDOTES')+4,LY-1,1,'F');
+          ln(LX,LY+1.5,LX+CW,LY+1.5,COL,0.35);LY+=6;
+        }
       });
     }
 
-    // Photos — chargées via fetch+canvas
+    // ─ COLONNE DROITE : EN IMAGES ─
+    let RY=52;
+    sf('bold',6.5,COL);doc.setCharSpace(1);
+    doc.text('EN IMAGES',RX,RY);doc.setCharSpace(0);
+    ln(RX,RY+1.5,RX+CW,RY+1.5,COL,0.35);
+    RY+=6;
+
     if(dayPhotos.length){
-      checkY(35);
-      doc.setFontSize(8);doc.setTextColor(r,g,b);doc.setFont('helvetica','bold');
-      doc.text('PHOTOS :',M+3,y);y+=4;
-      const imgW=(W-M*2-8)/3;
-      let ix=0;
-      let rowStartY=y;
-
-      for(const p of dayPhotos.slice(0,6)){
-        const col=ix%3;
-        if(col===0&&ix>0){y+=30;rowStartY=y;}
-        checkY(30);
-        const x=M+4+col*(imgW+2);
-
-        const b64=await loadImgBase64(p.url);
+      const gap=2.5,iw=(CW-gap)/2,ih=iw*0.72;
+      let pi=0;
+      for(const p of dayPhotos.slice(0,4)){
+        if(RY+ih>H-26)break;
+        const col2=pi%2;
+        const px=RX+col2*(iw+gap);
+        const b64=await loadImg(p.url);
         if(b64){
-          try{
-            const fmt=b64.includes('png')?'PNG':'JPEG';
-            doc.addImage(b64,fmt,x,y,imgW,25);
-          }catch(e){
-            // Photo invalide — placeholder
-            doc.setFillColor(240,235,228);
-            doc.rect(x,y,imgW,25,'F');
-            doc.setFontSize(6);doc.setTextColor(180,160,140);
-            doc.text('📷',x+imgW/2,y+14,{align:'center'});
-          }
-        } else {
-          // Placeholder si photo non chargée
-          doc.setFillColor(240,235,228);
-          doc.rect(x,y,imgW,25,'F');
-          doc.setFontSize(6);doc.setTextColor(180,160,140);
-          doc.text('📷',x+imgW/2,y+14,{align:'center'});
+          try{doc.addImage(b64,'JPEG',px,RY,iw,ih);}
+          catch(e){rr(px,RY,iw,ih,1,LT);sf('normal',7,GREY);doc.text('[photo]',px+iw/2,RY+ih/2,{align:'center'});}
+        }else{
+          rr(px,RY,iw,ih,1,LT);sf('normal',7,GREY);doc.text('[photo]',px+iw/2,RY+ih/2,{align:'center'});
         }
-
+        // Bordure subtile
+        doc.setDrawColor(...GREY_LT);doc.setLineWidth(0.2);
+        doc.rect(px,RY,iw,ih,'S');
         if(p.caption){
-          doc.setFontSize(5.5);doc.setTextColor(100,100,100);
-          doc.text(p.caption.substring(0,28),x,y+27,{maxWidth:imgW});
+          sf('normal',5,GREY);
+          doc.text(clean(p.caption).substring(0,24),px,RY+ih+2.5,{maxWidth:iw});
         }
-        ix++;
+        if(col2===1)RY+=ih+(p.caption?5:2.5);
+        pi++;
       }
-      y+=32;
+      if(pi%2===1)RY+=ih+2.5; // dernière ligne impaire
+    }else{
+      rr(RX,RY,CW,42,2,LT);
+      sf('bolditalic',8,GREY);
+      doc.text('Les photos s\'ajouteront',RX+CW/2,RY+18,{align:'center'});
+      doc.text('au fil du voyage...',RX+CW/2,RY+25,{align:'center'});
     }
 
-    y+=4;
-    doc.setDrawColor(220,210,200);doc.line(M,y,W-M,y);y+=5;
+    // ─ ENCADRE BAS : CE QUE NOUS RETIENDRONS ─
+    const BOX_Y=H-24;
+    rr(M,BOX_Y,W-M*2,16,2,LT);
+    doc.setDrawColor(...COL);doc.setLineWidth(0.5);
+    doc.roundedRect(M,BOX_Y,W-M*2,16,2,2,'S');
+    sf('bold',6.5,COL);doc.setCharSpace(1);
+    doc.text('CE QUE NOUS RETIENDRONS',W/2,BOX_Y+5,{align:'center'});
+    doc.setCharSpace(0);
+    // Trouver description la plus pertinente
+    let retText='';
+    if(dayNotes.length)retText=clean(dayNotes[0].text).substring(0,120);
+    else if(day.items&&day.items.length){const it=day.items.find(i=>i.d&&i.d.length>10);if(it)retText=clean(it.d).substring(0,120);}
+    if(!retText)retText='Un souvenir a ecrire...';
+    sf('bolditalic',8,BROWN_MID);
+    const retLines=doc.splitTextToSize(retText,W-M*2-14);
+    retLines.slice(0,2).forEach((l,li)=>doc.text(l,W/2,BOX_Y+10+li*4.5,{align:'center'}));
+
+    // Numéro de page
+    sf('normal',7,GREY);
+    doc.text('— '+String(pageNum).padStart(2,'0')+' —',W/2,H-5,{align:'center'});
   }
 
-  // ── RÉSUMÉ FINAL ──────────────────────────
-  checkY(30);
-  doc.setFillColor(61,43,31);
-  doc.rect(M,y,W-M*2,22,'F');
-  doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
-  doc.text('Thaïlande 2026 — Un voyage inoubliable',W/2,y+8,{align:'center'});
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(212,168,83);
-  const totalActs=Object.values(acts).filter(Boolean).length;
-  const totalPhotos=photos.length;
-  const totalNotes=photos.length>0?photos.length:0;
-  doc.text(`${totalActs} activités · ${totalPhotos} photos`,W/2,y+15,{align:'center'});
-
   doc.save('Thailande2026_souvenir.pdf');
-  toast('✅ PDF souvenir généré !');
+  toast('\u2705 PDF souvenir g\u00E9n\u00E9r\u00E9 !');
 }
+
 
 // ═══ FIREBASE ═════════════════════════════════
 function openFbModal(){document.getElementById('fb-url').value=localStorage.getItem('fb_databaseURL')||'';document.getElementById('fb-key').value=localStorage.getItem('fb_apiKey')||'';document.getElementById('fb-pid').value=localStorage.getItem('fb_projectId')||'';document.getElementById('fb-aid').value=localStorage.getItem('fb_appId')||'';document.getElementById('fb-modal').classList.add('open');}
@@ -2939,9 +3084,10 @@ function checkSwUpdate(){
     reg.update().then(()=>{
       if(reg.waiting){
         document.getElementById('sw-banner').classList.add('show');
-        toast('✅ Mise à jour disponible !');
+        toast('✅ Mise à jour disponible — appuyez sur Appliquer !');
       } else {
-        toast('✅ Application déjà à jour !');
+        toast('✅ Vérification OK — vidage du cache…');
+        forceClearCache();
       }
     });
   });
@@ -2951,9 +3097,26 @@ function applySwUpdate(){
   navigator.serviceWorker.getRegistration().then(reg=>{
     if(reg?.waiting){
       reg.waiting.postMessage('skipWaiting');
-      window.location.reload();
     }
   });
+  forceClearCache();
+}
+
+async function forceClearCache(){
+  // Vider tous les caches du navigateur
+  if('caches' in window){
+    const keys=await caches.keys();
+    await Promise.all(keys.map(k=>caches.delete(k)));
+  }
+  // Désinscrire le SW, puis recharger — il se réinscrira avec le nouveau fichier
+  if('serviceWorker' in navigator){
+    const regs=await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map(r=>r.unregister()));
+  }
+  // Vider le cache des taux (pour forcer la récupération)
+  localStorage.removeItem('cached_rates');
+  toast('🔄 Cache vidé — rechargement…');
+  setTimeout(()=>window.location.reload(true),800);
 }
 
 // ═══ SYNC MANUAL ══════════════════════════════
