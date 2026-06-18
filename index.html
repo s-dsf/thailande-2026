@@ -1713,7 +1713,7 @@ function convertCur(){
 }
 
 // ═══ TRANSLATOR ══════════════════════════════
-let tMode='text',tDir='fr-th',lastTrans='',lastVoice='',recog=null,isRec=false;
+let tMode='text',tDir='fr-th',lastTrans='',lastVoice='',recog=null,isRec=false,recogRestarts=0,recogTimeout=null;
 function setTransMode(m,b){tMode=m;document.querySelectorAll('.trans-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('trans-text-mode').style.display=m==='text'?'block':'none';document.getElementById('trans-voice-mode').style.display=m==='voice'?'block':'none';if(isRec)stopRec();}
 function setDir(d){tDir=d;document.getElementById('dir-fr').classList.toggle('active',d==='fr-th');document.getElementById('dir-th').classList.toggle('active',d==='th-fr');}
 function swapDir(){setDir(tDir==='fr-th'?'th-fr':'fr-th');}
@@ -1729,7 +1729,6 @@ async function doTranslate(){
 function speakTrans(){if(!lastTrans)return;const u=new SpeechSynthesisUtterance(lastTrans);u.lang=tDir==='fr-th'?'th-TH':'fr-FR';u.rate=0.85;speechSynthesis.speak(u);}
 function copyTrans(){if(!lastTrans)return;navigator.clipboard.writeText(lastTrans).then(()=>toast('✅ Copié !'));}
 // ═══ TRADUCTEUR VOCAL — Version stable ═══════
-let recog=null,isRec=false,recogRestarts=0,recogTimeout=null,lastVoice='';
 const MAX_RESTARTS=5;
 
 function toggleMic(){isRec?stopRec():startRec();}
