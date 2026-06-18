@@ -69,7 +69,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .tl-time{font-size:10px;font-weight:700;color:var(--turq);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
 .tl-name{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:2px}
 .tl-desc{font-size:12px;color:var(--brown-mid);line-height:1.5}
-.tl-addr{font-size:11px;color:var(--turq-dk);margin-top:3px;font-style:italic}
+.tl-addr{font-size:11px;color:var(--turq-dk);margin-top:3px;font-style:italic}.tl-addr-th{font-size:10px;color:var(--brown-mid);margin-top:2px;font-style:italic;padding-left:2px}
 
 /* TIPS */
 .tip{border-radius:var(--rs);padding:9px 11px;margin:8px 0;display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.5}
@@ -291,7 +291,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 /* LOGEMENT CARD DETACHEE */
 .logement-card{background:linear-gradient(135deg,rgba(43,191,179,.12),rgba(43,191,179,.06));border-radius:var(--r);padding:12px 14px;margin-top:10px;border:1.5px solid var(--turq);box-shadow:0 1px 4px rgba(0,0,0,.07)}
 .logement-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--turq-dk);margin-bottom:3px}
-.logement-addr{font-size:12px;color:var(--brown);line-height:1.4;font-weight:600}
+.logement-addr{font-size:12px;color:var(--brown);line-height:1.4;font-weight:600}.logement-addr-th{font-size:11px;color:var(--brown-mid);line-height:1.4;margin-top:2px;font-style:italic}.accom-rv-th{font-size:11px;color:var(--brown-mid);line-height:1.4;font-style:italic;margin-top:2px}
 .logement-maps{display:inline-flex;align-items:center;gap:4px;background:var(--turq);color:var(--white);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;margin-top:6px;text-decoration:none}
 /* NOTE DANS ACTS */
 .act-note-item{background:var(--gold-lt);border-radius:var(--rs);padding:8px 12px;margin-bottom:4px;font-size:12px;color:var(--brown);border-left:3px solid var(--gold)}
@@ -586,7 +586,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="logement-card">
     <div class="logement-label">🏠 Logement Airbnb</div>
-    <div class="logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
+    <div class="logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div><div class="logement-addr-th">🚕 ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700</div>
     <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-bkk" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
@@ -602,7 +602,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="logement-card">
     <div class="logement-label">🏠 Logement Airbnb</div>
-    <div class="logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
+    <div class="logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div><div class="logement-addr-th">🚕 1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เชียงใหม่ 50300</div>
     <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-cm" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
@@ -618,7 +618,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="logement-card">
     <div class="logement-label">🏠 Logement Airbnb</div>
-    <div class="logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
+    <div class="logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div><div class="logement-addr-th">🚕 13/35 หมู่ 2 เกาะเต่า จ.สุราษฎร์ธานี 84360</div>
     <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-kt" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
@@ -636,7 +636,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="logement-card">
     <div class="logement-label">🏠 Logement Airbnb</div>
-    <div class="logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
+    <div class="logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div><div class="logement-addr-th">🚕 57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140</div>
     <a class="logement-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Maps</a>
   </div>
   <div id="wx-ks" class="wx"><div class="wx-loading">🌤 Chargement météo…</div></div>
@@ -651,7 +651,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="accom-card">
     <div class="accom-hdr" style="background:linear-gradient(135deg,#E8734A,#C85A32)"><div class="accom-dest">🏙 Bangkok</div><div class="accom-dates">21 – 25 juillet · Airbnb</div></div>
     <div class="accom-body">
-      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div></div></div>
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div><div class="accom-rv-th">🚕 ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700</div></div></div>
 
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in à partir de 14h · Check-out avant 11h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Soi+Palakun+Khet+Bang+Phlat+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
@@ -661,7 +661,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="accom-card">
     <div class="accom-hdr" style="background:linear-gradient(135deg,#5B8C5A,#3D6B3C)"><div class="accom-dest">🌿 Chiang Mai</div><div class="accom-dates">25 – 29 juillet · Airbnb</div></div>
     <div class="accom-body">
-      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div></div></div>
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div><div class="accom-rv-th">🚕 1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เชียงใหม่ 50300</div></div></div>
 
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 14h · Check-out avant 10h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=1+Chang+Moi+Road+Soi+2+Chiang+Mai" target="_blank">🗺 Ouvrir dans Maps</a>
@@ -671,7 +671,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="accom-card">
     <div class="accom-hdr" style="background:linear-gradient(135deg,#2BBFB3,#1A8F85)"><div class="accom-dest">🐠 Koh Tao</div><div class="accom-dates">29 juillet – 1er août</div></div>
     <div class="accom-body">
-      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div></div>
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">13/35 Moo 2, Ko Tao, Surat Thani 84360</div><div class="accom-rv-th">🚕 13/35 หมู่ 2 เกาะเต่า จ.สุราษฎร์ธานี 84360</div></div></div>
 
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">Check-in 15h · Check-out avant 10h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Ko+Tao+Surat+Thani+84360" target="_blank">🗺 Ouvrir dans Maps</a>
@@ -681,7 +681,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="accom-card">
     <div class="accom-hdr" style="background:linear-gradient(135deg,#D4A853,#B8883A)"><div class="accom-dest">🌴 Koh Samui</div><div class="accom-dates">1 – 5 août · Airbnb</div></div>
     <div class="accom-body">
-      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div></div>
+      <div class="accom-row"><span class="accom-ri">📍</span><div><div class="accom-rl">Adresse</div><div class="accom-rv">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div><div class="accom-rv-th">🚕 57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140</div></div></div>
 
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in / Check-out</div><div class="accom-rv">À l'arrivée · Check-out avant 11h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=57+Moo+5+Anthong+Nathon+Ko+Samui" target="_blank">🗺 Ouvrir dans Maps</a>
@@ -691,7 +691,7 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="accom-card">
     <div class="accom-hdr" style="background:linear-gradient(135deg,#3D2B1F,#7A5C47)"><div class="accom-dest">🏨 Bangkok — Nuit retour</div><div class="accom-dates">5 – 6 août · Hôtel</div></div>
     <div class="accom-body">
-      <div class="accom-row"><span class="accom-ri">🏨</span><div><div class="accom-rl">Hôtel</div><div class="accom-rv">Grand BS Airport Hotel Suvarnabhumi</div><div class="accom-rv" style="font-size:11px;color:var(--brown-mid)">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div></div></div>
+      <div class="accom-row"><span class="accom-ri">🏨</span><div><div class="accom-rl">Hôtel</div><div class="accom-rv">Grand BS Airport Hotel Suvarnabhumi</div><div class="accom-rv" style="font-size:11px;color:var(--brown-mid)">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div><div class="accom-rv-th">🚕 836 ซอยลาดกระบัง 30/4 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ 10520</div></div></div>
       <div class="accom-row"><span class="accom-ri">🕐</span><div><div class="accom-rl">Check-in</div><div class="accom-rv">Check-in 16h · Check-out avant 12h</div></div></div>
       <a class="accom-maps" href="https://www.google.com/maps/search/?api=1&query=Grand+BS+Airport+Hotel+Suvarnabhumi+Bangkok" target="_blank">🗺 Ouvrir dans Maps</a>
     </div>
@@ -1666,31 +1666,96 @@ async function fetchSea(dest){
   }catch(e){el.innerHTML=`<div class="sea"><div class="sea-title">🌊 Conditions mer — ${cfg.n}</div><div style="font-size:11px;color:var(--brown-mid)">Données indisponibles hors connexion</div></div>`;}
 }
 
+
+// ═══ ADRESSES EN THAÏ ════════════════════════
+const ADDR_TH={
+  // Bangkok logements
+  "Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700":"ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700",
+  "Soi Palakun, Khet Bang Phlat, Bangkok 10700":"ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700",
+  "836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520":"836 ซอยลาดกระบัง 30/4 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ 10520",
+  // Bangkok activités
+  "Avani+ Riverside Bangkok Hotel":"โรงแรมอวานี+ ริเวอร์ไซด์ กรุงเทพฯ",
+  "Chao Phraya, Khlong San, Bangkok 10600":"แม่น้ำเจ้าพระยา คลองสาน กรุงเทพมหานคร 10600",
+  "2 Sanam Chai Rd, Phra Nakhon, Bangkok 10200":"2 ถนนสนามไชย แขวงพระบรมมหาราชวัง เขตพระนคร กรุงเทพฯ 10200",
+  "Na Phra Lan Rd, Phra Nakhon, Bangkok 10200":"ถนนหน้าพระลาน แขวงพระบรมมหาราชวัง เขตพระนคร กรุงเทพฯ 10200",
+  "6 Maharat Rd, Phra Nakhon, Bangkok 10200":"6 ถนนมหาราช แขวงพระบรมมหาราชวัง เขตพระนคร กรุงเทพฯ 10200",
+  "2194 Charoen Krung Rd, Bang Kho Laem, Bangkok 10120":"2194 ถนนเจริญกรุง แขวงบางคอแหลม เขตบางคอแหลม กรุงเทพฯ 10120",
+  "203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230":"203 ถนนสวนสยาม แขวงคันนายาว เขตคันนายาว กรุงเทพฯ 10230",
+  "299 Charoen Nakhon Rd, Khlong San, Bangkok 10600":"299 ถนนเจริญนคร แขวงคลองสาน เขตคลองสาน กรุงเทพฯ 10600",
+  "Train Night Market Srinakarin, Bangkok":"ตลาดนัดรถไฟศรีนครินทร์ กรุงเทพฯ",
+  "Aéroport international Don Mueang, Bangkok":"ท่าอากาศยานดอนเมือง กรุงเทพฯ",
+  "Aéroport Suvarnabhumi (BKK), Bangkok":"ท่าอากาศยานสุวรรณภูมิ กรุงเทพฯ",
+  // Chiang Mai logement
+  "1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300":"1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เมืองเชียงใหม่ 50300",
+  "1 Chang Moi Road Soi 2, Chiang Mai 50300":"1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เชียงใหม่ 50300",
+  // Chiang Mai activités
+  "2 Samlarn Rd, Si Phum, Mueang Chiang Mai 50200":"2 ถนนสามล้าน ตำบลศรีภูมิ อำเภอเมืองเชียงใหม่ 50200",
+  "Sri Poom 8 Alley, Si Phum, Mueang Chiang Mai 50200":"ซอยศรีภูมิ 8 ตำบลศรีภูมิ อำเภอเมืองเชียงใหม่ 50200",
+  "Doi Suthep, Suthep, Mueang Chiang Mai 50200":"ดอยสุเทพ ตำบลสุเทพ อำเภอเมืองเชียงใหม่ 50200",
+  "No.39 Cafe, 39/2 Suthep, Mueang Chiang Mai 50200":"No.39 Cafe 39/2 ตำบลสุเทพ อำเภอเมืองเชียงใหม่ 50200",
+  "Nimman Road, Su Thep, Mueang Chiang Mai":"ถนนนิมมานเหมินท์ ตำบลสุเทพ อำเภอเมืองเชียงใหม่",
+  "Changklan Rd, Chang Moi, Mueang Chiang Mai 50100":"ถนนช้างคลาน ตำบลช้างม่อย อำเภอเมืองเชียงใหม่ 50100",
+  "202 Nam Phrae, Hang Dong, Chiang Mai 50230":"202 นำแพร อำเภอหางดง เชียงใหม่ 50230",
+  "28/3-4 Changklan Rd, Chang Moi, Mueang Chiang Mai 50100":"28/3-4 ถนนช้างคลาน ตำบลช้างม่อย อำเภอเมืองเชียงใหม่ 50100",
+  "60 Mahidol Rd, Suthep, Mueang Chiang Mai 50200":"60 ถนนมหิดล ตำบลสุเทพ อำเภอเมืองเชียงใหม่ 50200",
+  // Koh Tao logement
+  "13/35 Moo 2, Ko Tao, Surat Thani 84360":"13/35 หมู่ 2 เกาะเต่า จังหวัดสุราษฎร์ธานี 84360",
+  // Koh Tao activités
+  "Free beach to Shark Bay, Ko Tao, Surat Thani 84280":"ชายหาดสาธารณะสู่อ่าวฉลาม เกาะเต่า จ.สุราษฎร์ธานี 84280",
+  "Sai Daeng Resort, 46/9 Moo 3, Sai Daeng Beach, Koh Tao":"Sai Daeng Resort 46/9 หมู่ 3 หาดทรายแดง เกาะเต่า",
+  "John-Suwan Viewpoint, Ko Tao, Surat Thani":"จุดชมวิวจอห์น-สุวรรณ เกาะเต่า จ.สุราษฎร์ธานี",
+  "Beach Club by Haadtien, Moo 3, Ko Tao":"Beach Club by Haadtien หมู่ 3 เกาะเต่า",
+  "Ao Leuk, Ko Tao, Surat Thani":"อ่าวเลก เกาะเต่า จ.สุราษฎร์ธานี",
+  "Barracuda Roof Top Restaurant, Koh Tao":"Barracuda Roof Top Restaurant เกาะเต่า",
+  "Mae Haad Pier, Koh Tao":"ท่าเรือแม่หาด เกาะเต่า",
+  // Koh Samui logement
+  "57/57 Moo 5 Anthong, Nathon, Surathani 84140":"57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140",
+  // Koh Samui activités
+  "Lipa Noi Beach, Ko Samui, Surat Thani":"หาดลิปะน้อย เกาะสมุย จ.สุราษฎร์ธานี",
+  "38/48 Lipa Noi, Ko Samui, Surat Thani 84140":"38/48 ลิปะน้อย อ.เกาะสมุย จ.สุราษฎร์ธานี 84140",
+  "Silver Beach, 124/4 Maret, Ko Samui, Surat Thani 84310":"หาดซิลเวอร์ 124/4 มะเร็ต เกาะสมุย จ.สุราษฎร์ธานี 84310",
+  "Café 69, Ko Samui":"Café 69 เกาะสมุย",
+  "Coco Tam's, Bophut, Ko Samui":"Coco Tam's บ่อผุด เกาะสมุย",
+  "Wat Phra Yai, Bo Put, Ko Samui District, Surat Thani 84320":"วัดพระใหญ่ บ้านบ่อผุด อ.เกาะสมุย จ.สุราษฎร์ธานี 84320",
+  "The Mother Restaurant, Bo Put, Ko Samui 84320":"The Mother Restaurant บ่อผุด เกาะสมุย 84320",
+  "Na Muang 2 Waterfall, Na Mueang, Ko Samui 84140":"น้ำตกนาเมือง 2 นาเมือง เกาะสมุย จ.สุราษฎร์ธานี 84140",
+  "Tarnim Magic Garden, Na Mueang, Ko Samui 84140":"สวนมนตรา (ทาร์นิม) นาเมือง เกาะสมุย จ.สุราษฎร์ธานี 84140",
+  "11/2 Angthong 11, Ang Thong, Ko Samui, Surat Thani 84140":"11/2 อ่างทอง 11 อ่างทอง เกาะสมุย จ.สุราษฎร์ธานี 84140",
+  "Aéroport de Koh Samui (USM), 9/10 Moo 5, Bo Phut, Ko Samui, Surat Thani 84320":"ท่าอากาศยานเกาะสมุย 9/10 หมู่ 5 บ่อผุด เกาะสมุย จ.สุราษฎร์ธานี 84320",
+};
+function getAddrTh(addr){
+  if(!addr)return '';
+  const key=addr.trim();
+  return ADDR_TH[key]||'';
+}
+
 // ═══ CURRENCY ════════════════════════════════
-let curRates={EUR:35.5,USD:33.0},curMode='EUR';
+let curRates={EUR:38.0,USD:32.5},curMode='EUR';
 async function fetchRates(){
   try{
-    const r=await fetch('https://api.exchangerate-api.com/v4/latest/THB');
-    if(!r.ok)throw new Error();
-    const d=await r.json();
-    curRates.EUR=1/d.rates.EUR;curRates.USD=1/d.rates.USD;
-    localStorage.setItem('cached_rates',JSON.stringify({EUR:curRates.EUR,USD:curRates.USD,ts:Date.now()}));
-    const el=document.getElementById('cur-rate');
-    if(el)el.textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;
-  }catch(e){
-    // Utiliser le cache si disponible
     const cached=localStorage.getItem('cached_rates');
-    if(cached){
-      const c=JSON.parse(cached);
-      curRates.EUR=c.EUR;curRates.USD=c.USD;
-      const age=Math.round((Date.now()-c.ts)/3600000);
+    if(cached){const c=JSON.parse(cached);const age=(Date.now()-c.ts)/3600000;if(age<6){curRates.EUR=c.EUR;curRates.USD=c.USD;const el=document.getElementById('cur-rate');if(el)el.textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;return;}}
+  }catch(e){}
+  const apis=[
+    {url:'https://open.er-api.com/v6/latest/EUR',parse:d=>({EUR:d.rates.THB,USD:d.rates.THB/d.rates.USD})},
+    {url:'https://api.frankfurter.app/latest?from=EUR&to=THB,USD',parse:d=>({EUR:d.rates.THB,USD:d.rates.THB/d.rates.USD})},
+  ];
+  for(const api of apis){
+    try{
+      const r=await fetch(api.url);if(!r.ok)continue;
+      const d=await r.json();const rates=api.parse(d);
+      curRates.EUR=rates.EUR;curRates.USD=rates.USD;
+      localStorage.setItem('cached_rates',JSON.stringify({EUR:curRates.EUR,USD:curRates.USD,ts:Date.now()}));
       const el=document.getElementById('cur-rate');
-      if(el)el.textContent=`Taux indicatifs (mis à jour il y a ${age}h) : 1 EUR ≈ ${curRates.EUR.toFixed(1)} THB`;
-    } else {
-      const el=document.getElementById('cur-rate');
-      if(el)el.textContent=`Taux indicatifs : 1 EUR ≈ ${curRates.EUR} THB · 1 USD ≈ ${curRates.USD} THB`;
-    }
+      if(el)el.textContent=`1 EUR = ${curRates.EUR.toFixed(1)} THB · 1 USD = ${curRates.USD.toFixed(1)} THB`;
+      return;
+    }catch(e){}
   }
+  try{
+    const cached=localStorage.getItem('cached_rates');
+    if(cached){const c=JSON.parse(cached);curRates.EUR=c.EUR;curRates.USD=c.USD;const age=Math.round((Date.now()-c.ts)/3600000);const el=document.getElementById('cur-rate');if(el)el.textContent=`Taux indicatifs (mis à jour il y a ${age}h) : 1 EUR ≈ ${curRates.EUR.toFixed(1)} THB`;}
+    else{const el=document.getElementById('cur-rate');if(el)el.textContent=`Taux indicatifs : 1 EUR ≈ ${curRates.EUR.toFixed(1)} THB · 1 USD ≈ ${curRates.USD.toFixed(1)} THB`;}
+  }catch(e){}
 }
 function setCur(m,b){
   curMode=m;
@@ -2036,6 +2101,7 @@ function deleteNote(dk,i,noteId){
   gsSave('note',key,JSON.stringify(notes));
   renderNotesList(dk,i);
   renderNotesInActs(dk,i,notes);
+  renderJournal();
 }
 
 function editNote(dk,i,noteId){
@@ -2144,7 +2210,7 @@ function renderDays(days,cid,dk){
           <span class="info-row-ico">📍</span>
           <span class="info-row-txt">${addr}${duration?` · <b>${duration}</b>`:''}</span>
           ${addr?`<a class="info-row-maps" href="${mapsUrl}" target="_blank">🗺 Maps</a>`:''}
-        </div>`:''}
+        </div>${addr&&getAddrTh(addr)?`<div class="tl-addr-th">🚕 ${getAddrTh(addr)}</div>`:''}`:''}
         ${it.al?`<div class="tip ${it.al.startsWith('✅')?'tip-green':'tip-red'}" style="margin-top:6px"><span style="font-size:13px">${it.al.startsWith('✅')?'✅':it.al.startsWith('📌')?'📌':'⚠️'}</span><div><div class="tip-text">${it.al.replace(/^✅\s*/,'').replace(/^📌\s*/,'')}</div></div></div>`:''}
         ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}
       </div>`;
@@ -2958,10 +3024,17 @@ function renderJournal(){
     ...DATA.kohtao.map((d,i)=>({...d,key:`kt-${i}`,dest:'Koh Tao'})),
     ...DATA.kohsamui.map((d,i)=>({...d,key:`ks-${i}`,dest:'Koh Samui'})),
   ];
+  // Collecter toutes les notes réelles (format note-dk-i)
+  function getDayAllNotes(dayKey){
+    return Object.keys(notes)
+      .filter(k=>k.startsWith(`note-${dayKey}-`))
+      .flatMap(k=>{const v=notes[k];return Array.isArray(v)?v:(v&&v.trim?[{id:'legacy',text:v,author:'Moi',time:''}]:[]);})
+      .filter(n=>n.text&&n.text.trim());
+  }
   const entries=allDays.filter(day=>{
     const hasActs=(day.acts||[]).some((_,ai)=>acts[`act-${day.key}-${ai}`]);
-    const hasNote=notes[`note-${day.key}`];
-    return hasActs||hasNote;
+    const hasNotes=getDayAllNotes(day.key).length>0;
+    return hasActs||hasNotes;
   });
   if(!entries.length){
     el.innerHTML=`<div style="text-align:center;padding:20px;color:var(--brown-mid);font-size:13px;font-style:italic">Le journal se remplira automatiquement au fil du voyage ✈</div>`;
@@ -2969,11 +3042,11 @@ function renderJournal(){
   }
   el.innerHTML=entries.map(day=>{
     const doneActs=(day.acts||[]).filter((_,ai)=>acts[`act-${day.key}-${ai}`]).map(a=>a.l);
-    const note=notes[`note-${day.key}`]||'';
+    const dayNotes=getDayAllNotes(day.key);
     return`<div class="journal-entry">
       <div class="journal-date">${day.date} · ${day.dest}</div>
       <div class="journal-text" style="font-weight:700;margin-bottom:4px">${day.title}</div>
-      ${note?`<div class="journal-text">${note}</div>`:''}
+      ${dayNotes.map(n=>`<div class="journal-text" style="margin-bottom:4px">${n.text.replace(/\n/g,'<br>')}${n.author&&n.author!=='Moi'?` <span style="font-size:10px;color:var(--brown-mid)">— ${n.author}</span>`:''}</div>`).join('')}
       ${doneActs.length?`<div class="journal-acts">✓ ${doneActs.join(' · ')}</div>`:''}
     </div>`;
   }).join('');
