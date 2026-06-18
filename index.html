@@ -949,6 +949,14 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="prat-sec" id="ps-photos">
     <div class="sec-title">📸 Photos du voyage</div>
 
+    <!-- Zone connexion Google Drive -->
+    <div id="g-login-area" style="margin-bottom:10px">
+      <button onclick="gDriveLogin()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:2px solid var(--sand-mid);border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;color:var(--brown);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.06)">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        🔑 Se connecter avec Google
+      </button>
+    </div>
+
     <div id="photo-section"></div>
     <button class="photo-add" onclick="openPhotoModal()" id="photo-add-btn" style="display:none">📷 Ajouter des photos</button>
   </div>
@@ -2106,7 +2114,7 @@ function saveNote(dk,i,typeId){
   const key=`note-${dk}-${i}-${typeId}`;
   const saved=getNotes();
   const raw=saved[key];
-  const existing=Array.isArray(raw)?raw:(raw&&raw.trim?[{id:'legacy',text:raw,author:'Moi',time:''}]:[]);
+  const existing=Array.isArray(raw)?raw:(raw&&raw.trim?[{id:'legacy-'+Date.now(),text:raw,author:'Moi',time:''}]:[]);
   const userName=localStorage.getItem('idx_user_name')||'Moi';
   const time=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
   existing.push({id:'n'+Date.now(),text:val,author:userName,time});
@@ -2166,8 +2174,14 @@ function renderNotesList(dk,i,typeId){
   const saved=getNotes();
   const raw=saved[key];
   const notes=Array.isArray(raw)?raw:(raw&&raw.trim?[{id:'legacy',text:raw,author:'Moi',time:''}]:[]);
-  if(!notes.length){el.innerHTML='';return;}
-  el.innerHTML=notes.map(n=>`<div class="note-item">
+  // Filtrer les notes vides (texte vide ou whitespace)
+  const validNotes=notes.filter(n=>n.text&&n.text.trim());
+  // Si des notes vides existaient, nettoyer le storage
+  if(validNotes.length!==notes.length){
+    const saved2=getNotes();saved2[key]=validNotes;saveNotes(saved2);
+  }
+  if(!validNotes.length){el.innerHTML='';return;}
+  el.innerHTML=validNotes.map(n=>`<div class="note-item">
     <div class="note-item-header">
       <span class="note-item-author">✍️ ${n.author||'Moi'}</span>
       <div style="display:flex;align-items:center;gap:6px">
@@ -2779,7 +2793,20 @@ const GD_CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleuse
 const GD_FOLDER_ID='1sZCQKYH_yFOfvx1smwXB3BeU0khbuupk';
 const PHOTO_SECRET='THAI2026SECRET'; // secret partagé avec le Worker
 const GD_SCOPE='https://www.googleapis.com/auth/drive.file';
-let gdToken=null,gdTokenExpiry=0,gdClient=null;
+let gdToken=localStorage.getItem('gd_token')||null;
+let gdTokenExpiry=parseInt(localStorage.getItem('gd_expiry')||'0');
+let gdClient=null;
+// Si token encore valide au chargement, afficher le bouton photos directement
+if(gdToken && Date.now() < gdTokenExpiry - 300000){
+  document.addEventListener('DOMContentLoaded',()=>{
+    setTimeout(()=>{
+      const la=document.getElementById('g-login-area');
+      if(la)la.innerHTML='<div class="g-login-ok">✅ Connecté à Google Drive <button onclick="gDriveLogin()" style="margin-left:8px;font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:2px 8px">Renouveler</button></div>';
+      const ab=document.getElementById('photo-add-btn');
+      if(ab)ab.style.display='flex';
+    },500);
+  });
+}
 let pendingFiles=[],selDest=null,selDay=null,selDiff='priv';
 let lbPhotos=[],lbIdx=0;
 
@@ -2834,7 +2861,8 @@ async function gDriveLogin(){
 }
 
 function showGLoginOk(){
-  document.getElementById('g-login-area').innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive <button onclick="gDriveLogin()" style="margin-left:8px;font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:2px 8px">Renouveler</button></div>`;
+  const la=document.getElementById('g-login-area');
+  if(la)la.innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive <button onclick="gDriveLogin()" style="margin-left:8px;font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:2px 8px">Renouveler</button></div>`;
   document.getElementById('photo-add-btn').style.display='flex';
 }
 
