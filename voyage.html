@@ -429,29 +429,49 @@ const REACTIONS=['❤️','😍','😂','🤩','👏'];
 
 async function loadFeed(){
   const container=document.getElementById('feed-container');
+  container.innerHTML='<div class="loader">Chargement…</div>';
   try{
-    const r=await fetch(GS_URL+'?action=getAll');
-    const data=await r.json();
-    const photos=data.photos||[];
+    // Charger depuis Google Sheets
+    const r=await fetch(GS_URL+'?t='+Date.now());
+    const allRows=await r.json();
+
+    const photos=[];
     const notesByDay={};
-    (data.notes||[]).forEach(n=>{
-      const m=n.key&&n.key.match(/^note-([a-z]+-\d+)/);
-      if(m){const dk=m[1];if(!notesByDay[dk])notesByDay[dk]=[];notesByDay[dk].push(n);}
+
+    (Array.isArray(allRows)?allRows:[]).forEach(row=>{
+      if(!row||!row.type)return;
+      if(row.type==='photo'){
+        try{
+          const p=typeof row.value==='string'?JSON.parse(row.value):row.value;
+          if(p&&p.url&&p.id)photos.push(p);
+        }catch(e){}
+      }
+      if(row.type==='note'&&row.key){
+        const m=row.key.match(/^note-([a-z]+-\d+)/);
+        if(m){
+          const dk=m[1];
+          if(!notesByDay[dk])notesByDay[dk]=[];
+          try{
+            const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;
+            if(Array.isArray(ns))notesByDay[dk].push(...ns);
+            else if(ns&&ns.text)notesByDay[dk].push(ns);
+          }catch(e){}
+        }
+      }
     });
-    // Afficher seulement les jours avec photos ou notes
+
     const activeDays=DAYS.filter(d=>{
-      const dp=photos.filter(p=>p.dayKey===d.key&&(p.diffusion==='all'||p.diffusion==='both'));
-      const dn=notesByDay[d.key]||[];
-      return dp.length||dn.length;
+      const dp=photos.filter(p=>p.dayKey===d.key&&(p.diff==='all'||p.diff==='both'));
+      return dp.length||(notesByDay[d.key]||[]).length;
     });
+
     if(!activeDays.length){
       container.innerHTML='<div class="loader" style="padding:60px">📷 Les photos et nouvelles apparaîtront ici au fil du voyage !</div>';
       return;
     }
     container.innerHTML='';
-    // Afficher du plus récent au plus ancien
     [...activeDays].reverse().forEach(day=>{
-      const dp=photos.filter(p=>p.dayKey===day.key&&(p.diffusion==='all'||p.diffusion==='both'));
+      const dp=photos.filter(p=>p.dayKey===day.key&&(p.diff==='all'||p.diff==='both'));
       const dn=notesByDay[day.key]||[];
       const card=document.createElement('div');
       card.className='day-card open';
@@ -467,7 +487,7 @@ async function loadFeed(){
         <div class="day-body">
           ${dp.length?`<div class="photos-grid">${dp.map(p=>`
             <div class="photo-wrap">
-              <img src="${p.url}" 
+              <img src="${WORKER_URL}/photo?id=${p.id}&secret=${SECRET}" 
                    loading="lazy"
                    onerror="this.parentElement.style.display='none'"
                    alt="${p.caption||'Photo'}">

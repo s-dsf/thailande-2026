@@ -2878,71 +2878,42 @@ function getPhotos(){return JSON.parse(localStorage.getItem('trip_photos')||'[]'
 function savePhotosMeta(p){localStorage.setItem('trip_photos',JSON.stringify(p));}
 
 async function uploadToDrive(file, caption, destKey, dayKey, diff){
-  // Upload direct vers Google Drive avec token OAuth de l'utilisateur
-  // Chaque membre de la famille se connecte et uploade dans le dossier partagé
+  // Upload via Cloudflare Worker + Service Account — même approche qu'avant
+  const form = new FormData();
+  form.append('file', file);
+  form.append('caption', caption||'');
+  form.append('dayKey', dayKey);
+  form.append('destKey', destKey);
+  form.append('diff', diff);
+  form.append('secret', PHOTO_SECRET);
 
-  // Vérifier/obtenir un token valide
-  const ok = await ensureGdToken();
-  if(!ok) {
-    // Forcer la connexion
-    await new Promise((resolve, reject) => {
-      gDriveLogin();
-      // Attendre que gdToken soit disponible
-      let tries = 0;
-      const check = setInterval(() => {
-        tries++;
-        if(gdToken) { clearInterval(check); resolve(); }
-        if(tries > 30) { clearInterval(check); reject(new Error('Connexion Google annulée')); }
-      }, 500);
-    });
-  }
-  if(!gdToken) throw new Error('Connectez-vous à Google pour uploader des photos');
-
-  // 1. Upload multipart vers Drive
-  const boundary = 'thai2026boundary';
-  const meta = JSON.stringify({
-    name: `${dayKey}-${Date.now()}-${file.name||'photo.jpg'}`,
-    parents: [GD_FOLDER_ID],
-  });
-
-  const metaBytes = new TextEncoder().encode(
-    `--${boundary}\r\nContent-Type: application/json\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: ${file.type||'image/jpeg'}\r\n\r\n`
-  );
-  const endBytes = new TextEncoder().encode(`\r\n--${boundary}--`);
-  const fileBuffer = await file.arrayBuffer();
-
-  const body = new Uint8Array(metaBytes.byteLength + fileBuffer.byteLength + endBytes.byteLength);
-  body.set(metaBytes, 0);
-  body.set(new Uint8Array(fileBuffer), metaBytes.byteLength);
-  body.set(endBytes, metaBytes.byteLength + fileBuffer.byteLength);
-
-  const r = await fetch(
-    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',
-    {
+  let r;
+  try {
+    r = await fetch('https://claude-proxy-thailande.s-desferet.workers.dev/upload', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${gdToken}`,
-        'Content-Type': `multipart/related; boundary=${boundary}`,
-      },
-      body,
-    }
-  );
+      body: form,
+    });
+  } catch(e) {
+    throw new Error('Pas de connexion internet — réessayez');
+  }
 
   if(!r.ok) {
-    const err = await r.json().catch(()=>({}));
-    throw new Error('Erreur Drive : ' + (err.error?.message || r.status));
+    let msg = 'HTTP ' + r.status;
+    try { const e=await r.json(); msg=e.error||msg; } catch(e){}
+    throw new Error(msg);
   }
 
-  const fileData = await r.json();
-  const fileId = fileData.id;
-
-  // 2. URL thumbnail Drive (stable)
-  const url = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
+  const d = await r.json();
+  if(d.error) throw new Error(d.error);
 
   return {
-    id: fileId, url, caption,
-    destKey, dayKey, diff,
-    uploadedAt: new Date().toISOString(),
+    id: d.id,
+    url: d.url,
+    caption: d.caption||caption,
+    destKey: d.destKey||destKey,
+    dayKey: d.dayKey||dayKey,
+    diff: d.diff||diff,
+    uploadedAt: d.uploadedAt||new Date().toISOString(),
   };
 }
 
