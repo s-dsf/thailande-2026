@@ -4,134 +4,121 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#E8734A">
-<title>Thaïlande 2026 — En voyage ✈</title>
+<title>Thaïlande 2026 — En voyage</title>
 <script src="https://accounts.google.com/gsi/client" async></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--coral:#E8734A;--coral-lt:#FCE4DB;--turq:#2BBFB3;--turq-lt:#E5F9F8;--gold:#D4A853;--gold-lt:#F5E6C0;--brown:#3D2B1F;--brown-mid:#7A5C47;--sand:#FFF8F0;--sand-mid:#F0E8DC;--green:#5B8C5A;--green-lt:#EAF4EA;--red:#C0392B;--rs:10px}
+:root{--coral:#E8734A;--coral-lt:#FCE4DB;--turq:#2BBFB3;--turq-lt:#E5F9F8;--gold:#D4A853;--gold-lt:#F5E6C0;--brown:#3D2B1F;--brown-mid:#7A5C47;--sand:#FFF8F0;--sand-mid:#F0E8DC;--green:#5B8C5A;--green-lt:#EAF4EA;--grey:#A09080;--white:#FFFFFF}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--sand);color:var(--brown);min-height:100vh}
+
+/* TOPBAR */
 .topbar{position:sticky;top:0;z-index:100;background:var(--coral);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.topbar-title{font-size:17px;font-weight:800;color:#fff;letter-spacing:.3px}
-.topbar-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:1px}
+.topbar-left .topbar-title{font-size:17px;font-weight:800;color:#fff}
+.topbar-left .topbar-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:1px}
 .topbar-clocks{display:flex;gap:10px;margin-top:4px}
-.topbar-clock{font-size:11px;color:rgba(255,255,255,.9);font-weight:600;display:flex;align-items:center;gap:4px}
+.topbar-clock{font-size:11px;color:rgba(255,255,255,.9);font-weight:600}
 .user-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 10px 5px 5px;cursor:pointer}
 .user-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;overflow:hidden}
 .user-avatar img{width:100%;height:100%;object-fit:cover}
 .user-name{font-size:12px;font-weight:700;color:#fff}
 
-/* AUTH SCREEN */
+/* AUTH */
 .auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;text-align:center}
 .auth-logo{font-size:64px;margin-bottom:20px}
 .auth-title{font-size:24px;font-weight:800;color:var(--brown);margin-bottom:8px}
 .auth-sub{font-size:15px;color:var(--brown-mid);margin-bottom:32px;line-height:1.5}
-.auth-btn{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--sand-mid);border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700;color:var(--brown);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:box-shadow .2s}
-.auth-btn:hover{box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.auth-btn{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--sand-mid);border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700;color:var(--brown);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .auth-btn svg{width:22px;height:22px;flex-shrink:0}
 
-/* CONTENT */
-.main{max-width:600px;margin:0 auto;padding:16px}
-.section-title{font-size:18px;font-weight:800;color:var(--brown);margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--sand-mid);display:flex;z-index:200;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 12px;font-size:10px;font-weight:700;color:var(--brown-mid);border:none;background:none;cursor:pointer;gap:3px}
+.nav-btn.active{color:var(--coral)}
+.nav-btn-icon{font-size:22px;line-height:1}
+
+/* MAIN */
+.main{max-width:600px;margin:0 auto;padding:16px;padding-bottom:80px}
+
+/* CARDS */
 .day-card{background:#fff;border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .day-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
-.day-header-left{flex:1}
 .day-date{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 .day-title{font-size:15px;font-weight:800;color:var(--brown)}
-.day-dest{font-size:11px;color:var(--brown-mid);margin-top:2px}
 .day-chevron{font-size:18px;color:var(--brown-mid);transition:transform .2s}
 .day-card.open .day-chevron{transform:rotate(180deg)}
 .day-body{display:none;border-top:1px solid var(--sand-mid);padding:14px 16px}
 .day-card.open .day-body{display:block}
+.dest-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;margin-left:6px}
+.badge-bkk{background:var(--coral)}.badge-cm{background:var(--green)}.badge-kt{background:var(--turq)}.badge-ks{background:var(--gold)}
 
 /* PHOTOS */
 .photos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .photo-wrap{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--sand-mid)}
 .photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .photo-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:11px;padding:4px 8px;font-weight:600}
-.no-photos{text-align:center;padding:24px;color:var(--brown-mid);font-size:13px;font-style:italic}
 
 /* NOTES */
 .note-bubble{background:var(--sand);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid var(--gold)}
 .note-author{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:3px}
 .note-text{font-size:13px;color:var(--brown);line-height:1.5}
-.note-time{font-size:10px;color:var(--brown-mid);margin-top:3px}
 
-/* RÉACTIONS */
+/* REACTIONS */
 .reactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.react-btn{display:flex;align-items:center;gap:5px;background:var(--sand-mid);border-radius:20px;padding:6px 12px;border:none;cursor:pointer;font-size:13px;color:var(--brown);font-weight:600;transition:background .15s}
+.react-btn{display:flex;align-items:center;gap:5px;background:var(--sand-mid);border-radius:20px;padding:6px 12px;border:none;cursor:pointer;font-size:13px;color:var(--brown);font-weight:600}
 .react-btn.active{background:var(--coral-lt);color:var(--coral)}
 .react-count{font-size:12px;font-weight:700}
-
-/* COMMENT */
 .comment-form{margin-top:12px;display:flex;gap:8px}
 .comment-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--brown);background:#fff;font-family:inherit;outline:none;resize:none}
 .comment-input:focus{border-color:var(--coral)}
 .comment-send{background:var(--coral);color:#fff;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;border:none;cursor:pointer;flex-shrink:0}
-
-.dest-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;margin-left:6px}
-.badge-bkk{background:var(--coral)}
-.badge-cm{background:var(--green)}
-.badge-kt{background:var(--turq)}
-.badge-ks{background:var(--gold)}
-
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
-.toast.show{opacity:1}
-
-.loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
-
-/* NAVBAR BAS */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--sand-mid);display:flex;z-index:200;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 12px;font-size:10px;font-weight:700;color:var(--brown-mid);border:none;background:none;cursor:pointer;gap:3px;transition:color .15s}
-.nav-btn.active{color:var(--coral)}
-.nav-btn-icon{font-size:22px;line-height:1}
-.main{padding-bottom:80px}
+.comments-list{margin-top:8px}
 
 /* ITINÉRAIRE */
 .itin-section{margin-bottom:20px}
-.itin-dest-header{background:var(--coral);color:#fff;border-radius:12px 12px 0 0;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.itin-dest-header{border-radius:12px 12px 0 0;padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--coral)}
 .itin-dest-header.cm{background:var(--green)}
 .itin-dest-header.kt{background:var(--turq)}
 .itin-dest-header.ks{background:var(--gold)}
 .itin-dest-header.brun{background:var(--brown)}
 .itin-dest-emoji{font-size:24px}
-.itin-dest-info{flex:1}
-.itin-dest-name{font-size:16px;font-weight:800}
-.itin-dest-dates{font-size:12px;opacity:.85;margin-top:2px}
-.itin-dest-addr{font-size:11px;opacity:.75;margin-top:3px;font-style:italic}
-.itin-body{background:#fff;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:4px}
-.itin-transport{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sand);border-bottom:1px solid var(--sand-mid)}
+.itin-dest-name{font-size:16px;font-weight:800;color:#fff}
+.itin-dest-dates{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.itin-body{background:#fff;border-radius:0 0 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.itin-logement{padding:12px 16px;border-bottom:1px solid var(--sand-mid)}
+.itin-logement-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.itin-logement-addr{font-size:13px;color:var(--brown);font-weight:600}
+.itin-transport{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--sand-mid)}
+.itin-transport:last-child{border-bottom:none}
 .itin-transport-icon{font-size:20px;flex-shrink:0}
-.itin-transport-info{flex:1}
 .itin-transport-title{font-size:13px;font-weight:700;color:var(--brown)}
 .itin-transport-detail{font-size:11px;color:var(--brown-mid);margin-top:2px}
-.itin-transport-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0}
-.itin-logement{padding:12px 16px;border-top:1px solid var(--sand-mid)}
-.itin-logement-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.itin-logement-addr{font-size:13px;color:var(--brown);font-weight:600;line-height:1.4}
-.itin-logement-thai{font-size:11px;color:var(--brown-mid);font-style:italic;margin-top:3px}
-.itin-logement-meta{font-size:11px;color:var(--brown-mid);margin-top:4px}
+.itin-transport-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0;margin-left:auto}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+.loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div>
+  <div class="topbar-left">
     <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
     <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
     <div class="topbar-clocks">
-      <div class="topbar-clock">🇫🇷 <span id="clock-fr">--:--</span></div>
-      <div class="topbar-clock">🇹🇭 <span id="clock-th">--:--</span></div>
+      <span class="topbar-clock">🇫🇷 <span id="clock-fr">--:--</span></span>
+      <span class="topbar-clock">🇹🇭 <span id="clock-th">--:--</span></span>
     </div>
   </div>
   <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
-    <div class="user-avatar" id="user-avatar">?</div>
+    <div class="user-avatar" id="user-avatar"></div>
     <span class="user-name" id="user-name-el">...</span>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div class="auth-screen" id="auth-screen">
   <div class="auth-logo">🌴</div>
   <div class="auth-title">Suivez notre voyage</div>
@@ -142,450 +129,351 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </button>
 </div>
 
-<!-- BOTTOM NAV -->
+<!-- NAV -->
 <div class="bottom-nav" id="bottom-nav" style="display:none">
-  <button class="nav-btn active" onclick="switchTab('feed',this)" id="nav-feed">
+  <button class="nav-btn active" onclick="switchTab('feed',this)">
     <span class="nav-btn-icon">📸</span>Photos
   </button>
-  <button class="nav-btn" onclick="switchTab('itin',this)" id="nav-itin">
+  <button class="nav-btn" onclick="switchTab('itin',this)">
     <span class="nav-btn-icon">🗺</span>Itinéraire
   </button>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div class="main" id="main-content" style="display:none">
-
-  <!-- ONGLET PHOTOS -->
   <div id="tab-feed">
-    <div id="feed-container">
-      <div class="loader">Chargement des photos et nouvelles…</div>
-    </div>
+    <div id="feed-container"><div class="loader">Chargement…</div></div>
   </div>
-
-  <!-- ONGLET ITINÉRAIRE -->
   <div id="tab-itin" style="display:none">
 
-    <!-- Vol aller -->
     <div class="itin-section">
-      <div class="itin-dest-header brun">
-        <div class="itin-dest-emoji">✈️</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Vol aller — Paris → Bangkok</div>
-          <div class="itin-dest-dates">Lundi 20 juillet 2026</div>
-        </div>
-      </div>
+      <div class="itin-dest-header brun"><div class="itin-dest-emoji">✈️</div><div><div class="itin-dest-name">Vol aller — Paris → Bangkok</div><div class="itin-dest-dates">Lundi 20 juillet 2026</div></div></div>
       <div class="itin-body">
-        <div class="itin-transport">
-          <div class="itin-transport-icon">✈️</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">Air France · Paris CDG T2E → Bangkok BKK</div>
-            <div class="itin-transport-detail">Vol direct ~11h · Arrivée le 21 juillet à 09h15 (+1j)</div>
-          </div>
-          <div class="itin-transport-time">16h40</div>
-        </div>
+        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Air France · Paris CDG T2E → Bangkok BKK</div><div class="itin-transport-detail">Vol direct ~11h · Arrivée le 21 juillet à 09h15</div></div><div class="itin-transport-time">16h40</div></div>
       </div>
     </div>
 
-    <!-- Bangkok -->
     <div class="itin-section">
-      <div class="itin-dest-header">
-        <div class="itin-dest-emoji">🏙</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Bangkok</div>
-          <div class="itin-dest-dates">21 – 25 juillet 2026 · 4 nuits</div>
-          <div class="itin-dest-addr">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div>
-        </div>
-      </div>
+      <div class="itin-dest-header"><div class="itin-dest-emoji">🏙</div><div><div class="itin-dest-name">Bangkok</div><div class="itin-dest-dates">21 – 25 juillet 2026 · 4 nuits</div></div></div>
       <div class="itin-body">
-        <div class="itin-logement">
-          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
-          <div class="itin-logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">✈️</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">AirAsia Move · Don Mueang T2 → Chiang Mai CNX</div>
-            <div class="itin-transport-detail">Samedi 25 juillet · Check-out 07h30 · Taxi aéroport 30 min</div>
-          </div>
-          <div class="itin-transport-time">10h10</div>
-        </div>
+        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">AirAsia · Don Mueang T2 → Chiang Mai CNX</div><div class="itin-transport-detail">Samedi 25 juillet · Check-out 07h30</div></div><div class="itin-transport-time">10h10</div></div>
       </div>
     </div>
 
-    <!-- Chiang Mai -->
     <div class="itin-section">
-      <div class="itin-dest-header cm">
-        <div class="itin-dest-emoji">🌿</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Chiang Mai</div>
-          <div class="itin-dest-dates">25 – 29 juillet 2026 · 4 nuits</div>
-        </div>
-      </div>
+      <div class="itin-dest-header cm"><div class="itin-dest-emoji">🌿</div><div><div class="itin-dest-name">Chiang Mai</div><div class="itin-dest-dates">25 – 29 juillet 2026 · 4 nuits</div></div></div>
       <div class="itin-body">
-        <div class="itin-logement">
-          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
-          <div class="itin-logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">✈️</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">AirAsia Move · CNX T2 → Surat Thani</div>
-            <div class="itin-transport-detail">Mercredi 29 juillet · Check-out avant 10h · Taxi gratuit Airbnb</div>
-          </div>
-          <div class="itin-transport-time">10h40</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">🚢</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">Ferry Tapee Pier → Mae Haad (Koh Tao)</div>
-            <div class="itin-transport-detail">Mercredi 29 juillet · Chercher pancarte avec notre nom</div>
-          </div>
-          <div class="itin-transport-time">15h30</div>
-        </div>
+        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">1 Chang Moi Road Soi 2, Chiang Mai 50300</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">AirAsia · CNX T2 → Surat Thani</div><div class="itin-transport-detail">Mercredi 29 juillet · Check-out avant 10h</div></div><div class="itin-transport-time">10h40</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">🚢</div><div class="itin-transport-info"><div class="itin-transport-title">Ferry Tapee Pier → Mae Haad (Koh Tao)</div><div class="itin-transport-detail">Mercredi 29 juillet · Arrivée ~18h00</div></div><div class="itin-transport-time">15h30</div></div>
       </div>
     </div>
 
-    <!-- Koh Tao -->
     <div class="itin-section">
-      <div class="itin-dest-header kt">
-        <div class="itin-dest-emoji">🐠</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Koh Tao</div>
-          <div class="itin-dest-dates">29 juillet – 1er août 2026 · 3 nuits</div>
-        </div>
-      </div>
+      <div class="itin-dest-header kt"><div class="itin-dest-emoji">🐠</div><div><div class="itin-dest-name">Koh Tao</div><div class="itin-dest-dates">29 juillet – 1er août 2026 · 3 nuits</div></div></div>
       <div class="itin-body">
-        <div class="itin-logement">
-          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
-          <div class="itin-logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">🚢</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">Direct Ferries · Mae Haad → Bangrak Pier (Koh Samui)</div>
-            <div class="itin-transport-detail">Dimanche 1er août · Check-out avant 10h · Transport Airbnb organisé</div>
-          </div>
-          <div class="itin-transport-time">11h30</div>
-        </div>
+        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">🚢</div><div class="itin-transport-info"><div class="itin-transport-title">Direct Ferries · Mae Haad → Bangrak Pier (Koh Samui)</div><div class="itin-transport-detail">Dimanche 1er août · Check-out avant 10h</div></div><div class="itin-transport-time">11h30</div></div>
       </div>
     </div>
 
-    <!-- Koh Samui -->
     <div class="itin-section">
-      <div class="itin-dest-header ks">
-        <div class="itin-dest-emoji">🌴</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Koh Samui</div>
-          <div class="itin-dest-dates">1 – 5 août 2026 · 4 nuits</div>
-        </div>
-      </div>
+      <div class="itin-dest-header ks"><div class="itin-dest-emoji">🌴</div><div><div class="itin-dest-name">Koh Samui</div><div class="itin-dest-dates">1 – 5 août 2026 · 4 nuits</div></div></div>
       <div class="itin-body">
-        <div class="itin-logement">
-          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
-          <div class="itin-logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">✈️</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div>
-            <div class="itin-transport-detail">Mercredi 5 août · Check-out 10h · Aéroport en voiture 45 min</div>
-          </div>
-          <div class="itin-transport-time">14h20</div>
-        </div>
+        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div><div class="itin-transport-detail">Mercredi 5 août · Check-out avant 11h</div></div><div class="itin-transport-time">14h20</div></div>
       </div>
     </div>
 
-    <!-- Retour Bangkok -->
     <div class="itin-section">
-      <div class="itin-dest-header brun">
-        <div class="itin-dest-emoji">🏨</div>
-        <div class="itin-dest-info">
-          <div class="itin-dest-name">Bangkok — Nuit avant vol</div>
-          <div class="itin-dest-dates">5 – 6 août 2026 · 1 nuit</div>
-        </div>
-      </div>
+      <div class="itin-dest-header brun"><div class="itin-dest-emoji">🏨</div><div><div class="itin-dest-name">Bangkok — Nuit avant vol</div><div class="itin-dest-dates">5 – 6 août 2026 · 1 nuit</div></div></div>
       <div class="itin-body">
-        <div class="itin-logement">
-          <div class="itin-logement-lbl">🏨 Hôtel Grand BS Airport Hotel Suvarnabhumi</div>
-          <div class="itin-logement-addr">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div>
-        </div>
-        <div class="itin-transport">
-          <div class="itin-transport-icon">✈️</div>
-          <div class="itin-transport-info">
-            <div class="itin-transport-title">Air France · Bangkok BKK → Paris CDG T2E</div>
-            <div class="itin-transport-detail">Jeudi 6 août · Arrivée 19h00 heure française · Vol direct ~11h</div>
-          </div>
-          <div class="itin-transport-time">11h25</div>
-        </div>
+        <div class="itin-logement"><div class="itin-logement-lbl">🏨 Grand BS Airport Hotel</div><div class="itin-logement-addr">836, Lat Krabang 30/4 Alley, Bangkok 10520</div></div>
+        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Air France · Bangkok BKK → Paris CDG T2E</div><div class="itin-transport-detail">Jeudi 6 août · Arrivée Paris 19h00</div></div><div class="itin-transport-time">11h25</div></div>
       </div>
     </div>
 
-  </div><!-- fin tab-itin -->
+  </div>
 </div>
 
 <script>
-const GS_URL='https://script.google.com/macros/s/AKfycbxFcGaftnTCphrBPy_NFTcWoMn83CSbPaCJh3ddAnZVa4yOyJDLGZlWWOdxfRY3iTk/exec';
-const WORKER_URL='https://claude-proxy-thailande.s-desferet.workers.dev';
-const SECRET='THAI2026SECRET';
-const CLIENT_ID='149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
-
-let currentUser=null;
-let tokenClient=null;
-let accessToken=null;
-
-// ── Toast ──
-function toast(msg,dur=2500){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
-
-// ── Auth Google — UNE SEULE méthode : token client ──
-function initAuth(){
-  // Vérifier si un token est mémorisé
-  const saved=sessionStorage.getItem('vg_token');
-  const savedUser=sessionStorage.getItem('vg_user');
-  if(saved&&savedUser){
-    accessToken=saved;
-    currentUser=JSON.parse(savedUser);
-    showConnected();
-    return;
-  }
-  // Sinon attendre que l'utilisateur clique
-}
-
-function startSignIn(){
-  if(!window.google){toast('⏳ Chargement en cours…');setTimeout(startSignIn,1000);return;}
-  tokenClient=google.accounts.oauth2.initTokenClient({
-    client_id:CLIENT_ID,
-    scope:'https://www.googleapis.com/auth/userinfo.profile openid email',
-    callback:(resp)=>{
-      if(resp.error){toast('❌ Connexion annulée');return;}
-      accessToken=resp.access_token;
-      // Récupérer infos utilisateur
-      fetch('https://www.googleapis.com/oauth2/v3/userinfo',{
-        headers:{Authorization:'Bearer '+accessToken}
-      }).then(r=>r.json()).then(u=>{
-        currentUser={name:u.name,picture:u.picture,email:u.email};
-        sessionStorage.setItem('vg_token',accessToken);
-        sessionStorage.setItem('vg_user',JSON.stringify(currentUser));
-        showConnected();
-      });
-    },
-  });
-  tokenClient.requestAccessToken({prompt:'select_account'});
-}
-
-function showConnected(){
-  document.getElementById('auth-screen').style.display='none';
-  document.getElementById('main-content').style.display='block';
-  document.getElementById('bottom-nav').style.display='flex';
-  const chip=document.getElementById('user-chip');
-  chip.style.display='flex';
-  const av=document.getElementById('user-avatar');
-  if(currentUser.picture){av.innerHTML=`<img src="${currentUser.picture}" onerror="this.parentElement.textContent='${currentUser.name[0]}'">`;}
-  else{av.textContent=currentUser.name[0];}
-  document.getElementById('user-name-el').textContent=currentUser.name.split(' ')[0];
-  loadFeed();
-}
-
-function signOut(){
-  if(!confirm('Se déconnecter ?'))return;
-  sessionStorage.removeItem('vg_token');
-  sessionStorage.removeItem('vg_user');
-  currentUser=null;accessToken=null;
-  document.getElementById('auth-screen').style.display='flex';
-  document.getElementById('main-content').style.display='none';
-  document.getElementById('user-chip').style.display='none';
-  document.getElementById('bottom-nav').style.display='none';
-}
-
-// ── Charger le feed ──
-const DAYS=[
-  {key:'bkk-0',date:'Mar 21 juil',title:'Arrivée à Bangkok',dk:'bkk'},
-  {key:'bkk-1',date:'Mer 22 juil',title:'Temples & klongs',dk:'bkk'},
-  {key:'bkk-2',date:'Jeu 23 juil',title:'Excursion Ayutthaya',dk:'bkk'},
-  {key:'bkk-3',date:'Ven 24 juil',title:'Journée fun',dk:'bkk'},
-  {key:'bkk-4',date:'Sam 25 juil',title:'Départ Chiang Mai',dk:'bkk'},
-  {key:'cm-0', date:'Sam 25 juil',title:'Arrivée Chiang Mai',dk:'cm'},
-  {key:'cm-1', date:'Dim 26 juil',title:'Sanctuaire éléphants',dk:'cm'},
-  {key:'cm-2', date:'Lun 27 juil',title:'Doi Suthep + Night Bazaar',dk:'cm'},
-  {key:'cm-3', date:'Mar 28 juil',title:'Grand Canyon Water Park',dk:'cm'},
-  {key:'cm-4', date:'Mer 29 juil',title:'Trajet Koh Tao',dk:'cm'},
-  {key:'kt-0', date:'Jeu 29 juil',title:'Arrivée Koh Tao',dk:'kt'},
-  {key:'kt-1', date:'Ven 30 juil',title:'Shark Bay — Tortues 🐢',dk:'kt'},
-  {key:'kt-2', date:'Sam 31 juil',title:'Ao Leuk Beach 🌊',dk:'kt'},
-  {key:'kt-3', date:'Dim 1 août', title:'Départ Koh Samui',dk:'kt'},
-  {key:'ks-0', date:'Lun 1 août', title:'Arrivée Koh Samui',dk:'ks'},
-  {key:'ks-1', date:'Dim 2 août', title:'Silver Beach 🌊',dk:'ks'},
-  {key:'ks-2', date:'Lun 3 août', title:'Big Buddha + Cascades',dk:'ks'},
-  {key:'ks-3', date:'Mar 4 août', title:'Journée de vacances 🌴',dk:'ks'},
-  {key:'ks-4', date:'Mer 5 août', title:'Retour Bangkok',dk:'ks'},
-  {key:'bkk-6',date:'Jeu 6 août', title:'Retour Paris ✈',dk:'bkk'},
+const GS_URL = 'https://script.google.com/macros/s/AKfycbxFcGaftnTCphrBPy_NFTcWoMn83CSbPaCJh3ddAnZVa4yOyJDLGZlWWOdxfRY3iTk/exec';
+const CLIENT_ID = '149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
+const REACTIONS = ['❤️','😍','😂','🤩','👏'];
+const DEST_LABEL = {bkk:'Bangkok',cm:'Chiang Mai',kt:'Koh Tao',ks:'Koh Samui'};
+const DAYS = [
+  {key:'bkk-0',date:'Mar 21 juil',title:"Arrivée à Bangkok",dk:'bkk'},
+  {key:'bkk-1',date:'Mer 22 juil',title:"Temples & klongs",dk:'bkk'},
+  {key:'bkk-2',date:'Jeu 23 juil',title:"Excursion Ayutthaya",dk:'bkk'},
+  {key:'bkk-3',date:'Ven 24 juil',title:"Journée fun",dk:'bkk'},
+  {key:'bkk-4',date:'Sam 25 juil',title:"Départ Chiang Mai",dk:'bkk'},
+  {key:'cm-0', date:'Sam 25 juil',title:"Arrivée Chiang Mai",dk:'cm'},
+  {key:'cm-1', date:'Dim 26 juil',title:"Sanctuaire éléphants 🐘",dk:'cm'},
+  {key:'cm-2', date:'Lun 27 juil',title:"Doi Suthep + Night Bazaar",dk:'cm'},
+  {key:'cm-3', date:'Mar 28 juil',title:"Grand Canyon Water Park",dk:'cm'},
+  {key:'cm-4', date:'Mer 29 juil',title:"Trajet Koh Tao",dk:'cm'},
+  {key:'kt-0', date:'Jeu 29 juil',title:"Arrivée Koh Tao",dk:'kt'},
+  {key:'kt-1', date:'Ven 30 juil',title:"Shark Bay — Tortues 🐢",dk:'kt'},
+  {key:'kt-2', date:'Sam 31 juil',title:"Ao Leuk Beach 🌊",dk:'kt'},
+  {key:'kt-3', date:'Dim 1 août', title:"Départ Koh Samui",dk:'kt'},
+  {key:'ks-0', date:'Lun 1 août', title:"Arrivée Koh Samui",dk:'ks'},
+  {key:'ks-1', date:'Dim 2 août', title:"Silver Beach 🌊",dk:'ks'},
+  {key:'ks-2', date:'Lun 3 août', title:"Big Buddha + Cascades",dk:'ks'},
+  {key:'ks-3', date:'Mar 4 août', title:"Journée de vacances 🌴",dk:'ks'},
+  {key:'ks-4', date:'Mer 5 août', title:"Retour Bangkok",dk:'ks'},
+  {key:'bkk-6',date:'Jeu 6 août', title:"Retour Paris ✈",dk:'bkk'},
 ];
 
-const DEST_LABEL={bkk:'Bangkok',cm:'Chiang Mai',kt:'Koh Tao',ks:'Koh Samui'};
-const REACTIONS=['❤️','😍','😂','🤩','👏'];
+let currentUser = null;
+let tokenClient = null;
 
-async function loadFeed(){
-  const container=document.getElementById('feed-container');
-  container.innerHTML='<div class="loader">Chargement…</div>';
-  try{
-    // Charger depuis Google Sheets
-    const r=await fetch(GS_URL+'?t='+Date.now());
-    const allRows=await r.json();
-
-    const photos=[];
-    const notesByDay={};
-
-    (Array.isArray(allRows)?allRows:[]).forEach(row=>{
-      if(!row||!row.type)return;
-      if(row.type==='photo'){
-        try{
-          const p=typeof row.value==='string'?JSON.parse(row.value):row.value;
-          if(p&&p.url&&p.id)photos.push(p);
-        }catch(e){}
-      }
-      if(row.type==='note'&&row.key){
-        const m=row.key.match(/^note-([a-z]+-[0-9]+)/);
-        if(m){
-          const dk=m[1];
-          if(!notesByDay[dk])notesByDay[dk]=[];
-          try{
-            const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;
-            if(Array.isArray(ns))notesByDay[dk].push(...ns);
-            else if(ns&&ns.text)notesByDay[dk].push(ns);
-          }catch(e){}
-        }
-      }
-    });
-
-    const activeDays=DAYS.filter(d=>{
-      const dp=photos.filter(p=>p.dayKey===d.key&&(p.diff==='all'||p.diff==='both'));
-      return dp.length||(notesByDay[d.key]||[]).length;
-    });
-
-    if(!activeDays.length){
-      container.innerHTML='<div class="loader" style="padding:60px">📷 Les photos et nouvelles apparaîtront ici au fil du voyage !</div>';
-      return;
-    }
-    container.innerHTML='';
-    [...activeDays].reverse().forEach(day=>{
-      const dp=photos.filter(p=>p.dayKey===day.key&&(p.diff==='all'||p.diff==='both'));
-      const dn=notesByDay[day.key]||[];
-      const card=document.createElement('div');
-      card.className='day-card open';
-      const badgeClass='badge-'+day.dk;
-      card.innerHTML=`
-        <div class="day-header" onclick="toggleCard(this)">
-          <div class="day-header-left">
-            <div class="day-date">${day.date} <span class="dest-badge ${badgeClass}">${DEST_LABEL[day.dk]}</span></div>
-            <div class="day-title">${day.title}</div>
-          </div>
-          <div class="day-chevron">⌃</div>
-        </div>
-        <div class="day-body">
-          ${dp.length?`<div class="photos-grid">${dp.map(p=>`
-            <div class="photo-wrap">
-              <img src="${p.url}" 
-                   loading="lazy"
-                   onerror="this.src=`https://lh3.googleusercontent.com/d/${p.id}=w800`"
-                   alt="${p.caption||'Photo'}">
-              ${p.caption?`<div class="photo-caption">${p.caption}</div>`:''}
-            </div>`).join('')}</div>`:''}
-          ${dn.length?dn.map(n=>`<div class="note-bubble">
-            <div class="note-author">✍️ ${n.author||'La famille'}</div>
-            <div class="note-text">${(n.text||'').replace(/\n/g,'<br>')}</div>
-            ${n.time?`<div class="note-time">${n.time}</div>`:''}
-          </div>`).join(''):''}
-          <div class="reactions" id="react-${day.key}">
-            ${REACTIONS.map(r=>`<button class="react-btn" onclick="addReaction('${day.key}','${r}',this)">${r} <span class="react-count">0</span></button>`).join('')}
-          </div>
-          <div class="comment-form">
-            <textarea class="comment-input" id="cmt-${day.key}" placeholder="Laisser un message…" rows="1" oninput="this.rows=Math.max(1,this.value.split('\\n').length)"></textarea>
-            <button class="comment-send" onclick="sendComment('${day.key}')">Envoyer</button>
-          </div>
-          <div id="cmts-${day.key}" style="margin-top:8px"></div>
-        </div>`;
-      container.appendChild(card);
-      loadReactions(day.key);
-      loadComments(day.key);
-    });
-  }catch(e){
-    container.innerHTML='<div class="loader">📡 Chargement en cours… Vérifiez votre connexion.</div>';
-  }
-}
-
-function toggleCard(hdr){
-  hdr.parentElement.classList.toggle('open');
-}
-
-// ── Réactions ──
-function addReaction(dayKey,emoji,btn){
-  const stored=JSON.parse(localStorage.getItem('vg_reacts')||'{}');
-  const rkey=dayKey+'-'+emoji;
-  stored[rkey]=(stored[rkey]||0)+1;
-  localStorage.setItem('vg_reacts',JSON.stringify(stored));
-  btn.classList.add('active');
-  btn.querySelector('.react-count').textContent=stored[rkey];
-  // Sauvegarder dans GS
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({type:'reaction',key:dayKey,value:emoji+':'+currentUser.name,device:'voyage'})});
-  toast(emoji+' Réaction envoyée !');
-}
-
-function loadReactions(dayKey){
-  const stored=JSON.parse(localStorage.getItem('vg_reacts')||'{}');
-  const container=document.getElementById('react-'+dayKey);
-  if(!container)return;
-  container.querySelectorAll('.react-btn').forEach(btn=>{
-    const emoji=btn.textContent.trim()[0];
-    const rkey=dayKey+'-'+emoji;
-    if(stored[rkey])btn.querySelector('.react-count').textContent=stored[rkey];
-  });
-}
-
-// ── Commentaires ──
-function sendComment(dayKey){
-  const inp=document.getElementById('cmt-'+dayKey);
-  const text=inp.value.trim();
-  if(!text)return;
-  const name=currentUser?currentUser.name.split(' ')[0]:'Visiteur';
-  fetch(GS_URL,{method:'POST',body:JSON.stringify({type:'comment',key:dayKey,value:name+': '+text,device:'voyage'})});
-  const container=document.getElementById('cmts-'+dayKey);
-  const div=document.createElement('div');
-  div.className='note-bubble';
-  div.innerHTML=`<div class="note-author">💬 ${name}</div><div class="note-text">${text}</div>`;
-  container.appendChild(div);
-  inp.value='';inp.rows=1;
-  toast('💬 Message envoyé !');
-}
-
-function loadComments(dayKey){
-  // Les commentaires seront chargés depuis GS au prochain rechargement
-}
-
-// ── Init ──
-function switchTab(tab, btn){
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-feed').style.display = tab==='feed'?'block':'none';
-  document.getElementById('tab-itin').style.display = tab==='itin'?'block':'none';
-}
-
-function updateClocks(){
-  const now = new Date();
-  const th = new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
-  const fr = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(now);
-  const elTh = document.getElementById('clock-th');
-  const elFr = document.getElementById('clock-fr');
-  if(elTh) elTh.textContent = th;
+// ── Horloges ──
+function updateClocks() {
+  var now = new Date();
+  var fr = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(now);
+  var th = new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
+  var elFr = document.getElementById('clock-fr');
+  var elTh = document.getElementById('clock-th');
   if(elFr) elFr.textContent = fr;
+  if(elTh) elTh.textContent = th;
 }
 updateClocks();
 setInterval(updateClocks, 30000);
 
-window.addEventListener('load',()=>{
-  // Pas de One Tap — uniquement auth sur clic utilisateur
+// ── Toast ──
+function toast(msg, dur) {
+  dur = dur || 2500;
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, dur);
+}
+
+// ── Auth ──
+function initAuth() {
+  var saved = sessionStorage.getItem('vg_token');
+  var savedUser = sessionStorage.getItem('vg_user');
+  if(saved && savedUser) {
+    currentUser = JSON.parse(savedUser);
+    showConnected();
+  }
+}
+
+function startSignIn() {
+  if(!window.google) {
+    toast('⏳ Chargement en cours…');
+    setTimeout(startSignIn, 1000);
+    return;
+  }
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/userinfo.profile openid email',
+    callback: function(resp) {
+      if(resp.error) { toast('❌ Connexion annulée'); return; }
+      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {Authorization: 'Bearer ' + resp.access_token}
+      }).then(function(r){ return r.json(); }).then(function(u) {
+        currentUser = {name: u.name, picture: u.picture, email: u.email};
+        sessionStorage.setItem('vg_token', resp.access_token);
+        sessionStorage.setItem('vg_user', JSON.stringify(currentUser));
+        showConnected();
+      });
+    }
+  });
+  tokenClient.requestAccessToken({prompt: 'select_account'});
+}
+
+function showConnected() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+  document.getElementById('bottom-nav').style.display = 'flex';
+  var chip = document.getElementById('user-chip');
+  chip.style.display = 'flex';
+  var av = document.getElementById('user-avatar');
+  if(currentUser.picture) {
+    var img = document.createElement('img');
+    img.src = currentUser.picture;
+    img.alt = currentUser.name;
+    av.innerHTML = '';
+    av.appendChild(img);
+  } else {
+    av.textContent = currentUser.name[0];
+  }
+  document.getElementById('user-name-el').textContent = currentUser.name.split(' ')[0];
+  loadFeed();
+}
+
+function signOut() {
+  if(!confirm('Se déconnecter ?')) return;
+  sessionStorage.removeItem('vg_token');
+  sessionStorage.removeItem('vg_user');
+  currentUser = null;
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('bottom-nav').style.display = 'none';
+  document.getElementById('user-chip').style.display = 'none';
+}
+
+// ── Tabs ──
+function switchTab(tab, btn) {
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('tab-feed').style.display = tab === 'feed' ? 'block' : 'none';
+  document.getElementById('tab-itin').style.display = tab === 'itin' ? 'block' : 'none';
+}
+
+// ── Feed ──
+async function loadFeed() {
+  var container = document.getElementById('feed-container');
+  container.innerHTML = '<div class="loader">Chargement…</div>';
+  try {
+    var r = await fetch(GS_URL + '?t=' + Date.now());
+    var allRows = await r.json();
+    if(!Array.isArray(allRows)) allRows = [];
+
+    var photos = [];
+    var notesByDay = {};
+
+    allRows.forEach(function(row) {
+      if(!row || !row.type) return;
+      if(row.type === 'photo') {
+        try {
+          var p = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+          if(p && p.url && p.id && (p.diff === 'all' || p.diff === 'both')) {
+            photos.push(p);
+          }
+        } catch(e) {}
+      }
+      if(row.type === 'note' && row.key) {
+        var m = row.key.match(/^note-([a-z]+-[0-9]+)/);
+        if(m) {
+          var dk = m[1];
+          if(!notesByDay[dk]) notesByDay[dk] = [];
+          try {
+            var ns = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
+            if(Array.isArray(ns)) notesByDay[dk] = notesByDay[dk].concat(ns);
+          } catch(e) {}
+        }
+      }
+    });
+
+    var activeDays = DAYS.filter(function(d) {
+      var dp = photos.filter(function(p){ return p.dayKey === d.key; });
+      var dn = notesByDay[d.key] || [];
+      return dp.length || dn.length;
+    });
+
+    if(!activeDays.length) {
+      container.innerHTML = '<div class="loader" style="padding:60px">📷 Les photos et nouvelles apparaîtront ici au fil du voyage !</div>';
+      return;
+    }
+
+    container.innerHTML = '';
+    activeDays.slice().reverse().forEach(function(day) {
+      var dp = photos.filter(function(p){ return p.dayKey === day.key; });
+      var dn = (notesByDay[day.key] || []).filter(function(n){ return n && n.text; });
+      var badgeClass = 'badge-' + day.dk;
+
+      var card = document.createElement('div');
+      card.className = 'day-card open';
+
+      // Header
+      var header = '<div class="day-header" onclick="toggleCard(this)">' +
+        '<div><div class="day-date">' + day.date + ' <span class="dest-badge ' + badgeClass + '">' + DEST_LABEL[day.dk] + '</span></div>' +
+        '<div class="day-title">' + day.title + '</div></div>' +
+        '<div class="day-chevron">⌃</div></div>';
+
+      // Body
+      var photosHtml = '';
+      if(dp.length) {
+        photosHtml = '<div class="photos-grid">';
+        dp.forEach(function(p) {
+          photosHtml += '<div class="photo-wrap"><img src="' + p.url + '" loading="lazy" alt="' + (p.caption || '') + '" onerror="this.parentElement.style.display=\'none\'">';
+          if(p.caption) photosHtml += '<div class="photo-caption">' + p.caption + '</div>';
+          photosHtml += '</div>';
+        });
+        photosHtml += '</div>';
+      }
+
+      var notesHtml = '';
+      dn.forEach(function(n) {
+        var txt = (n.text || '').replace(/\n/g, '<br>');
+        notesHtml += '<div class="note-bubble">' +
+          '<div class="note-author">✍️ ' + (n.author || 'La famille') + '</div>' +
+          '<div class="note-text">' + txt + '</div>' +
+          '</div>';
+      });
+
+      // Reactions
+      var reactHtml = '<div class="reactions" id="react-' + day.key + '">';
+      REACTIONS.forEach(function(emoji) {
+        reactHtml += '<button class="react-btn" onclick="addReaction(\'' + day.key + '\',\'' + emoji + '\',this)">' + emoji + ' <span class="react-count">0</span></button>';
+      });
+      reactHtml += '</div>';
+
+      // Comment
+      var commentHtml = '<div class="comment-form">' +
+        '<textarea class="comment-input" id="cmt-' + day.key + '" placeholder="Laisser un message…" rows="1"></textarea>' +
+        '<button class="comment-send" onclick="sendComment(\'' + day.key + '\')">Envoyer</button>' +
+        '</div><div class="comments-list" id="cmts-' + day.key + '"></div>';
+
+      card.innerHTML = header +
+        '<div class="day-body">' + photosHtml + notesHtml + reactHtml + commentHtml + '</div>';
+
+      container.appendChild(card);
+      loadReactions(day.key);
+    });
+
+  } catch(e) {
+    container.innerHTML = '<div class="loader">❌ Erreur de chargement. Réessayez.</div>';
+    console.error(e);
+  }
+}
+
+function toggleCard(hdr) {
+  hdr.parentElement.classList.toggle('open');
+}
+
+function addReaction(dayKey, emoji, btn) {
+  var stored = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
+  var rkey = dayKey + '-' + emoji;
+  stored[rkey] = (stored[rkey] || 0) + 1;
+  localStorage.setItem('vg_reacts', JSON.stringify(stored));
+  btn.classList.add('active');
+  btn.querySelector('.react-count').textContent = stored[rkey];
+  var name = currentUser ? currentUser.name : 'Visiteur';
+  fetch(GS_URL, {method:'POST', body:JSON.stringify({type:'reaction',key:dayKey,value:emoji+':'+name,device:'voyage'})});
+  toast(emoji + ' Réaction envoyée !');
+}
+
+function loadReactions(dayKey) {
+  var stored = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
+  var container = document.getElementById('react-' + dayKey);
+  if(!container) return;
+  container.querySelectorAll('.react-btn').forEach(function(btn) {
+    var emoji = btn.textContent.trim()[0];
+    var rkey = dayKey + '-' + emoji;
+    if(stored[rkey]) btn.querySelector('.react-count').textContent = stored[rkey];
+  });
+}
+
+function sendComment(dayKey) {
+  var inp = document.getElementById('cmt-' + dayKey);
+  var text = inp.value.trim();
+  if(!text) return;
+  var name = currentUser ? currentUser.name.split(' ')[0] : 'Visiteur';
+  fetch(GS_URL, {method:'POST', body:JSON.stringify({type:'comment',key:dayKey,value:name+': '+text,device:'voyage'})});
+  var container = document.getElementById('cmts-' + dayKey);
+  var div = document.createElement('div');
+  div.className = 'note-bubble';
+  div.innerHTML = '<div class="note-author">💬 ' + name + '</div><div class="note-text">' + text + '</div>';
+  container.appendChild(div);
+  inp.value = '';
+  toast('💬 Message envoyé !');
+}
+
+window.addEventListener('load', function() {
   initAuth();
 });
 </script>
