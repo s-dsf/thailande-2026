@@ -447,7 +447,7 @@ async function loadFeed(){
         }catch(e){}
       }
       if(row.type==='note'&&row.key){
-        const m=row.key.match(/^note-([a-z]+-\d+)/);
+        const m=row.key.match(/^note-([a-z]+-[0-9]+)/);
         if(m){
           const dk=m[1];
           if(!notesByDay[dk])notesByDay[dk]=[];
