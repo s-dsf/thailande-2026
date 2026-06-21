@@ -2902,7 +2902,7 @@ async function uploadToDrive(file, caption, destKey, dayKey, diff){
   const boundary = 'thai2026boundary';
   const meta = JSON.stringify({
     name: `${dayKey}-${Date.now()}-${file.name||'photo.jpg'}`,
-    parents: [DRIVE_FOLDER_ID],
+    parents: [GD_FOLDER_ID],
   });
 
   const metaBytes = new TextEncoder().encode(
