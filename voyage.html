@@ -13,6 +13,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .topbar{position:sticky;top:0;z-index:100;background:var(--coral);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .topbar-title{font-size:17px;font-weight:800;color:#fff;letter-spacing:.3px}
 .topbar-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:1px}
+.topbar-clocks{display:flex;gap:10px;margin-top:4px}
+.topbar-clock{font-size:11px;color:rgba(255,255,255,.9);font-weight:600;display:flex;align-items:center;gap:4px}
 .user-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 10px 5px 5px;cursor:pointer}
 .user-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;overflow:hidden}
 .user-avatar img{width:100%;height:100%;object-fit:cover}
@@ -76,6 +78,38 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toast.show{opacity:1}
 
 .loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
+
+/* NAVBAR BAS */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--sand-mid);display:flex;z-index:200;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 12px;font-size:10px;font-weight:700;color:var(--brown-mid);border:none;background:none;cursor:pointer;gap:3px;transition:color .15s}
+.nav-btn.active{color:var(--coral)}
+.nav-btn-icon{font-size:22px;line-height:1}
+.main{padding-bottom:80px}
+
+/* ITINÉRAIRE */
+.itin-section{margin-bottom:20px}
+.itin-dest-header{background:var(--coral);color:#fff;border-radius:12px 12px 0 0;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.itin-dest-header.cm{background:var(--green)}
+.itin-dest-header.kt{background:var(--turq)}
+.itin-dest-header.ks{background:var(--gold)}
+.itin-dest-header.brun{background:var(--brown)}
+.itin-dest-emoji{font-size:24px}
+.itin-dest-info{flex:1}
+.itin-dest-name{font-size:16px;font-weight:800}
+.itin-dest-dates{font-size:12px;opacity:.85;margin-top:2px}
+.itin-dest-addr{font-size:11px;opacity:.75;margin-top:3px;font-style:italic}
+.itin-body{background:#fff;border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:4px}
+.itin-transport{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--sand);border-bottom:1px solid var(--sand-mid)}
+.itin-transport-icon{font-size:20px;flex-shrink:0}
+.itin-transport-info{flex:1}
+.itin-transport-title{font-size:13px;font-weight:700;color:var(--brown)}
+.itin-transport-detail{font-size:11px;color:var(--brown-mid);margin-top:2px}
+.itin-transport-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0}
+.itin-logement{padding:12px 16px;border-top:1px solid var(--sand-mid)}
+.itin-logement-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.itin-logement-addr{font-size:13px;color:var(--brown);font-weight:600;line-height:1.4}
+.itin-logement-thai{font-size:11px;color:var(--brown-mid);font-style:italic;margin-top:3px}
+.itin-logement-meta{font-size:11px;color:var(--brown-mid);margin-top:4px}
 </style>
 </head>
 <body>
@@ -84,6 +118,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div>
     <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
     <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
+    <div class="topbar-clocks">
+      <div class="topbar-clock">🇫🇷 <span id="clock-fr">--:--</span></div>
+      <div class="topbar-clock">🇹🇭 <span id="clock-th">--:--</span></div>
+    </div>
   </div>
   <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
     <div class="user-avatar" id="user-avatar">?</div>
@@ -104,11 +142,185 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </button>
 </div>
 
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottom-nav" style="display:none">
+  <button class="nav-btn active" onclick="switchTab('feed',this)" id="nav-feed">
+    <span class="nav-btn-icon">📸</span>Photos
+  </button>
+  <button class="nav-btn" onclick="switchTab('itin',this)" id="nav-itin">
+    <span class="nav-btn-icon">🗺</span>Itinéraire
+  </button>
+</div>
+
 <!-- MAIN CONTENT -->
 <div class="main" id="main-content" style="display:none">
-  <div id="feed-container">
-    <div class="loader">Chargement des photos et nouvelles…</div>
+
+  <!-- ONGLET PHOTOS -->
+  <div id="tab-feed">
+    <div id="feed-container">
+      <div class="loader">Chargement des photos et nouvelles…</div>
+    </div>
   </div>
+
+  <!-- ONGLET ITINÉRAIRE -->
+  <div id="tab-itin" style="display:none">
+
+    <!-- Vol aller -->
+    <div class="itin-section">
+      <div class="itin-dest-header brun">
+        <div class="itin-dest-emoji">✈️</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Vol aller — Paris → Bangkok</div>
+          <div class="itin-dest-dates">Lundi 20 juillet 2026</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-transport">
+          <div class="itin-transport-icon">✈️</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">Air France · Paris CDG T2E → Bangkok BKK</div>
+            <div class="itin-transport-detail">Vol direct ~11h · Arrivée le 21 juillet à 09h15 (+1j)</div>
+          </div>
+          <div class="itin-transport-time">16h40</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bangkok -->
+    <div class="itin-section">
+      <div class="itin-dest-header">
+        <div class="itin-dest-emoji">🏙</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Bangkok</div>
+          <div class="itin-dest-dates">21 – 25 juillet 2026 · 4 nuits</div>
+          <div class="itin-dest-addr">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-logement">
+          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
+          <div class="itin-logement-addr">Soi Palakun, Khet Bang Phlat, Krung Thep Maha Nakhon 10700</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">✈️</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">AirAsia Move · Don Mueang T2 → Chiang Mai CNX</div>
+            <div class="itin-transport-detail">Samedi 25 juillet · Check-out 07h30 · Taxi aéroport 30 min</div>
+          </div>
+          <div class="itin-transport-time">10h10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chiang Mai -->
+    <div class="itin-section">
+      <div class="itin-dest-header cm">
+        <div class="itin-dest-emoji">🌿</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Chiang Mai</div>
+          <div class="itin-dest-dates">25 – 29 juillet 2026 · 4 nuits</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-logement">
+          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
+          <div class="itin-logement-addr">1 Chang Moi Road Soi 2, Chang Moi Sub-district, Chiang Mai 50300</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">✈️</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">AirAsia Move · CNX T2 → Surat Thani</div>
+            <div class="itin-transport-detail">Mercredi 29 juillet · Check-out avant 10h · Taxi gratuit Airbnb</div>
+          </div>
+          <div class="itin-transport-time">10h40</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">🚢</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">Ferry Tapee Pier → Mae Haad (Koh Tao)</div>
+            <div class="itin-transport-detail">Mercredi 29 juillet · Chercher pancarte avec notre nom</div>
+          </div>
+          <div class="itin-transport-time">15h30</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Koh Tao -->
+    <div class="itin-section">
+      <div class="itin-dest-header kt">
+        <div class="itin-dest-emoji">🐠</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Koh Tao</div>
+          <div class="itin-dest-dates">29 juillet – 1er août 2026 · 3 nuits</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-logement">
+          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
+          <div class="itin-logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">🚢</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">Direct Ferries · Mae Haad → Bangrak Pier (Koh Samui)</div>
+            <div class="itin-transport-detail">Dimanche 1er août · Check-out avant 10h · Transport Airbnb organisé</div>
+          </div>
+          <div class="itin-transport-time">11h30</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Koh Samui -->
+    <div class="itin-section">
+      <div class="itin-dest-header ks">
+        <div class="itin-dest-emoji">🌴</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Koh Samui</div>
+          <div class="itin-dest-dates">1 – 5 août 2026 · 4 nuits</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-logement">
+          <div class="itin-logement-lbl">🏠 Logement Airbnb</div>
+          <div class="itin-logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">✈️</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div>
+            <div class="itin-transport-detail">Mercredi 5 août · Check-out 10h · Aéroport en voiture 45 min</div>
+          </div>
+          <div class="itin-transport-time">14h20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour Bangkok -->
+    <div class="itin-section">
+      <div class="itin-dest-header brun">
+        <div class="itin-dest-emoji">🏨</div>
+        <div class="itin-dest-info">
+          <div class="itin-dest-name">Bangkok — Nuit avant vol</div>
+          <div class="itin-dest-dates">5 – 6 août 2026 · 1 nuit</div>
+        </div>
+      </div>
+      <div class="itin-body">
+        <div class="itin-logement">
+          <div class="itin-logement-lbl">🏨 Hôtel Grand BS Airport Hotel Suvarnabhumi</div>
+          <div class="itin-logement-addr">836, 11 Lat Krabang 30/4 Alley, Lat Krabang, Bangkok 10520</div>
+        </div>
+        <div class="itin-transport">
+          <div class="itin-transport-icon">✈️</div>
+          <div class="itin-transport-info">
+            <div class="itin-transport-title">Air France · Bangkok BKK → Paris CDG T2E</div>
+            <div class="itin-transport-detail">Jeudi 6 août · Arrivée 19h00 heure française · Vol direct ~11h</div>
+          </div>
+          <div class="itin-transport-time">11h25</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- fin tab-itin -->
 </div>
 
 <script>
@@ -167,6 +379,7 @@ function startSignIn(){
 function showConnected(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('main-content').style.display='block';
+  document.getElementById('bottom-nav').style.display='flex';
   const chip=document.getElementById('user-chip');
   chip.style.display='flex';
   const av=document.getElementById('user-avatar');
@@ -184,6 +397,7 @@ function signOut(){
   document.getElementById('auth-screen').style.display='flex';
   document.getElementById('main-content').style.display='none';
   document.getElementById('user-chip').style.display='none';
+  document.getElementById('bottom-nav').style.display='none';
 }
 
 // ── Charger le feed ──
@@ -253,7 +467,7 @@ async function loadFeed(){
         <div class="day-body">
           ${dp.length?`<div class="photos-grid">${dp.map(p=>`
             <div class="photo-wrap">
-              <img src="${WORKER_URL}/photo?id=${p.id}&secret=${SECRET}" 
+              <img src="${p.url}" 
                    loading="lazy"
                    onerror="this.parentElement.style.display='none'"
                    alt="${p.caption||'Photo'}">
@@ -331,6 +545,25 @@ function loadComments(dayKey){
 }
 
 // ── Init ──
+function switchTab(tab, btn){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-feed').style.display = tab==='feed'?'block':'none';
+  document.getElementById('tab-itin').style.display = tab==='itin'?'block':'none';
+}
+
+function updateClocks(){
+  const now = new Date();
+  const th = new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(now);
+  const fr = new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(now);
+  const elTh = document.getElementById('clock-th');
+  const elFr = document.getElementById('clock-fr');
+  if(elTh) elTh.textContent = th;
+  if(elFr) elFr.textContent = fr;
+}
+updateClocks();
+setInterval(updateClocks, 30000);
+
 window.addEventListener('load',()=>{
   // Pas de One Tap — uniquement auth sur clic utilisateur
   initAuth();
