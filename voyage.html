@@ -487,9 +487,9 @@ async function loadFeed(){
         <div class="day-body">
           ${dp.length?`<div class="photos-grid">${dp.map(p=>`
             <div class="photo-wrap">
-              <img src="${WORKER_URL}/photo?id=${p.id}&secret=${SECRET}" 
+              <img src="${p.url}" 
                    loading="lazy"
-                   onerror="this.parentElement.style.display='none'"
+                   onerror="this.src=`https://lh3.googleusercontent.com/d/${p.id}=w800`"
                    alt="${p.caption||'Photo'}">
               ${p.caption?`<div class="photo-caption">${p.caption}</div>`:''}
             </div>`).join('')}</div>`:''}
