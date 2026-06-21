@@ -949,10 +949,15 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <div class="prat-sec" id="ps-photos">
     <div class="sec-title">📸 Photos du voyage</div>
 
-    <!-- Upload via Worker — aucune connexion Google requise -->
+    <div id="g-login-area" style="margin-bottom:10px">
+      <button onclick="gDriveLogin()" id="gd-login-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:2px solid var(--sand-mid);border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;color:var(--brown);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.06)">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        📸 Se connecter pour ajouter des photos
+      </button>
+    </div>
 
     <div id="photo-section"></div>
-    <button class="photo-add" onclick="openPhotoModal()" id="photo-add-btn">📷 Ajouter des photos</button>
+    <button class="photo-add" onclick="openPhotoModal()" id="photo-add-btn" style="display:none">📷 Ajouter des photos</button>
   </div>
 
   <!-- ── SECTION CONFIG ── -->
@@ -2855,47 +2860,89 @@ async function gDriveLogin(){
 }
 
 function showGLoginOk(){
+  // Cacher bouton connexion, afficher bouton ajout photos
+  const loginBtn = document.getElementById('gd-login-btn');
+  if(loginBtn) loginBtn.style.display='none';
   const la=document.getElementById('g-login-area');
-  if(la)la.innerHTML=`<div class="g-login-ok">✅ Connecté à Google Drive <button onclick="gDriveLogin()" style="margin-left:8px;font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:2px 8px">Renouveler</button></div>`;
-  document.getElementById('photo-add-btn').style.display='flex';
+  if(la){
+    la.innerHTML=`<div class="g-login-ok" style="display:flex;align-items:center;justify-content:space-between">
+      <span>✅ Connecté à Google Drive</span>
+      <button onclick="gDriveLogin()" style="font-size:10px;background:var(--sand-mid);color:var(--brown-mid);border-radius:6px;padding:3px 8px;border:none;cursor:pointer">🔄 Renouveler</button>
+    </div>`;
+  }
+  const ab = document.getElementById('photo-add-btn');
+  if(ab) ab.style.display='flex';
 }
 
 function getPhotos(){return JSON.parse(localStorage.getItem('trip_photos')||'[]');}
 function savePhotosMeta(p){localStorage.setItem('trip_photos',JSON.stringify(p));}
 
 async function uploadToDrive(file, caption, destKey, dayKey, diff){
-  // Upload via Cloudflare Worker (Service Account) — aucun token utilisateur requis
-  const form = new FormData();
-  form.append('file', file);
-  form.append('caption', caption||'');
-  form.append('dayKey', dayKey);
-  form.append('destKey', destKey);
-  form.append('diff', diff);
-  form.append('secret', PHOTO_SECRET);
+  // Upload direct vers Google Drive avec token OAuth de l'utilisateur
+  // Chaque membre de la famille se connecte et uploade dans le dossier partagé
 
-  let r;
-  try {
-    r = await fetch('https://claude-proxy-thailande.s-desferet.workers.dev/upload', {
-      method: 'POST',
-      body: form,
+  // Vérifier/obtenir un token valide
+  const ok = await ensureGdToken();
+  if(!ok) {
+    // Forcer la connexion
+    await new Promise((resolve, reject) => {
+      gDriveLogin();
+      // Attendre que gdToken soit disponible
+      let tries = 0;
+      const check = setInterval(() => {
+        tries++;
+        if(gdToken) { clearInterval(check); resolve(); }
+        if(tries > 30) { clearInterval(check); reject(new Error('Connexion Google annulée')); }
+      }, 500);
     });
-  } catch(e) {
-    throw new Error('Pas de connexion internet — réessayez dans un moment');
   }
+  if(!gdToken) throw new Error('Connectez-vous à Google pour uploader des photos');
+
+  // 1. Upload multipart vers Drive
+  const boundary = 'thai2026boundary';
+  const meta = JSON.stringify({
+    name: `${dayKey}-${Date.now()}-${file.name||'photo.jpg'}`,
+    parents: [DRIVE_FOLDER_ID],
+  });
+
+  const metaBytes = new TextEncoder().encode(
+    `--${boundary}\r\nContent-Type: application/json\r\n\r\n${meta}\r\n--${boundary}\r\nContent-Type: ${file.type||'image/jpeg'}\r\n\r\n`
+  );
+  const endBytes = new TextEncoder().encode(`\r\n--${boundary}--`);
+  const fileBuffer = await file.arrayBuffer();
+
+  const body = new Uint8Array(metaBytes.byteLength + fileBuffer.byteLength + endBytes.byteLength);
+  body.set(metaBytes, 0);
+  body.set(new Uint8Array(fileBuffer), metaBytes.byteLength);
+  body.set(endBytes, metaBytes.byteLength + fileBuffer.byteLength);
+
+  const r = await fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${gdToken}`,
+        'Content-Type': `multipart/related; boundary=${boundary}`,
+      },
+      body,
+    }
+  );
 
   if(!r.ok) {
-    let msg = 'HTTP ' + r.status;
-    try { const e=await r.json(); msg=e.error||e.message||msg; } catch(e){}
-    throw new Error('Upload échoué : ' + msg);
+    const err = await r.json().catch(()=>({}));
+    throw new Error('Erreur Drive : ' + (err.error?.message || r.status));
   }
 
-  const d = await r.json();
-  if(d.error) throw new Error(d.error);
+  const fileData = await r.json();
+  const fileId = fileData.id;
+
+  // 2. URL thumbnail Drive (stable)
+  const url = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
 
   return {
-    id: d.id, url: d.url, caption: d.caption||caption,
-    destKey: d.destKey||destKey, dayKey: d.dayKey||dayKey,
-    diff: d.diff||diff, uploadedAt: d.uploadedAt||new Date().toISOString(),
+    id: fileId, url, caption,
+    destKey, dayKey, diff,
+    uploadedAt: new Date().toISOString(),
   };
 }
 
@@ -2922,7 +2969,13 @@ async function publishPhotos(){
     // Sync vers voyage.html via GS
     syncPhotosToVoyage(photos);
   }catch(e){
-    toast('❌ Erreur — vérifiez la connexion Google');
+    // Message d'erreur explicite
+    const msg = e.message || 'Erreur inconnue';
+    if(msg.includes('annulée') || msg.includes('Connectez-vous')){
+      toast('🔑 Connectez-vous à Google d\'abord (bouton ci-dessus)');
+    } else {
+      toast('❌ ' + msg.substring(0, 80));
+    }
     status.textContent='Erreur : '+e.message;
   }
   btn.disabled=false;btn.textContent='📤 Publier les photos';
