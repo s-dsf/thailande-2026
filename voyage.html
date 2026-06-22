@@ -408,10 +408,14 @@ async function loadFeed() {
           '</div>';
       });
 
-      // Reactions
+      // Reactions — lire localStorage immédiatement
+      var storedReacts = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
       var reactHtml = '<div class="reactions" id="react-' + day.key + '">';
       REACTIONS.forEach(function(emoji) {
-        reactHtml += '<button class="react-btn" onclick="addReaction(\'' + day.key + '\',\'' + emoji + '\',this)">' + emoji + ' <span class="react-count">0</span></button>';
+        var rkey = day.key + '-' + emoji;
+        var count = storedReacts[rkey] || 0;
+        var activeClass = count > 0 ? ' active' : '';
+        reactHtml += '<button class="react-btn' + activeClass + '" onclick="addReaction(\'' + day.key + '\',\'' + emoji + '\',this)">' + emoji + ' <span class="react-count">' + count + '</span></button>';
       });
       reactHtml += '</div>';
 
