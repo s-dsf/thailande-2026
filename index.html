@@ -596,8 +596,8 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="topbar-right">
     <div class="time-badges">
-      <div class="time-badge time-th" id="thai-time"><span style="font-size:9px;opacity:.8">TH</span> <span id="thai-time-val">--:--</span></div>
-      <div class="time-badge time-fr" id="fr-time"><span style="font-size:9px;opacity:.8">FR</span> <span id="fr-time-val">--:--</span></div>
+      <div class="time-badge time-th" id="thai-time">&#127481;&#127469; --:--</div>
+      <div class="time-badge time-fr" id="fr-time">&#127467;&#127479; --:--</div>
     </div>
     <div class="countdown-badge" id="countdown">J–?</div>
     <button onclick="toggleDark()" id="dark-toggle" title="Mode nuit" style="background:rgba(0,0,0,.15);border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">🌙</button>
@@ -1672,8 +1672,8 @@ function updCdown(){
 function updThaiTime(){
   const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
   const fr=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(new Date());
-  const e1=document.getElementById('thai-time-val');if(e1)e1.textContent=th;
-  const e2=document.getElementById('fr-time-val');if(e2)e2.textContent=fr;
+  const e1=document.getElementById('thai-time');if(e1)e1.innerHTML='&#127481;&#127469; '+th;
+  const e2=document.getElementById('fr-time');if(e2)e2.innerHTML='&#127467;&#127479; '+fr;
   const e3=document.getElementById('thai-time-big');if(e3)e3.textContent=th;
   const e4=document.getElementById('fr-time-big');if(e4)e4.textContent=fr;
 }
@@ -2927,37 +2927,11 @@ async function loadFil(){
       cmts.forEach(function(c,ci){
         const d=document.createElement('div');
         d.className='fil-comment';
-        d.style.cursor='pointer';
         const replyTo=c.replyTo?'<div class="fil-reply-quote">↩ '+c.replyTo+'</div>':'';
         d.innerHTML=replyTo+'<div class="fil-comment-author">💬 '+(c.author||'')+(c.time?' · '+c.time:'')+'</div>'+(c.text||'');
-        const cAuthor=c.author||'', cText=c.text||'';
-        d.onclick=function(){
-          const inp=cmtDiv.querySelector('.fil-comment-input');
-          if(inp){
-            inp.placeholder='Répondre à '+cAuthor+'…';
-            inp.dataset.replyTo=cAuthor+': '+cText.substring(0,40);
-            inp.focus();
-            d.style.background='var(--coral-lt)';
-            setTimeout(function(){d.style.background='';},1000);
-          }
-        };
+
         cmtDiv.appendChild(d);
       });
-      const form=document.createElement('div');
-      form.className='fil-comment-form';
-      const inp=document.createElement('input');
-      inp.className='fil-comment-input';
-      inp.id='fil-cmt-'+day.key;
-      inp.placeholder='Répondre…';
-      inp.type='text';
-      const sendBtn=document.createElement('button');
-      sendBtn.className='fil-comment-send';
-      sendBtn.textContent='Envoyer';
-      const dayKeyCapture=day.key;
-      sendBtn.onclick=function(){filSendComment(dayKeyCapture);};
-      form.appendChild(inp);
-      form.appendChild(sendBtn);
-      cmtDiv.appendChild(form);
       card.appendChild(cmtDiv);
 
       container.appendChild(card);

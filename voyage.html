@@ -106,8 +106,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
     <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
     <div class="topbar-clocks">
-      <span class="topbar-clock">🇫🇷 <span id="clock-fr">--:--</span></span>
-      <span class="topbar-clock">🇹🇭 <span id="clock-th">--:--</span></span>
+      <span class="topbar-clock">&#127467;&#127479; <span id="clock-fr">--:--</span></span>
+      <span class="topbar-clock">&#127481;&#127469; <span id="clock-th">--:--</span></span>
     </div>
   </div>
   <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
@@ -485,6 +485,28 @@ function displayComment(dayKey, author, text, time) {
   div.style.borderLeftColor = 'var(--turq)';
   div.innerHTML = '<div class="note-author" style="color:var(--turq)">💬 ' + author + ' · ' + (time||'') + '</div><div class="note-text">' + text + '</div>';
   container.appendChild(div);
+}
+
+function editVoyageComment(dayKey, idx) {
+  var cmts = JSON.parse(localStorage.getItem('vg_comments') || '{}');
+  var list = cmts[dayKey] || [];
+  var c = list[idx];
+  if(!c) return;
+  var newText = prompt('Modifier votre commentaire :', c.text);
+  if(newText === null) return; // annulé
+  newText = newText.trim();
+  if(!newText) {
+    // Supprimer si vide
+    list.splice(idx, 1);
+  } else {
+    list[idx].text = newText;
+  }
+  cmts[dayKey] = list;
+  localStorage.setItem('vg_comments', JSON.stringify(cmts));
+  // Sync GS
+  var name = currentUser ? currentUser.name.split(' ')[0] : '';
+  fetch(GS_URL, {method:'POST', body:JSON.stringify({type:'comment',key:'cmt-edit-'+dayKey+'-'+idx,value:name+': '+newText,device:'voyage'})});
+  loadFeed(); // Recharger pour afficher la modif
 }
 
 function loadComments(dayKey) {
