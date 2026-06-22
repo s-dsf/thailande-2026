@@ -97,6 +97,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
 .loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:8px}
+.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:32px;cursor:pointer;font-weight:700;line-height:1}
 </style>
 </head>
 <body>
@@ -106,8 +110,281 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
     <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
     <div class="topbar-clocks">
-      <span class="topbar-clock">&#127467;&#127479; <span id="clock-fr">--:--</span></span>
-      <span class="topbar-clock">&#127481;&#127469; <span id="clock-th">--:--</span></span>
+      <span class="topbar-clock"><img src="https://flagcdn.com/16x12/fr.png" width="16" height="12" alt="FR" style="vertical-align:middle;margin-right:3px"><span id="clock-fr">--:--</span></span>
+      <span class="topbar-clock"><img src="https://flagcdn.com/16x12/th.png" width="16" height="12" alt="TH" style="vertical-align:middle;margin-right:3px"><span id="clock-th">--:--</span></span>
+    </div>
+  </div>
+  <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
+    <div class="user-avatar" id="user-avatar"></div>
+    <span class="user-name" id="user-name-el">...</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- AUTH -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-logo">🌴</div>
+  <div class="auth-title">Suivez notre voyage</div>
+  <div class="auth-sub">Connectez-vous avec Google pour accéder aux photos et nouvelles du voyage.</div>
+  <button class="auth-btn" onclick="startSignIn()">
+    <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Se connecter avec Google
+  </button>
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav" id="bottom-nav" style="display:none">
+  <button class="nav-btn active" onclick="switchTab('feed',this)">
+    <span class="nav-btn-icon">📸</span>Photos
+  </button>
+  <button class="nav-btn" onclick="switchTab('itin',this)">
+    <span class="nav-btn-icon">🗺</span>Itinéraire
+  </button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content" style="display:none">
+  <div id="tab-feed">
+    <div id="feed-container"><div class="loader">Chargement…</div></div>
+  </div>
+  <div id="tab-itin" style="display:none">
+<style>
+.acc-card{background:#fff;border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.acc-hdr{padding:14px 16px;color:#fff;font-weight:800;font-size:15px}
+.acc-body{padding:12px 16px}
+.acc-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.acc-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.acc-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.acc-val{font-size:13px;color:var(--brown);font-weight:600}
+.tpt-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--sand-mid);background:var(--sand)}
+.tpt-icon{font-size:18px;flex-shrink:0}
+.tpt-info{flex:1}
+.tpt-title{font-size:13px;font-weight:700;color:var(--brown)}
+.tpt-detail{font-size:11px;color:var(--brown-mid);margin-top:2px}
+.tpt-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0}
+</style>
+
+
+    <!-- VOL ALLER -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--brown)">✈️ Vol aller — Paris → Bangkok</div>
+      <div class="tpt-row">
+        <div class="tpt-icon">✈️</div>
+        <div class="tpt-info">
+          <div class="tpt-title">Air France · CDG T2E → Bangkok BKK</div>
+          <div class="tpt-detail">Lundi 20 juillet · Vol direct ~11h · Arrivée mardi 21 juillet à 09h15 🇹🇭 (04h15 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">16h40 🇫🇷</div>
+      </div>
+    </div>
+
+    <!-- BANGKOK -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--coral)">🏙 Bangkok · 21 – 25 juillet · 4 nuits</div>
+      <div class="acc-body">
+        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div></div></div>
+        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700</div></div></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">✈️</div>
+        <div class="tpt-info">
+          <div class="tpt-title">AirAsia · Don Mueang T2 → Chiang Mai CNX</div>
+          <div class="tpt-detail">Samedi 25 juillet · 10h10 🇹🇭 (05h10 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">10h10 🇹🇭</div>
+      </div>
+    </div>
+
+    <!-- CHIANG MAI -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--green)">🌿 Chiang Mai · 25 – 29 juillet · 4 nuits</div>
+      <div class="acc-body">
+        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">1 Chang Moi Road Soi 2, Chiang Mai 50300</div></div></div>
+        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เชียงใหม่ 50300</div></div></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">✈️</div>
+        <div class="tpt-info">
+          <div class="tpt-title">AirAsia · CNX T2 → Surat Thani</div>
+          <div class="tpt-detail">Mercredi 29 juillet · 10h40 🇹🇭 (05h40 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">10h40 🇹🇭</div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">🚢</div>
+        <div class="tpt-info">
+          <div class="tpt-title">Ferry Tapee Pier → Mae Haad · Koh Tao</div>
+          <div class="tpt-detail">Mercredi 29 juillet · Arrivée ~18h00 🇹🇭 (~13h 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">15h30 🇹🇭</div>
+      </div>
+    </div>
+
+    <!-- KOH TAO -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--turq)">🐠 Koh Tao · 29 juillet – 1er août · 3 nuits</div>
+      <div class="acc-body">
+        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div></div>
+        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">13/35 หมู่ 2 เกาะเต่า จ.สุราษฎร์ธานี 84360</div></div></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">🚢</div>
+        <div class="tpt-info">
+          <div class="tpt-title">Direct Ferries · Mae Haad → Bangrak Pier · Koh Samui</div>
+          <div class="tpt-detail">Dimanche 1er août · 11h30 🇹🇭 (06h30 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">11h30 🇹🇭</div>
+      </div>
+    </div>
+
+    <!-- KOH SAMUI -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--gold)">🌴 Koh Samui · 1 – 5 août · 4 nuits</div>
+      <div class="acc-body">
+        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div></div>
+        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140</div></div></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">✈️</div>
+        <div class="tpt-info">
+          <div class="tpt-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div>
+          <div class="tpt-detail">Mercredi 5 août · 14h20 🇹🇭 (09h20 🇫🇷)</div>
+        </div>
+        <div class="tpt-time">14h20 🇹🇭</div>
+      </div>
+    </div>
+
+    <!-- RETOUR BANGKOK -->
+    <div class="acc-card">
+      <div class="acc-hdr" style="background:var(--brown)">🏨 Bangkok · Nuit avant vol retour</div>
+      <div class="acc-body">
+        <div class="acc-row"><div class="acc-icon">🏨</div><div><div class="acc-lbl">Hôtel</div><div class="acc-val">Grand BS Airport Hotel Suvarnabhumi</div></div></div>
+        <div class="acc-row"><div class="acc-icon">📍</div><div><div class="acc-val">836, Lat Krabang 30/4 Alley, Bangkok 10520</div></div></div>
+      </div>
+      <div class="tpt-row">
+        <div class="tpt-icon">✈️</div>
+        <div class="tpt-info">
+          <div class="tpt-title">Air France · Bangkok BKK → Paris CDG T2E</div>
+          <div class="tpt-detail">Jeudi 6 août · 11h25 🇹🇭 (06h25 🇫🇷) · Arrivée Paris 19h00 🇫🇷</div>
+        </div>
+        <div class="tpt-time">11h25 🇹🇭</div>
+      </div>
+    </div>
+
+  </div><!-- fin tab-itin -->fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#E8734A">
+<title>Thaïlande 2026 — En voyage</title>
+<script src="https://accounts.google.com/gsi/client" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--coral:#E8734A;--coral-lt:#FCE4DB;--turq:#2BBFB3;--turq-lt:#E5F9F8;--gold:#D4A853;--gold-lt:#F5E6C0;--brown:#3D2B1F;--brown-mid:#7A5C47;--sand:#FFF8F0;--sand-mid:#F0E8DC;--green:#5B8C5A;--green-lt:#EAF4EA;--grey:#A09080;--white:#FFFFFF}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--sand);color:var(--brown);min-height:100vh}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:var(--coral);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.topbar-left .topbar-title{font-size:17px;font-weight:800;color:#fff}
+.topbar-left .topbar-sub{font-size:11px;color:rgba(255,255,255,.8);margin-top:1px}
+.topbar-clocks{display:flex;gap:10px;margin-top:4px}
+.topbar-clock{font-size:11px;color:rgba(255,255,255,.9);font-weight:600}
+.user-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 10px 5px 5px;cursor:pointer}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;overflow:hidden}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-name{font-size:12px;font-weight:700;color:#fff}
+
+/* AUTH */
+.auth-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;text-align:center}
+.auth-logo{font-size:64px;margin-bottom:20px}
+.auth-title{font-size:24px;font-weight:800;color:var(--brown);margin-bottom:8px}
+.auth-sub{font-size:15px;color:var(--brown-mid);margin-bottom:32px;line-height:1.5}
+.auth-btn{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--sand-mid);border-radius:12px;padding:14px 20px;font-size:15px;font-weight:700;color:var(--brown);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.auth-btn svg{width:22px;height:22px;flex-shrink:0}
+
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--sand-mid);display:flex;z-index:200;box-shadow:0 -2px 10px rgba(0,0,0,.08)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 12px;font-size:10px;font-weight:700;color:var(--brown-mid);border:none;background:none;cursor:pointer;gap:3px}
+.nav-btn.active{color:var(--coral)}
+.nav-btn-icon{font-size:22px;line-height:1}
+
+/* MAIN */
+.main{max-width:600px;margin:0 auto;padding:16px;padding-bottom:80px}
+
+/* CARDS */
+.day-card{background:#fff;border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.day-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.day-date{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.day-title{font-size:15px;font-weight:800;color:var(--brown)}
+.day-chevron{font-size:18px;color:var(--brown-mid);transition:transform .2s}
+.day-card.open .day-chevron{transform:rotate(180deg)}
+.day-body{display:none;border-top:1px solid var(--sand-mid);padding:14px 16px}
+.day-card.open .day-body{display:block}
+.dest-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;margin-left:6px}
+.badge-bkk{background:var(--coral)}.badge-cm{background:var(--green)}.badge-kt{background:var(--turq)}.badge-ks{background:var(--gold)}
+
+/* PHOTOS */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.photo-wrap{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:4/3;background:var(--sand-mid)}
+.photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-caption{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));color:#fff;font-size:11px;padding:4px 8px;font-weight:600}
+
+/* NOTES */
+.note-bubble{background:var(--sand);border-radius:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid var(--gold)}
+.note-author{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:3px}
+.note-text{font-size:13px;color:var(--brown);line-height:1.5}
+
+/* REACTIONS */
+.reactions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.react-btn{display:flex;align-items:center;gap:5px;background:var(--sand-mid);border-radius:20px;padding:6px 12px;border:none;cursor:pointer;font-size:13px;color:var(--brown);font-weight:600}
+.react-btn.active{background:var(--coral-lt);color:var(--coral)}
+.react-count{font-size:12px;font-weight:700}
+.comment-form{margin-top:12px;display:flex;gap:8px}
+.comment-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:10px;padding:8px 12px;font-size:13px;color:var(--brown);background:#fff;font-family:inherit;outline:none;resize:none}
+.comment-input:focus{border-color:var(--coral)}
+.comment-send{background:var(--coral);color:#fff;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;border:none;cursor:pointer;flex-shrink:0}
+.comments-list{margin-top:8px}
+
+/* ITINÉRAIRE */
+.itin-section{margin-bottom:20px}
+.itin-dest-header{border-radius:12px 12px 0 0;padding:12px 16px;display:flex;align-items:center;gap:10px;background:var(--coral)}
+.itin-dest-header.cm{background:var(--green)}
+.itin-dest-header.kt{background:var(--turq)}
+.itin-dest-header.ks{background:var(--gold)}
+.itin-dest-header.brun{background:var(--brown)}
+.itin-dest-emoji{font-size:24px}
+.itin-dest-name{font-size:16px;font-weight:800;color:#fff}
+.itin-dest-dates{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.itin-body{background:#fff;border-radius:0 0 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.itin-logement{padding:12px 16px;border-bottom:1px solid var(--sand-mid)}
+.itin-logement-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.itin-logement-addr{font-size:13px;color:var(--brown);font-weight:600}
+.itin-transport{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--sand-mid)}
+.itin-transport:last-child{border-bottom:none}
+.itin-transport-icon{font-size:20px;flex-shrink:0}
+.itin-transport-title{font-size:13px;font-weight:700;color:var(--brown)}
+.itin-transport-detail{font-size:11px;color:var(--brown-mid);margin-top:2px}
+.itin-transport-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0;margin-left:auto}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
+.toast.show{opacity:1}
+.loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:8px}
+.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:32px;cursor:pointer;font-weight:700;line-height:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
+    <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
+    <div class="topbar-clocks">
+      <span class="topbar-clock"><img src="https://flagcdn.com/16x12/fr.png" width="16" height="12" alt="FR" style="vertical-align:middle;margin-right:3px"><span id="clock-fr">--:--</span></span>
+      <span class="topbar-clock"><img src="https://flagcdn.com/16x12/th.png" width="16" height="12" alt="TH" style="vertical-align:middle;margin-right:3px"><span id="clock-th">--:--</span></span>
     </div>
   </div>
   <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
@@ -379,7 +656,7 @@ async function loadFeed() {
       if(dp.length) {
         photosHtml = '<div class="photos-grid">';
         dp.forEach(function(p) {
-          photosHtml += '<div class="photo-wrap"><img src="' + p.url + '" loading="lazy" alt="' + (p.caption || '') + '" onerror="this.parentElement.style.display=\'none\'">';
+          photosHtml += '<div class="photo-wrap"><img src="' + p.url + '" loading="lazy" alt="' + (p.caption || '') + '" onclick=\\\"openLightbox(this.src)\\\" onerror="this.parentElement.style.display=\'none\'">';
           if(p.caption) photosHtml += '<div class="photo-caption">' + p.caption + '</div>';
           photosHtml += '</div>';
         });
@@ -468,7 +745,31 @@ function sendComment(dayKey) {
   // Sync GS
   fetch(GS_URL, {method:'POST', body:JSON.stringify({type:'comment',key:'cmt-'+dayKey+'-'+Date.now(),value:name+': '+text,device:'voyage'})});
   // Afficher
-  displayComment(dayKey, name, text, ts);
+  // Afficher avec bouton edit (commentaire vient d'être posté = c'est le nôtre)
+  var ctn = document.getElementById('cmts-' + dayKey);
+  if(ctn) {
+    var cmts2 = JSON.parse(localStorage.getItem('vg_comments') || '{}');
+    var list2 = cmts2[dayKey] || [];
+    var ci = list2.length - 1; // dernier commentaire = celui qu'on vient d'ajouter
+    var div2 = document.createElement('div');
+    div2.className = 'note-bubble';
+    div2.style.borderLeftColor = 'var(--turq)';
+    var hdr2 = document.createElement('div');
+    hdr2.className = 'note-author';
+    hdr2.style.color = 'var(--turq)';
+    hdr2.textContent = String.fromCodePoint(0x1F4AC)+' '+name+' · '+ts;
+    var btn2 = document.createElement('button');
+    btn2.textContent = '✏';
+    btn2.style.cssText = 'float:right;background:none;border:none;cursor:pointer;font-size:14px';
+    btn2.onclick = (function(dk,i){return function(){editVoyageComment(dk,i);};})(dayKey, ci);
+    hdr2.appendChild(btn2);
+    div2.appendChild(hdr2);
+    var txt2 = document.createElement('div');
+    txt2.textContent = text;
+    div2.appendChild(txt2);
+    var form2 = ctn.querySelector('.comment-form');
+    ctn.insertBefore(div2, form2 || null);
+  }
   inp.value = '';
   toast('💬 Message envoyé !');
 }
@@ -526,9 +827,22 @@ function loadComments(dayKey) {
   });
 }
 
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightbox-img').src = '';
+}
+
 window.addEventListener('load', function() {
   initAuth();
 });
 </script>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="closeLightbox()">×</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
 </body>
 </html>
