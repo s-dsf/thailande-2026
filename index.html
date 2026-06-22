@@ -2841,7 +2841,9 @@ async function loadFil(){
       if(row.type==='photo'){
         try{
           const p=typeof row.value==='string'?JSON.parse(row.value):row.value;
-          if(p&&p.url&&p.id)photos.push(p);
+          if(p&&p.url&&p.id&&(p.diff==='all'||p.diff==='both')){
+            if(!photos.find(function(x){return x.id===p.id;}))photos.push(p);
+          }
         }catch(e){}
       }
       // Notes privées (fait/souvenir/anecdote) non affichées dans le fil
@@ -3163,8 +3165,12 @@ async function publishPhotos(){
 }
 
 function syncPhotosToVoyage(photos){
-  // Envoie les photos "all" et "both" vers GS pour que voyage.html les lise
+  // Envoie chaque photo individuellement dans Sheets
   const pubPhotos=photos.filter(p=>p.diff==='all'||p.diff==='both');
+  pubPhotos.forEach(p=>{
+    gsSave('photo',`${p.dayKey}-${p.id}`,JSON.stringify(p));
+  });
+  // Aussi en bulk pour compatibilité
   gsSave('photos_voyage','all_photos',JSON.stringify(pubPhotos));
 }
 
@@ -3249,11 +3255,27 @@ function confirmDeletePhoto(photoId){
 
 async function deletePhotoById(photoId){
   let photos=getPhotos();
+  // Trouver la photo avant suppression pour avoir dayKey
+  const toDelete=photos.find(p=>p.id===photoId);
   photos=photos.filter(p=>p.id!==photoId);
   savePhotosMeta(photos);
   syncPhotosToVoyage(photos);
+  // Supprimer aussi l'entrée individuelle dans Sheets
+  if(toDelete){
+    const key=`${toDelete.dayKey}-${photoId}`;
+    gsSave('photo_deleted',key,'1'); // Marquer comme supprimée
+    // Supprimer la clé photo dans Sheets en écrasant avec valeur vide
+    gsSave('photo',key,'{}');
+  }
   renderPhotoSection();
-  toast('🗑 Photo supprimée de l\'appli');
+  renderFil();  
+  toast('🗑 Photo supprimée');
+}
+
+function renderFil(){
+  // Rafraîchir le fil si visible
+  const fil=document.getElementById('ps-fil');
+  if(fil&&fil.classList.contains('active'))loadFil();
 }
 
 // Alias pour le modal edit
@@ -3261,7 +3283,6 @@ function deletePhoto(){confirmDeletePhoto(editPhotoId);}
 
 // ═══ PHOTO MODAL
 function openPhotoModal(){
-  if(!gdToken){toast('🔑 Connectez-vous à Google d\'abord');return;}
   selDest=null;selDay=null;selDiff='priv';pendingFiles=[];
   document.getElementById('up-prevs').innerHTML='';
   document.getElementById('ph-caption').value='';

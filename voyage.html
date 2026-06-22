@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="<head>
+<html lang="fr">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#E8734A">
@@ -96,10 +97,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--brown);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
 .loader{text-align:center;padding:40px;color:var(--brown-mid);font-size:14px}
-.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;align-items:center;justify-content:center;cursor:zoom-out}
-.lightbox.open{display:flex}
-.lightbox img{max-width:95vw;max-height:90vh;object-fit:contain;border-radius:8px}
-.lightbox-close{position:absolute;top:16px;right:20px;color:#fff;font-size:36px;cursor:pointer;font-weight:700}
+.flight-card{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.flight-hdr{padding:11px 14px}
+.flight-ht{font-size:13px;font-weight:700;color:#fff}
+.flight-hd{font-size:10px;color:rgba(255,255,255,.85);margin-top:1px}
+.flight-body{padding:12px 14px}
+.flight-route{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.flight-city{text-align:center;flex:1}
+.flight-code{font-size:20px;font-weight:800;color:var(--brown)}
+.flight-time{font-size:12px;color:var(--brown-mid);margin-top:1px}
+.flight-arrow{font-size:18px;color:var(--brown-mid);flex-shrink:0}
+.flight-tags{display:flex;gap:5px;flex-wrap:wrap}
+.ftag{background:var(--sand-mid);border-radius:8px;padding:3px 8px;font-size:11px;color:var(--brown-mid);font-weight:600}
+.lodge-card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.lodge-name{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:4px}
+.lodge-addr{font-size:12px;color:var(--brown-mid)}
+.lodge-thai{font-size:11px;color:var(--brown-mid);font-style:italic;margin-top:3px}
+.dest-title{font-size:15px;font-weight:800;color:#fff;padding:12px 16px;border-radius:12px;margin:16px 0 8px}
 </style>
 </head>
 <body>
@@ -148,168 +162,149 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div id="feed-container"><div class="loader">Chargement…</div></div>
   </div>
   <div id="tab-itin" style="display:none">
-    <style>
-.acc-card{background:#fff;border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.acc-hdr{padding:14px 16px;color:#fff;font-weight:800;font-size:15px}
-.acc-body{padding:12px 16px}
-.acc-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
-.acc-icon{font-size:18px;flex-shrink:0;margin-top:1px}
-.acc-lbl{font-size:10px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
-.acc-val{font-size:13px;color:var(--brown);font-weight:600;line-height:1.5}
-.tpt-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--sand-mid);background:var(--sand)}
-.tpt-icon{font-size:18px;flex-shrink:0}
-.tpt-info{flex:1}
-.tpt-title{font-size:13px;font-weight:700;color:var(--brown)}
-.tpt-detail{font-size:11px;color:var(--brown-mid);margin-top:2px}
-.tpt-time{font-size:12px;font-weight:700;color:var(--coral);flex-shrink:0;min-width:60px;text-align:right}
-    </style>
 
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--brown)">✈️ Vol aller — Paris → Bangkok</div>
-      <div class="tpt-row"><div class="tpt-icon">✈️</div><div class="tpt-info"><div class="tpt-title">Air France · CDG T2E → Bangkok BKK</div><div class="tpt-detail">Lundi 20 juillet · Vol direct ~11h · Arrivée le 21 juillet à 09h15 🇹🇭 (04h15 🇫🇷)</div></div><div class="tpt-time">16h40 🇫🇷</div></div>
-    </div>
-
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--coral)">🏙 Bangkok · 21 – 25 juillet · 4 nuits</div>
-      <div class="acc-body">
-        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div></div></div>
-        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700</div></div></div>
+    <!-- VOL ALLER -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--brown),#6B4A30)">✈️ Vol aller — Paris → Bangkok</div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,#3D2B1F,#6B4A30)">
+        <div class="flight-ht">✈ Paris CDG → Bangkok BKK</div>
+        <div class="flight-hd">Lundi 20 juillet 2026</div>
       </div>
-      <div class="tpt-row"><div class="tpt-icon">✈️</div><div class="tpt-info"><div class="tpt-title">AirAsia · Don Mueang T2 → Chiang Mai CNX</div><div class="tpt-detail">Samedi 25 juillet · 10h10 🇹🇭 (05h10 🇫🇷)</div></div><div class="tpt-time">10h10 🇹🇭</div></div>
-    </div>
-
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--green)">🌿 Chiang Mai · 25 – 29 juillet · 4 nuits</div>
-      <div class="acc-body">
-        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">1 Chang Moi Road Soi 2, Chiang Mai 50300</div></div></div>
-        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">1 ถนนช้างม่อย ซอย 2 ตำบลช้างม่อย เชียงใหม่ 50300</div></div></div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">16h40 🇫🇷</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">09h15 🇹🇭 +1j</div><div style="font-size:10px;color:var(--brown-mid)">(04h15 🇫🇷)</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">Vol direct ~11h</span></div>
       </div>
-      <div class="tpt-row"><div class="tpt-icon">✈️</div><div class="tpt-info"><div class="tpt-title">AirAsia · CNX T2 → Surat Thani</div><div class="tpt-detail">Mercredi 29 juillet · 10h40 🇹🇭 (05h40 🇫🇷)</div></div><div class="tpt-time">10h40 🇹🇭</div></div>
-      <div class="tpt-row"><div class="tpt-icon">🚢</div><div class="tpt-info"><div class="tpt-title">Ferry Tapee Pier → Mae Haad · Koh Tao</div><div class="tpt-detail">Mercredi 29 juillet · Arrivée ~18h00 🇹🇭 (~13h 🇫🇷)</div></div><div class="tpt-time">15h30 🇹🇭</div></div>
     </div>
 
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--turq)">🐠 Koh Tao · 29 juillet – 1er août · 3 nuits</div>
-      <div class="acc-body">
-        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div></div>
-        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">13/35 หมู่ 2 เกาะเต่า จ.สุราษฎร์ธานี 84360</div></div></div>
+    <!-- BANGKOK -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--coral),#C85A32)">🏙 Bangkok · 21–25 juillet · 4 nuits</div>
+    <div class="lodge-card">
+      <div class="lodge-name">🏠 Airbnb</div>
+      <div class="lodge-addr">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div>
+      <div class="lodge-thai">🚕 ซอยพลากุล เขตบางพลัด กรุงเทพมหานคร 10700</div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,var(--green),#4a7a49)">
+        <div class="flight-ht">✈ Bangkok DMK → Chiang Mai CNX</div>
+        <div class="flight-hd">Samedi 25 juillet 2026</div>
       </div>
-      <div class="tpt-row"><div class="tpt-icon">🚢</div><div class="tpt-info"><div class="tpt-title">Direct Ferries · Mae Haad → Bangrak Pier · Koh Samui</div><div class="tpt-detail">Dimanche 1er août · 11h30 🇹🇭 (06h30 🇫🇷)</div></div><div class="tpt-time">11h30 🇹🇭</div></div>
-    </div>
-
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--gold)">🌴 Koh Samui · 1 – 5 août · 4 nuits</div>
-      <div class="acc-body">
-        <div class="acc-row"><div class="acc-icon">🏠</div><div><div class="acc-lbl">Airbnb</div><div class="acc-val">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div></div>
-        <div class="acc-row"><div class="acc-icon">🚕</div><div><div class="acc-val" style="font-style:italic;color:var(--brown-mid)">57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140</div></div></div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">DMK</div><div class="flight-time">10h10 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(05h10 🇫🇷) T2</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">11h25 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h25 🇫🇷)</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">✈ AirAsia Move</span></div>
       </div>
-      <div class="tpt-row"><div class="tpt-icon">✈️</div><div class="tpt-info"><div class="tpt-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div><div class="tpt-detail">Mercredi 5 août · 14h20 🇹🇭 (09h20 🇫🇷)</div></div><div class="tpt-time">14h20 🇹🇭</div></div>
     </div>
 
-    <div class="acc-card">
-      <div class="acc-hdr" style="background:var(--brown)">🏨 Bangkok · Nuit avant vol retour</div>
-      <div class="acc-body">
-        <div class="acc-row"><div class="acc-icon">🏨</div><div><div class="acc-lbl">Hôtel</div><div class="acc-val">Grand BS Airport Hotel · 836 Lat Krabang 30/4 Alley, Bangkok 10520</div></div></div>
+    <!-- CHIANG MAI -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--green),#4a7a49)">🌿 Chiang Mai · 25–29 juillet · 4 nuits</div>
+    <div class="lodge-card">
+      <div class="lodge-name">🏠 Airbnb</div>
+      <div class="lodge-addr">1 Chang Moi Road Soi 2, Chiang Mai 50300</div>
+      <div class="lodge-thai">🚕 1 ถนนช้างม่อย ซอย 2 เชียงใหม่ 50300</div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,var(--turq),#1a9990)">
+        <div class="flight-ht">✈ Chiang Mai CNX → Surat Thani</div>
+        <div class="flight-hd">Mercredi 29 juillet 2026</div>
       </div>
-      <div class="tpt-row"><div class="tpt-icon">✈️</div><div class="tpt-info"><div class="tpt-title">Air France · Bangkok BKK → Paris CDG T2E</div><div class="tpt-detail">Jeudi 6 août · 11h25 🇹🇭 (06h25 🇫🇷) · Arrivée Paris 19h00 🇫🇷</div></div><div class="tpt-time">11h25 🇹🇭</div></div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">CNX</div><div class="flight-time">10h40 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(05h40 🇫🇷) T2</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code">URT</div><div class="flight-time">12h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(07h00 🇫🇷)</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">✈ AirAsia Move</span></div>
+      </div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,var(--turq),#1a9990)">
+        <div class="flight-ht">🚢 Ferry Tapee Pier → Mae Haad (Koh Tao)</div>
+        <div class="flight-hd">Mercredi 29 juillet 2026</div>
+      </div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">SUG</div><div class="flight-time">15h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">Tapee Pier</div></div>
+          <div class="flight-arrow">🚢─</div>
+          <div class="flight-city"><div class="flight-code">KOH</div><div class="flight-time">~18h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">Mae Haad</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">Direct Ferries</span><span class="ftag">Chercher pancarte avec notre nom</span></div>
+      </div>
     </div>
 
-  </div><!-- fin tab-itin -->
-<body>
-
-<div class="topbar">
-  <div class="topbar-left">
-    <div class="topbar-title">🇹🇭 Thaïlande 2026</div>
-    <div class="topbar-sub">Suivez l'aventure en direct ✈</div>
-    <div class="topbar-clocks">
-      <span class="topbar-clock">&#127467;&#127479; <span id="clock-fr">--:--</span></span>
-      <span class="topbar-clock">&#127481;&#127469; <span id="clock-th">--:--</span></span>
+    <!-- KOH TAO -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--turq),#1a9990)">🐠 Koh Tao · 29 juillet–1er août · 3 nuits</div>
+    <div class="lodge-card">
+      <div class="lodge-name">🏠 Airbnb</div>
+      <div class="lodge-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div>
+      <div class="lodge-thai">🚕 13/35 หมู่ 2 เกาะเต่า จ.สุราษฎร์ธานี 84360</div>
     </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,var(--gold),#b8893a)">
+        <div class="flight-ht">🚢 Ferry Mae Haad → Bangrak Pier (Koh Samui)</div>
+        <div class="flight-hd">Dimanche 1er août 2026</div>
+      </div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">MAH</div><div class="flight-time">11h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h30 🇫🇷)</div></div>
+          <div class="flight-arrow">🚢─</div>
+          <div class="flight-city"><div class="flight-code">BGK</div><div class="flight-time">~13h00 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">Bangrak</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">Direct Ferries</span></div>
+      </div>
+    </div>
+
+    <!-- KOH SAMUI -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--gold),#b8893a)">🌴 Koh Samui · 1–5 août · 4 nuits</div>
+    <div class="lodge-card">
+      <div class="lodge-name">🏠 Airbnb</div>
+      <div class="lodge-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div>
+      <div class="lodge-thai">🚕 57/57 หมู่ 5 ต.อ่างทอง อ.เกาะสมุย จ.สุราษฎร์ธานี 84140</div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,var(--brown),#6B4A30)">
+        <div class="flight-ht">✈ Koh Samui USM → Bangkok BKK</div>
+        <div class="flight-hd">Mercredi 5 août 2026</div>
+      </div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">USM</div><div class="flight-time">14h20 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(09h20 🇫🇷)</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">15h30 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(10h30 🇫🇷)</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">✈ Bangkok Airways</span></div>
+      </div>
+    </div>
+
+    <!-- RETOUR -->
+    <div class="dest-title" style="background:linear-gradient(135deg,var(--brown),#6B4A30)">🏨 Bangkok · Nuit avant vol retour</div>
+    <div class="lodge-card">
+      <div class="lodge-name">🏨 Grand BS Airport Hotel Suvarnabhumi</div>
+      <div class="lodge-addr">836 Lat Krabang 30/4 Alley, Bangkok 10520</div>
+      <div class="lodge-thai">🚕 836 ซอยลาดกระบัง 30/4 แขวงลาดกระบัง เขตลาดกระบัง กรุงเทพฯ 10520</div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-hdr" style="background:linear-gradient(135deg,#3D2B1F,#6B4A30)">
+        <div class="flight-ht">✈ Bangkok BKK → Paris CDG</div>
+        <div class="flight-hd">Jeudi 6 août 2026</div>
+      </div>
+      <div class="flight-body">
+        <div class="flight-route">
+          <div class="flight-city"><div class="flight-code">BKK</div><div class="flight-time">11h25 🇹🇭</div><div style="font-size:10px;color:var(--brown-mid)">(06h25 🇫🇷)</div></div>
+          <div class="flight-arrow">✈──</div>
+          <div class="flight-city"><div class="flight-code">CDG</div><div class="flight-time">19h00 🇫🇷</div><div style="font-size:10px;color:var(--brown-mid)">Terminal 2E</div></div>
+        </div>
+        <div class="flight-tags"><span class="ftag">✈ Air France</span><span class="ftag">Vol direct ~11h</span></div>
+      </div>
+    </div>
+
   </div>
-  <div class="user-chip" id="user-chip" onclick="signOut()" style="display:none">
-    <div class="user-avatar" id="user-avatar"></div>
-    <span class="user-name" id="user-name-el">...</span>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- AUTH -->
-<div class="auth-screen" id="auth-screen">
-  <div class="auth-logo">🌴</div>
-  <div class="auth-title">Suivez notre voyage</div>
-  <div class="auth-sub">Connectez-vous avec Google pour accéder aux photos et nouvelles du voyage.</div>
-  <button class="auth-btn" onclick="startSignIn()">
-    <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-    Se connecter avec Google
-  </button>
-</div>
-
-<!-- NAV -->
-<div class="bottom-nav" id="bottom-nav" style="display:none">
-  <button class="nav-btn active" onclick="switchTab('feed',this)">
-    <span class="nav-btn-icon">📸</span>Photos
-  </button>
-  <button class="nav-btn" onclick="switchTab('itin',this)">
-    <span class="nav-btn-icon">🗺</span>Itinéraire
-  </button>
-</div>
-
-<!-- MAIN -->
-<div class="main" id="main-content" style="display:none">
-  <div id="tab-feed">
-    <div id="feed-container"><div class="loader">Chargement…</div></div>
-  </div>
-  <div id="tab-itin" style="display:none">
-
-    <div class="itin-section">
-      <div class="itin-dest-header brun"><div class="itin-dest-emoji">✈️</div><div><div class="itin-dest-name">Vol aller — Paris → Bangkok</div><div class="itin-dest-dates">Lundi 20 juillet 2026</div></div></div>
-      <div class="itin-body">
-        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Air France · Paris CDG T2E → Bangkok BKK</div><div class="itin-transport-detail">Vol direct ~11h · Arrivée le 21 juillet à 09h15</div></div><div class="itin-transport-time">16h40</div></div>
-      </div>
-    </div>
-
-    <div class="itin-section">
-      <div class="itin-dest-header"><div class="itin-dest-emoji">🏙</div><div><div class="itin-dest-name">Bangkok</div><div class="itin-dest-dates">21 – 25 juillet 2026 · 4 nuits</div></div></div>
-      <div class="itin-body">
-        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">Soi Palakun, Khet Bang Phlat, Bangkok 10700</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">AirAsia · Don Mueang T2 → Chiang Mai CNX</div><div class="itin-transport-detail">Samedi 25 juillet · 10h10 heure thaï (05h10 heure française)</div></div><div class="itin-transport-time">10h10 🇹🇭</div></div>
-      </div>
-    </div>
-
-    <div class="itin-section">
-      <div class="itin-dest-header cm"><div class="itin-dest-emoji">🌿</div><div><div class="itin-dest-name">Chiang Mai</div><div class="itin-dest-dates">25 – 29 juillet 2026 · 4 nuits</div></div></div>
-      <div class="itin-body">
-        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">1 Chang Moi Road Soi 2, Chiang Mai 50300</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">AirAsia · CNX T2 → Surat Thani</div><div class="itin-transport-detail">Mercredi 29 juillet · 10h40 heure thaï (05h40 heure française)</div></div><div class="itin-transport-time">10h40 🇹🇭</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">🚢</div><div class="itin-transport-info"><div class="itin-transport-title">Ferry Tapee Pier → Mae Haad (Koh Tao)</div><div class="itin-transport-detail">Mercredi 29 juillet · Arrivée ~18h00 heure thaï (~13h heure française)</div></div><div class="itin-transport-time">15h30 🇹🇭</div></div>
-      </div>
-    </div>
-
-    <div class="itin-section">
-      <div class="itin-dest-header kt"><div class="itin-dest-emoji">🐠</div><div><div class="itin-dest-name">Koh Tao</div><div class="itin-dest-dates">29 juillet – 1er août 2026 · 3 nuits</div></div></div>
-      <div class="itin-body">
-        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">13/35 Moo 2, Ko Tao, Surat Thani 84360</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">🚢</div><div class="itin-transport-info"><div class="itin-transport-title">Direct Ferries · Mae Haad → Bangrak Pier (Koh Samui)</div><div class="itin-transport-detail">Dimanche 1er août · 11h30 heure thaï (06h30 heure française)</div></div><div class="itin-transport-time">11h30 🇹🇭</div></div>
-      </div>
-    </div>
-
-    <div class="itin-section">
-      <div class="itin-dest-header ks"><div class="itin-dest-emoji">🌴</div><div><div class="itin-dest-name">Koh Samui</div><div class="itin-dest-dates">1 – 5 août 2026 · 4 nuits</div></div></div>
-      <div class="itin-body">
-        <div class="itin-logement"><div class="itin-logement-lbl">🏠 Airbnb</div><div class="itin-logement-addr">57/57 Moo 5 Anthong, Nathon, Surathani 84140</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Bangkok Airways · USM → Bangkok Suvarnabhumi</div><div class="itin-transport-detail">Mercredi 5 août · 14h20 heure thaï (09h20 heure française)</div></div><div class="itin-transport-time">14h20 🇹🇭</div></div>
-      </div>
-    </div>
-
-    <div class="itin-section">
-      <div class="itin-dest-header brun"><div class="itin-dest-emoji">🏨</div><div><div class="itin-dest-name">Bangkok — Nuit avant vol</div><div class="itin-dest-dates">5 – 6 août 2026 · 1 nuit</div></div></div>
-      <div class="itin-body">
-        <div class="itin-logement"><div class="itin-logement-lbl">🏨 Grand BS Airport Hotel</div><div class="itin-logement-addr">836, Lat Krabang 30/4 Alley, Bangkok 10520</div></div>
-        <div class="itin-transport"><div class="itin-transport-icon">✈️</div><div class="itin-transport-info"><div class="itin-transport-title">Air France · Bangkok BKK → Paris CDG T2E</div><div class="itin-transport-detail">Jeudi 6 août · 11h25 heure thaï (06h25 FR) · Arrivée Paris 19h00 🇫🇷</div></div><div class="itin-transport-time">11h25 🇹🇭</div></div>
-      </div>
-    </div>
-
   </div>
 </div>
 
@@ -506,12 +501,11 @@ async function loadFeed() {
 
       // Reactions
       var reactHtml = '<div class="reactions" id="react-' + day.key + '">';
-      var storedReactsNow = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
+      var storedNow = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
       REACTIONS.forEach(function(emoji) {
-        var rkey = day.key + '-' + emoji;
-        var cnt = storedReactsNow[rkey] || 0;
+        var cnt = storedNow[day.key+'-'+emoji] || 0;
         var act = cnt > 0 ? ' active' : '';
-        reactHtml += '<button class="react-btn' + act + '" onclick="addReaction(\'' + day.key + '\',\'' + emoji + '\',this)">' + emoji + ' <span class="react-count">' + cnt + '</span></button>';
+        reactHtml += '<button class="react-btn'+act+'" onclick="addReaction(\'' + day.key + '\',\'' + emoji + '\',this)">' + emoji + ' <span class="react-count">'+cnt+'</span></button>';
       });
       reactHtml += '</div>';
 
@@ -588,25 +582,7 @@ function sendComment(dayKey) {
   // Sync GS
   fetch(GS_URL, {method:'POST', body:JSON.stringify({type:'comment',key:'cmt-'+dayKey+'-'+Date.now(),value:name+': '+text,device:'voyage'})});
   // Afficher
-  // Afficher immédiatement avec bouton edit
-  var ctnNow = document.getElementById('cmts-' + dayKey);
-  if(ctnNow) {
-    var cmtsNow = JSON.parse(localStorage.getItem('vg_comments') || '{}');
-    var ci = (cmtsNow[dayKey] || []).length - 1;
-    var divNow = document.createElement('div');
-    divNow.className = 'note-bubble';
-    divNow.style.borderLeftColor = 'var(--turq)';
-    var hdrNow = document.createElement('div');
-    hdrNow.className = 'note-author'; hdrNow.style.color = 'var(--turq)';
-    hdrNow.textContent = String.fromCodePoint(0x1F4AC)+' '+name+' · '+ts;
-    var btnNow = document.createElement('button');
-    btnNow.textContent = '✏'; btnNow.style.cssText='float:right;background:none;border:none;cursor:pointer;font-size:14px';
-    btnNow.onclick=(function(dk,i){return function(){editVoyageComment(dk,i);};})(dayKey,ci);
-    hdrNow.appendChild(btnNow); divNow.appendChild(hdrNow);
-    var txtNow = document.createElement('div'); txtNow.textContent=text; divNow.appendChild(txtNow);
-    var formNow = ctnNow.querySelector('.comment-form');
-    ctnNow.insertBefore(divNow, formNow || null);
-  }
+  displayComment(dayKey, name, text, ts);
   inp.value = '';
   toast('💬 Message envoyé !');
 }
@@ -664,25 +640,16 @@ function loadComments(dayKey) {
   });
 }
 
-function openLightbox(src) {
-  var lb = document.getElementById('lightbox');
-  var lbImg = document.getElementById('lightbox-img');
-  if(lb && lbImg) { lbImg.src = src; lb.classList.add('open'); }
-}
-function closeLightbox() {
-  var lb = document.getElementById('lightbox');
-  var lbImg = document.getElementById('lightbox-img');
-  if(lb) lb.classList.remove('open');
-  if(lbImg) lbImg.src = '';
-}
+function openLightbox(src){var lb=document.getElementById('lightbox');if(lb){document.getElementById('lightbox-img').src=src;lb.classList.add('open');}}
+function closeLightbox(){var lb=document.getElementById('lightbox');if(lb){lb.classList.remove('open');document.getElementById('lightbox-img').src='';}}
 
 window.addEventListener('load', function() {
   initAuth();
 });
 </script>
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <span class="lightbox-close">×</span>
-  <img id="lightbox-img" src="" alt="">
+  <span style="position:absolute;top:16px;right:20px;color:#fff;font-size:36px;cursor:pointer;font-weight:700">×</span>
+  <img id="lightbox-img" src="" alt="" style="max-width:95vw;max-height:90vh;object-fit:contain;border-radius:8px">
 </div>
 </body>
 </html>
