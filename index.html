@@ -2838,7 +2838,7 @@ async function loadFil(){
       return;
     }
 
-    const photos=[], reactsByDay={};
+    const photos=[], reactsByDay={}, commentsByDay={};
     allRows.forEach(function(row){
       if(!row||!row.type)return;
       if(row.type==='photo'){
@@ -2856,6 +2856,23 @@ async function loadFil(){
         const dayKey=parts.slice(0,-1).join('-');
         if(!reactsByDay[dayKey])reactsByDay[dayKey]={};
         reactsByDay[dayKey][emoji]=parseInt(row.value)||0;
+      }
+      // Lire les commentaires depuis Sheets (postés depuis voyage.html ou index)
+      if(row.type==='comment'&&row.key){
+        const m=row.key.match(/^cmt-([a-z]+-[0-9]+)-/);
+        if(m){
+          const dk=m[1];
+          if(!commentsByDay[dk])commentsByDay[dk]=[];
+          // Format: "Auteur: texte" ou juste le texte
+          const val=row.value||'';
+          const colonIdx=val.indexOf(': ');
+          const author=colonIdx>0?val.substring(0,colonIdx):'Anonyme';
+          const text=colonIdx>0?val.substring(colonIdx+2):val;
+          // Éviter les doublons
+          if(text&&!commentsByDay[dk].find(function(c){return c.text===text&&c.author===author;})){
+            commentsByDay[dk].push({author:author,text:text,time:row.timestamp?new Date(row.timestamp).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):''});
+          }
+        }
       }
     });
 
@@ -2885,7 +2902,17 @@ async function loadFil(){
 
     activeDays.slice().reverse().forEach(function(day){
       const dp=photos.filter(function(p){return p.dayKey===day.key&&(p.diff==='all'||p.diff==='both');});
-      const cmts=storedCmts[day.key]||[];
+      // Fusionner commentaires localStorage + Sheets (Sheets prioritaire pour avoir ceux des autres)
+      const localCmts=storedCmts[day.key]||[];
+      const sheetCmts=commentsByDay[day.key]||[];
+      // Merge : garder tous les Sheets + les locaux non présents dans Sheets
+      const allCmts=[...sheetCmts];
+      localCmts.forEach(function(lc){
+        if(!allCmts.find(function(sc){return sc.text===lc.text&&sc.author===lc.author;})){
+          allCmts.push(lc);
+        }
+      });
+      const cmts=allCmts;
       const reacts=reactsByDay[day.key]||{};
 
       const card=document.createElement('div');
