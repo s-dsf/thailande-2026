@@ -387,13 +387,6 @@ async function loadFeed() {
       }
 
       var notesHtml = '';
-      dn.forEach(function(n) {
-        var txt = (n.text || '').replace(/\n/g, '<br>');
-        notesHtml += '<div class="note-bubble">' +
-          '<div class="note-author">✍️ ' + (n.author || 'La famille') + '</div>' +
-          '<div class="note-text">' + txt + '</div>' +
-          '</div>';
-      });
 
       // Reactions
       var reactHtml = '<div class="reactions" id="react-' + day.key + '">';
