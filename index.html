@@ -2809,52 +2809,173 @@ async function loadFil(){
   try{
     const r=await fetch(GS_URL+'?t='+Date.now());
     const allRows=await r.json();
-    if(!Array.isArray(allRows)){container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';return;}
-    const photos=[],notesByDay={},reactsByDay={};
+    if(!Array.isArray(allRows)){
+      container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';
+      return;
+    }
+
+    const photos=[], notesByDay={}, reactsByDay={};
     allRows.forEach(function(row){
       if(!row||!row.type)return;
-      if(row.type==='photo'){try{const p=typeof row.value==='string'?JSON.parse(row.value):row.value;if(p&&p.url&&p.id)photos.push(p);}catch(e){}}
-      if(row.type==='note'&&row.key){const m=row.key.match(/^note-([a-z]+-[0-9]+)/);if(m){const dk=m[1];if(!notesByDay[dk])notesByDay[dk]=[];try{const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;if(Array.isArray(ns))notesByDay[dk]=notesByDay[dk].concat(ns.filter(n=>n&&n.text));}catch(e){}}}
-      if(row.type==='reaction'&&row.key){const parts=row.key.split('-');const emoji=parts[parts.length-1];const dayKey=parts.slice(0,-1).join('-');if(!reactsByDay[dayKey])reactsByDay[dayKey]={};reactsByDay[dayKey][emoji]=parseInt(row.value)||0;}
+      if(row.type==='photo'){
+        try{
+          const p=typeof row.value==='string'?JSON.parse(row.value):row.value;
+          if(p&&p.url&&p.id)photos.push(p);
+        }catch(e){}
+      }
+      if(row.type==='note'&&row.key){
+        const m=row.key.match(/^note-([a-z]+-[0-9]+)/);
+        if(m){
+          const dk=m[1];
+          if(!notesByDay[dk])notesByDay[dk]=[];
+          try{
+            const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;
+            if(Array.isArray(ns))notesByDay[dk]=notesByDay[dk].concat(ns.filter(function(n){return n&&n.text;}));
+          }catch(e){}
+        }
+      }
+      if(row.type==='reaction'&&row.key){
+        const parts=row.key.split('-');
+        const emoji=parts[parts.length-1];
+        const dayKey=parts.slice(0,-1).join('-');
+        if(!reactsByDay[dayKey])reactsByDay[dayKey]={};
+        reactsByDay[dayKey][emoji]=parseInt(row.value)||0;
+      }
     });
+
     const storedReacts=JSON.parse(localStorage.getItem('vg_reacts')||'{}');
     const storedCmts=JSON.parse(localStorage.getItem('vg_comments')||'{}');
+
     const allDaysData=[
-      ...DATA.bangkok.map((d,i)=>({...d,key:'bkk-'+i,dk:'bkk'})),
-      ...DATA.chiangmai.map((d,i)=>({...d,key:'cm-'+i,dk:'cm'})),
-      ...DATA.kohtao.map((d,i)=>({...d,key:'kt-'+i,dk:'kt'})),
-      ...DATA.kohsamui.map((d,i)=>({...d,key:'ks-'+i,dk:'ks'})),
+      ...DATA.bangkok.map(function(d,i){return Object.assign({},d,{key:'bkk-'+i,dk:'bkk'});} ),
+      ...DATA.chiangmai.map(function(d,i){return Object.assign({},d,{key:'cm-'+i,dk:'cm'});} ),
+      ...DATA.kohtao.map(function(d,i){return Object.assign({},d,{key:'kt-'+i,dk:'kt'});} ),
+      ...DATA.kohsamui.map(function(d,i){return Object.assign({},d,{key:'ks-'+i,dk:'ks'});} ),
     ];
-    const activeDays=allDaysData.filter(d=>{
-      return photos.filter(p=>p.dayKey===d.key).length||(notesByDay[d.key]||[]).length||(storedCmts[d.key]||[]).length;
+
+    const activeDays=allDaysData.filter(function(d){
+      const dp=photos.filter(function(p){return p.dayKey===d.key;});
+      const dn=notesByDay[d.key]||[];
+      const cmts=storedCmts[d.key]||[];
+      return dp.length||dn.length||cmts.length;
     });
-    if(!activeDays.length){container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';return;}
+
+    if(!activeDays.length){
+      container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';
+      return;
+    }
+
     const DEST_NAMES={bkk:'Bangkok',cm:'Chiang Mai',kt:'Koh Tao',ks:'Koh Samui'};
     container.innerHTML='';
-    activeDays.slice().reverse().forEach(day=>{
-      const dp=photos.filter(p=>p.dayKey===day.key);
-      const dn=(notesByDay[day.key]||[]).filter(n=>n&&n.text);
+
+    activeDays.slice().reverse().forEach(function(day){
+      const dp=photos.filter(function(p){return p.dayKey===day.key;});
+      const dn=(notesByDay[day.key]||[]).filter(function(n){return n&&n.text;});
       const cmts=storedCmts[day.key]||[];
       const reacts=reactsByDay[day.key]||{};
+
       const card=document.createElement('div');
       card.className='fil-card';
-      let html='<div class="fil-card-header"><div><div class="fil-card-date">'+(day.date||'')+'<span class="fil-badge '+day.dk+'">'+(DEST_NAMES[day.dk]||'')+'</span></div><div class="fil-card-title">'+(day.title||'')+'</div></div></div>';
-      if(dp.length){html+='<div class="fil-photos-grid">';dp.forEach(p=>{var imgTag='<img src="'+p.url+'" loading="lazy" alt="'+(p.caption||'')+'">';html+='<div><div class="fil-photo">'+imgTag+'</div>'+(p.caption?'<div class="fil-photo-caption">'+p.caption+'</div>':'')+'}');});html+='</div>';}
-      if(dn.length){html+='<div class="fil-notes">';dn.forEach(n=>{html+='<div class="fil-note"><div class="fil-note-author">✍️ '+(n.author||'Moi')+'</div>'+(n.text||'').replace(/
-/g,'<br>')+'</div>';});html+='</div>';}
-      html+='<div class="fil-reactions" id="fil-react-'+day.key+'">';
-      FIL_REACTIONS.forEach(emoji=>{
-        const count=Math.max(reacts[emoji]||0,storedReacts[day.key+'-'+emoji]||0);
-        html+='<button class="fil-react-btn'+(count>0?' active':'')+'" onclick="filAddReaction(''+day.key+'',''+emoji+'',this)">'+emoji+' <span>'+count+'</span></button>';
+
+      // Header
+      const header=document.createElement('div');
+      header.className='fil-card-header';
+      header.innerHTML='<div class="fil-card-date">'+(day.date||'')+'<span class="fil-badge '+day.dk+'">'+(DEST_NAMES[day.dk]||'')+'</span></div><div class="fil-card-title">'+(day.title||'')+'</div>';
+      card.appendChild(header);
+
+      // Photos
+      if(dp.length){
+        const grid=document.createElement('div');
+        grid.className='fil-photos-grid';
+        dp.forEach(function(p){
+          const wrap=document.createElement('div');
+          const photoDiv=document.createElement('div');
+          photoDiv.className='fil-photo';
+          const img=document.createElement('img');
+          img.src=p.url;
+          img.loading='lazy';
+          img.alt=p.caption||'';
+          img.onerror=function(){this.parentElement.style.display='none';};
+          photoDiv.appendChild(img);
+          wrap.appendChild(photoDiv);
+          if(p.caption){
+            const cap=document.createElement('div');
+            cap.className='fil-photo-caption';
+            cap.textContent=p.caption;
+            wrap.appendChild(cap);
+          }
+          grid.appendChild(wrap);
+        });
+        card.appendChild(grid);
+      }
+
+      // Notes
+      if(dn.length){
+        const notesDiv=document.createElement('div');
+        notesDiv.className='fil-notes';
+        dn.forEach(function(n){
+          const noteDiv=document.createElement('div');
+          noteDiv.className='fil-note';
+          const author=document.createElement('div');
+          author.className='fil-note-author';
+          author.textContent='✍️ '+(n.author||'Moi');
+          noteDiv.appendChild(author);
+          const txt=document.createElement('div');
+          txt.innerHTML=(n.text||'').split('\n').join('<br>');
+          noteDiv.appendChild(txt);
+          notesDiv.appendChild(noteDiv);
+        });
+        card.appendChild(notesDiv);
+      }
+
+      // Réactions
+      const reactDiv=document.createElement('div');
+      reactDiv.className='fil-reactions';
+      reactDiv.id='fil-react-'+day.key;
+      FIL_REACTIONS.forEach(function(emoji){
+        const rkey=day.key+'-'+emoji;
+        const count=Math.max(reacts[emoji]||0, storedReacts[rkey]||0);
+        const btn=document.createElement('button');
+        btn.className='fil-react-btn'+(count>0?' active':'');
+        btn.innerHTML=emoji+' <span>'+count+'</span>';
+        btn.onclick=function(){filAddReaction(day.key,emoji,btn);};
+        reactDiv.appendChild(btn);
       });
-      html+='</div>';
-      html+='<div class="fil-comments" id="fil-cmts-'+day.key+'">';
-      cmts.forEach(c=>{html+='<div class="fil-comment"><div class="fil-comment-author">💬 '+c.author+' · '+(c.time||'')+'</div>'+c.text+'</div>';});
-      html+='<div class="fil-comment-form"><input class="fil-comment-input" id="fil-cmt-'+day.key+'" placeholder="Répondre…" type="text"><button class="fil-comment-send" onclick="filSendComment(''+day.key+'')">Envoyer</button></div></div>';
-      card.innerHTML=html;
+      card.appendChild(reactDiv);
+
+      // Commentaires
+      const cmtDiv=document.createElement('div');
+      cmtDiv.className='fil-comments';
+      cmtDiv.id='fil-cmts-'+day.key;
+      cmts.forEach(function(c){
+        const d=document.createElement('div');
+        d.className='fil-comment';
+        d.innerHTML='<div class="fil-comment-author">💬 '+(c.author||'')+(c.time?' · '+c.time:'')+'</div>'+(c.text||'');
+        cmtDiv.appendChild(d);
+      });
+      const form=document.createElement('div');
+      form.className='fil-comment-form';
+      const inp=document.createElement('input');
+      inp.className='fil-comment-input';
+      inp.id='fil-cmt-'+day.key;
+      inp.placeholder='Répondre…';
+      inp.type='text';
+      const sendBtn=document.createElement('button');
+      sendBtn.className='fil-comment-send';
+      sendBtn.textContent='Envoyer';
+      sendBtn.onclick=function(){filSendComment(day.key);};
+      form.appendChild(inp);
+      form.appendChild(sendBtn);
+      cmtDiv.appendChild(form);
+      card.appendChild(cmtDiv);
+
       container.appendChild(card);
     });
-  }catch(e){container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid)">Erreur de chargement</div>';console.error(e);}
+
+  }catch(e){
+    container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid)">Erreur de chargement</div>';
+    console.error('loadFil error:',e);
+  }
 }
 
 function filAddReaction(dayKey,emoji,btn){
@@ -2864,19 +2985,20 @@ function filAddReaction(dayKey,emoji,btn){
   localStorage.setItem('vg_reacts',JSON.stringify(stored));
   btn.classList.add('active');
   btn.querySelector('span').textContent=stored[rkey];
-  gsSave('reaction',dayKey+'-'+emoji,stored[rkey]);
+  gsSave('reaction',rkey,stored[rkey]);
   toast(emoji+' Réaction ajoutée !');
 }
 
 function filSendComment(dayKey){
   const inp=document.getElementById('fil-cmt-'+dayKey);
+  if(!inp)return;
   const text=inp.value.trim();
   if(!text)return;
   const author=idxUser?idxUser.split(' ')[0]:'Moi';
   const ts=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   const cmts=JSON.parse(localStorage.getItem('vg_comments')||'{}');
   if(!cmts[dayKey])cmts[dayKey]=[];
-  cmts[dayKey].push({author,text,time:ts});
+  cmts[dayKey].push({author:author,text:text,time:ts});
   localStorage.setItem('vg_comments',JSON.stringify(cmts));
   gsSave('comment','cmt-'+dayKey+'-'+Date.now(),author+': '+text);
   const container=document.getElementById('fil-cmts-'+dayKey);
@@ -2887,6 +3009,7 @@ function filSendComment(dayKey){
   inp.value='';
   toast('💬 Commentaire envoyé !');
 }
+
 
 // ═══ FIREBASE ═════════════════════════════════
 function openFbModal(){document.getElementById('fb-url').value=localStorage.getItem('fb_databaseURL')||'';document.getElementById('fb-key').value=localStorage.getItem('fb_apiKey')||'';document.getElementById('fb-pid').value=localStorage.getItem('fb_projectId')||'';document.getElementById('fb-aid').value=localStorage.getItem('fb_appId')||'';document.getElementById('fb-modal').classList.add('open');}
