@@ -2827,8 +2827,11 @@ async function loadFil(){
   try{
     const r=await fetch(GS_URL+'?t='+Date.now());
     const allRows=await r.json();
-    if(!Array.isArray(allRows)||allRows.length===0){
-      // Sheets vide = vider le cache local aussi
+    // Si Sheets vide ou aucune ligne utile : vider le cache local
+    const hasContent = Array.isArray(allRows) && allRows.some(function(r){
+      return r && (r.type==='photo' || r.type==='comment' || r.type==='reaction');
+    });
+    if(!hasContent){
       localStorage.removeItem('vg_reacts');
       localStorage.removeItem('vg_comments');
       container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';
