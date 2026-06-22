@@ -2839,7 +2839,7 @@ async function loadFil(){
       const card=document.createElement('div');
       card.className='fil-card';
       let html='<div class="fil-card-header"><div><div class="fil-card-date">'+(day.date||'')+'<span class="fil-badge '+day.dk+'">'+(DEST_NAMES[day.dk]||'')+'</span></div><div class="fil-card-title">'+(day.title||'')+'</div></div></div>';
-      if(dp.length){html+='<div class="fil-photos-grid">';dp.forEach(p=>{html+='<div><div class="fil-photo"><img src="'+p.url+'" loading="lazy" alt="'+(p.caption||'')+'" onerror="this.parentElement.style.background='var(--sand-mid)'"></div>'+(p.caption?'<div class="fil-photo-caption">'+p.caption+'</div>':'')+'</div>';});html+='</div>';}
+      if(dp.length){html+='<div class="fil-photos-grid">';dp.forEach(p=>{html+='<div><div class="fil-photo"><img src="'+p.url+'" loading="lazy" alt="'+(p.caption||'')+'" onerror="this.parentElement.style.display='none'"></div>'+(p.caption?'<div class="fil-photo-caption">'+p.caption+'</div>':'')+'</div>';});html+='</div>';}
       if(dn.length){html+='<div class="fil-notes">';dn.forEach(n=>{html+='<div class="fil-note"><div class="fil-note-author">✍️ '+(n.author||'Moi')+'</div>'+(n.text||'').replace(/
 /g,'<br>')+'</div>';});html+='</div>';}
       html+='<div class="fil-reactions" id="fil-react-'+day.key+'">';
