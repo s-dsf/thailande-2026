@@ -333,7 +333,6 @@ async function loadFeed() {
     if(!Array.isArray(allRows)) allRows = [];
 
     var photos = [];
-    var notesByDay = {};
 
     allRows.forEach(function(row) {
       if(!row || !row.type) return;
@@ -345,23 +344,12 @@ async function loadFeed() {
           }
         } catch(e) {}
       }
-      if(row.type === 'note' && row.key) {
-        var m = row.key.match(/^note-([a-z]+-[0-9]+)/);
-        if(m) {
-          var dk = m[1];
-          if(!notesByDay[dk]) notesByDay[dk] = [];
-          try {
-            var ns = typeof row.value === 'string' ? JSON.parse(row.value) : row.value;
-            if(Array.isArray(ns)) notesByDay[dk] = notesByDay[dk].concat(ns);
-          } catch(e) {}
-        }
-      }
+      // Notes privées ignorées
     });
 
     var activeDays = DAYS.filter(function(d) {
       var dp = photos.filter(function(p){ return p.dayKey === d.key; });
-      var dn = notesByDay[d.key] || [];
-      return dp.length || dn.length;
+      return dp.length;
     });
 
     // Charger réactions depuis GS et fusionner avec localStorage
@@ -375,7 +363,6 @@ async function loadFeed() {
     container.innerHTML = '';
     activeDays.slice().reverse().forEach(function(day) {
       var dp = photos.filter(function(p){ return p.dayKey === day.key; });
-      var dn = (notesByDay[day.key] || []).filter(function(n){ return n && n.text; });
       var badgeClass = 'badge-' + day.dk;
 
       var card = document.createElement('div');
@@ -399,14 +386,7 @@ async function loadFeed() {
         photosHtml += '</div>';
       }
 
-      var notesHtml = '';
-      dn.forEach(function(n) {
-        var txt = (n.text || '').replace(/\n/g, '<br>');
-        notesHtml += '<div class="note-bubble">' +
-          '<div class="note-author">✍️ ' + (n.author || 'La famille') + '</div>' +
-          '<div class="note-text">' + txt + '</div>' +
-          '</div>';
-      });
+      var notesHtml = ''; // notes privées
 
       // Reactions — lire localStorage immédiatement
       var storedReacts = JSON.parse(localStorage.getItem('vg_reacts') || '{}');
@@ -426,7 +406,7 @@ async function loadFeed() {
         '</div><div class="comments-list" id="cmts-' + day.key + '"></div>';
 
       card.innerHTML = header +
-        '<div class="day-body">' + photosHtml + notesHtml + reactHtml + commentHtml + '</div>';
+        '<div class="day-body">' + photosHtml + reactHtml + commentHtml + '</div>';
 
       container.appendChild(card);
       loadReactions(day.key);

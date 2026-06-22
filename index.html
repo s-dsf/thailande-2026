@@ -25,7 +25,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .topbar-sub{font-size:10px;color:var(--gold-lt)}
 .topbar-right{display:flex;align-items:center;gap:5px}
 .time-badges{display:flex;flex-direction:column;gap:2px;align-items:flex-end}
-.time-badge{border-radius:10px;padding:2px 7px;font-size:10px;font-weight:700;white-space:nowrap}
+.time-badge{border-radius:10px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;color:#fff}
 .time-th{background:rgba(0,0,0,.2);color:#fff}
 .time-fr{background:rgba(255,255,255,.2);color:var(--gold-lt)}
 .countdown-badge{background:var(--gold);color:var(--brown);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
@@ -139,6 +139,7 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .fil-comment{background:var(--sand);border-radius:8px;padding:6px 10px;margin-bottom:5px;font-size:12px;border-left:3px solid var(--turq)}
 .fil-comment-author{font-size:10px;font-weight:700;color:var(--turq);margin-bottom:2px}
 .fil-comment-form{display:flex;gap:6px;margin-top:8px}
+.fil-reply-quote{font-size:10px;color:var(--brown-mid);background:var(--sand-mid);border-left:3px solid var(--coral);padding:3px 8px;border-radius:4px;margin-bottom:3px;font-style:italic}
 .fil-comment-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--brown);background:#fff;font-family:inherit;outline:none}
 .fil-comment-input:focus{border-color:var(--coral)}
 .fil-comment-send{background:var(--coral);color:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;border:none;cursor:pointer}
@@ -2810,7 +2811,10 @@ async function loadFil(){
   try{
     const r=await fetch(GS_URL+'?t='+Date.now());
     const allRows=await r.json();
-    if(!Array.isArray(allRows)){
+    if(!Array.isArray(allRows)||allRows.length===0){
+      // Sheets vide = vider le cache local aussi
+      localStorage.removeItem('vg_reacts');
+      localStorage.removeItem('vg_comments');
       container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';
       return;
     }
@@ -2824,17 +2828,7 @@ async function loadFil(){
           if(p&&p.url&&p.id)photos.push(p);
         }catch(e){}
       }
-      if(row.type==='note'&&row.key){
-        const m=row.key.match(/^note-([a-z]+-[0-9]+)/);
-        if(m){
-          const dk=m[1];
-          if(!notesByDay[dk])notesByDay[dk]=[];
-          try{
-            const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;
-            if(Array.isArray(ns))notesByDay[dk]=notesByDay[dk].concat(ns.filter(function(n){return n&&n.text;}));
-          }catch(e){}
-        }
-      }
+      // Notes privées (fait/souvenir/anecdote) non affichées dans le fil
       if(row.type==='reaction'&&row.key){
         const parts=row.key.split('-');
         const emoji=parts[parts.length-1];
@@ -2855,10 +2849,9 @@ async function loadFil(){
     ];
 
     const activeDays=allDaysData.filter(function(d){
-      const dp=photos.filter(function(p){return p.dayKey===d.key;});
-      const dn=notesByDay[d.key]||[];
+      const dp=photos.filter(function(p){return p.dayKey===d.key&&(p.diff==='all'||p.diff==='both');});
       const cmts=storedCmts[d.key]||[];
-      return dp.length||dn.length||cmts.length;
+      return dp.length||cmts.length;
     });
 
     if(!activeDays.length){
@@ -2871,7 +2864,6 @@ async function loadFil(){
 
     activeDays.slice().reverse().forEach(function(day){
       const dp=photos.filter(function(p){return p.dayKey===day.key&&(p.diff==='all'||p.diff==='both');});
-      const dn=(notesByDay[day.key]||[]).filter(function(n){return n&&n.text;});
       const cmts=storedCmts[day.key]||[];
       const reacts=reactsByDay[day.key]||{};
 
@@ -2910,24 +2902,7 @@ async function loadFil(){
         card.appendChild(grid);
       }
 
-      // Notes
-      if(dn.length){
-        const notesDiv=document.createElement('div');
-        notesDiv.className='fil-notes';
-        dn.forEach(function(n){
-          const noteDiv=document.createElement('div');
-          noteDiv.className='fil-note';
-          const author=document.createElement('div');
-          author.className='fil-note-author';
-          author.textContent='✍️ '+(n.author||'Moi');
-          noteDiv.appendChild(author);
-          const txt=document.createElement('div');
-          txt.innerHTML=(n.text||'').split('\n').join('<br>');
-          noteDiv.appendChild(txt);
-          notesDiv.appendChild(noteDiv);
-        });
-        card.appendChild(notesDiv);
-      }
+      // Notes privées non affichées dans le fil
 
       // Réactions
       const reactDiv=document.createElement('div');
@@ -2948,10 +2923,22 @@ async function loadFil(){
       const cmtDiv=document.createElement('div');
       cmtDiv.className='fil-comments';
       cmtDiv.id='fil-cmts-'+day.key;
-      cmts.forEach(function(c){
+      cmts.forEach(function(c,ci){
         const d=document.createElement('div');
         d.className='fil-comment';
-        d.innerHTML='<div class="fil-comment-author">💬 '+(c.author||'')+(c.time?' · '+c.time:'')+'</div>'+(c.text||'');
+        d.style.cursor='pointer';
+        const replyTo=c.replyTo?'<div class="fil-reply-quote">↩ '+c.replyTo+'</div>':'';
+        d.innerHTML=replyTo+'<div class="fil-comment-author">💬 '+(c.author||'')+(c.time?' · '+c.time:'')+'</div>'+(c.text||'');
+        d.onclick=function(){
+          const inp=cmtDiv.querySelector('.fil-comment-input');
+          if(inp){
+            inp.placeholder='Répondre à '+(c.author||'')+'…';
+            inp.dataset.replyTo=(c.author||'')+': '+(c.text||'').substring(0,40);
+            inp.focus();
+            d.style.background='var(--coral-lt)';
+            setTimeout(function(){d.style.background='';},1000);
+          }
+        };
         cmtDiv.appendChild(d);
       });
       const form=document.createElement('div');
@@ -3005,17 +2992,24 @@ function filSendComment(dayKey){
   if(!text)return;
   const author=idxUser?idxUser.split(' ')[0]:'Moi';
   const ts=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const replyTo=inp.dataset.replyTo||null;
   const cmts=JSON.parse(localStorage.getItem('vg_comments')||'{}');
   if(!cmts[dayKey])cmts[dayKey]=[];
-  cmts[dayKey].push({author:author,text:text,time:ts});
+  cmts[dayKey].push({author:author,text:text,time:ts,replyTo:replyTo});
   localStorage.setItem('vg_comments',JSON.stringify(cmts));
-  gsSave('comment','cmt-'+dayKey+'-'+Date.now(),author+': '+text);
+  const val=replyTo?'↩ '+replyTo+' | '+author+': '+text:author+': '+text;
+  gsSave('comment','cmt-'+dayKey+'-'+Date.now(),val);
   const container=document.getElementById('fil-cmts-'+dayKey);
+  const form=container.querySelector('.fil-comment-form');
   const div=document.createElement('div');
   div.className='fil-comment';
-  div.innerHTML='<div class="fil-comment-author">💬 '+author+' · '+ts+'</div>'+text;
-  container.insertBefore(div,container.querySelector('.fil-comment-form'));
+  div.style.cursor='pointer';
+  const replyHtml=replyTo?'<div class="fil-reply-quote">↩ '+replyTo+'</div>':'';
+  div.innerHTML=replyHtml+'<div class="fil-comment-author">💬 '+author+' · '+ts+'</div>'+text;
+  container.insertBefore(div,form);
   inp.value='';
+  inp.placeholder='Répondre…';
+  delete inp.dataset.replyTo;
   toast('💬 Commentaire envoyé !');
 }
 
