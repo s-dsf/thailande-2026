@@ -596,8 +596,8 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
   <div class="topbar-right">
     <div class="time-badges">
-      <div class="time-badge time-th" id="thai-time">&#127481;&#127469; --:--</div>
-      <div class="time-badge time-fr" id="fr-time">&#127467;&#127479; --:--</div>
+      <div class="time-badge time-th">&#127481;&#127469; <span id="thai-time">--:--</span></div>
+      <div class="time-badge time-fr">&#127467;&#127479; <span id="fr-time">--:--</span></div>
     </div>
     <div class="countdown-badge" id="countdown">J–?</div>
     <button onclick="toggleDark()" id="dark-toggle" title="Mode nuit" style="background:rgba(0,0,0,.15);border:none;color:#fff;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">🌙</button>
@@ -1672,8 +1672,8 @@ function updCdown(){
 function updThaiTime(){
   const th=new Intl.DateTimeFormat('fr-FR',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit'}).format(new Date());
   const fr=new Intl.DateTimeFormat('fr-FR',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}).format(new Date());
-  const e1=document.getElementById('thai-time');if(e1)e1.innerHTML='&#127481;&#127469; '+th;
-  const e2=document.getElementById('fr-time');if(e2)e2.innerHTML='&#127467;&#127479; '+fr;
+  const e1=document.getElementById('thai-time');if(e1)e1.textContent=th;
+  const e2=document.getElementById('fr-time');if(e2)e2.textContent=fr;
   const e3=document.getElementById('thai-time-big');if(e3)e3.textContent=th;
   const e4=document.getElementById('fr-time-big');if(e4)e4.textContent=fr;
 }
