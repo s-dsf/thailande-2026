@@ -309,6 +309,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
+var SHEETS_COMMENTS = {}; // commentaires chargés depuis Sheets
 const GS_URL = 'https://script.google.com/macros/s/AKfycbw3M2bE9oPL-io0YbiXp08fQ4ArSCZ-ZbVa053vmcKByIUC-U-jwG1upUtmqJE8_zFE/exec';
 const CLIENT_ID = '149294989704-njs9lik8j598ufbp99quni6qfjqlvg6e.apps.googleusercontent.com';
 const REACTIONS = ['❤️','😍','😂','🤩','👏'];
@@ -443,7 +444,7 @@ async function loadFeed() {
     var allRows = await r.json();
     if(!Array.isArray(allRows)) allRows = [];
 
-    var photos = [];
+    var photos = [], commentsByDay = {};
 
     allRows.forEach(function(row) {
       if(!row || !row.type) return;
@@ -456,12 +457,29 @@ async function loadFeed() {
         } catch(e) {}
       }
       // notes privees ignorees
+      if(row.type === 'comment' && row.key) {
+        var m = row.key.match(/^cmt-([a-z]+-[0-9]+)-/);
+        if(m) {
+          var dk = m[1];
+          if(!commentsByDay[dk]) commentsByDay[dk] = [];
+          var val = row.value || '';
+          var colonIdx = val.indexOf(': ');
+          var author = colonIdx > 0 ? val.substring(0, colonIdx) : 'Anonyme';
+          var text = colonIdx > 0 ? val.substring(colonIdx + 2) : val;
+          if(text && !commentsByDay[dk].find(function(c){ return c.text===text && c.author===author; })) {
+            commentsByDay[dk].push({author: author, text: text, time: ''});
+          }
+        }
+      }
     });
 
     var activeDays = DAYS.filter(function(d) {
       var dp = photos.filter(function(p){ return p.dayKey === d.key; });
       return dp.length;
     });
+
+    // Stocker les commentaires Sheets dans la variable globale
+    SHEETS_COMMENTS = commentsByDay;
 
     // Charger réactions depuis GS et fusionner avec localStorage
     loadReactionsFromGS(allRows);
@@ -612,8 +630,17 @@ function editVoyageComment(dayKey, ci) {
 }
 
 function loadComments(dayKey) {
-  var cmts = JSON.parse(localStorage.getItem('vg_comments') || '{}');
-  var list = cmts[dayKey] || [];
+  var localCmtsAll = JSON.parse(localStorage.getItem('vg_comments') || '{}');
+  var localList = localCmtsAll[dayKey] || [];
+  var sheetList = SHEETS_COMMENTS[dayKey] || [];
+  // Fusionner : Sheets d'abord, puis locaux non présents
+  var merged = sheetList.slice();
+  localList.forEach(function(lc){
+    if(!merged.find(function(sc){ return sc.text===lc.text && sc.author===lc.author; })){
+      merged.push(lc);
+    }
+  });
+  var list = merged;
   var ctn = document.getElementById('cmts-'+dayKey);
   if(!ctn) return;
   var myName = currentUser ? currentUser.name.split(' ')[0] : '';
