@@ -1,4 +1,4 @@
-const CACHE = 'thailand-2026-v30';
+const CACHE = 'thailand-2026-v34';
 const ASSETS = ['/', '/index.html', '/voyage.html', '/docx.umd.js'];
 
 self.addEventListener('install', e => {

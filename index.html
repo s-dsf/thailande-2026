@@ -121,6 +121,29 @@ a{color:inherit;text-decoration:none}button{border:none;background:none;cursor:p
 .note-item-time{font-size:10px;color:var(--brown-mid)}
 .note-item-text{font-size:12px;color:var(--brown);line-height:1.5}
 .note-item-actions{display:flex;gap:4px}
+.fil-card{background:#fff;border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.fil-card-header{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--sand-mid)}
+.fil-card-date{font-size:11px;font-weight:700;color:var(--brown-mid);text-transform:uppercase;letter-spacing:.4px}
+.fil-card-title{font-size:13px;font-weight:800;color:var(--brown);margin-top:2px}
+.fil-photos-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 14px}
+.fil-photo{border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:var(--sand-mid)}
+.fil-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.fil-photo-caption{font-size:10px;color:var(--brown-mid);margin-top:3px;text-align:center}
+.fil-notes{padding:0 14px 8px}
+.fil-note{background:var(--sand);border-radius:8px;padding:8px 10px;margin-bottom:6px;border-left:3px solid var(--gold);font-size:12px;color:var(--brown)}
+.fil-note-author{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.fil-reactions{display:flex;gap:6px;padding:8px 14px;flex-wrap:wrap;border-top:1px solid var(--sand-mid)}
+.fil-react-btn{display:flex;align-items:center;gap:4px;background:var(--sand-mid);border-radius:16px;padding:4px 10px;border:none;cursor:pointer;font-size:12px;color:var(--brown);font-weight:600}
+.fil-react-btn.active{background:var(--coral-lt);color:var(--coral)}
+.fil-comments{padding:8px 14px;border-top:1px solid var(--sand-mid)}
+.fil-comment{background:var(--sand);border-radius:8px;padding:6px 10px;margin-bottom:5px;font-size:12px;border-left:3px solid var(--turq)}
+.fil-comment-author{font-size:10px;font-weight:700;color:var(--turq);margin-bottom:2px}
+.fil-comment-form{display:flex;gap:6px;margin-top:8px}
+.fil-comment-input{flex:1;border:1.5px solid var(--sand-mid);border-radius:8px;padding:7px 10px;font-size:12px;color:var(--brown);background:#fff;font-family:inherit;outline:none}
+.fil-comment-input:focus{border-color:var(--coral)}
+.fil-comment-send{background:var(--coral);color:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;border:none;cursor:pointer}
+.fil-badge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;color:#fff;margin-left:5px}
+.fil-badge.bkk{background:var(--coral)}.fil-badge.cm{background:var(--green)}.fil-badge.kt{background:var(--turq)}.fil-badge.ks{background:var(--gold)}
 .note-act{font-size:10px;background:none;border:1px solid var(--sand-mid);border-radius:5px;padding:2px 6px;cursor:pointer;color:var(--brown-mid)}
 .note-act-del{color:var(--red);border-color:var(--red)}
 .cf{clear:both}
@@ -816,10 +839,11 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   <!-- SUB-TABS -->
   <div class="prat-tabs">
     <div class="prat-tab active" onclick="goP('outils',this)"><span class="pti">🛠</span>Outils</div>
+    <div class="prat-tab" onclick="goP('fil',this)"><span class="pti">📸</span>Fil</div>
     <div class="prat-tab" onclick="goP('pratique',this)"><span class="pti">📋</span>Pratique</div>
     <div class="prat-tab" onclick="goP('info',this)"><span class="pti">ℹ️</span>Infos</div>
     <div class="prat-tab" onclick="goP('avant',this)"><span class="pti">🗓</span>Avant</div>
-    <div class="prat-tab" onclick="goP('photos',this)"><span class="pti">📸</span>Photos</div>
+    <div class="prat-tab" onclick="goP('photos',this)"><span class="pti">📤</span>Upload</div>
     <div class="prat-tab" onclick="goP('config',this)"><span class="pti">⚙️</span>Config</div>
   </div>
 
@@ -946,6 +970,13 @@ body.dark .ai-msg.assistant{background:#16213E;color:#E0D5CC}
   </div>
 
   <!-- ── SECTION PHOTOS ── -->
+  <!-- ── SECTION FIL ── -->
+  <div class="prat-sec" id="ps-fil">
+    <div class="sec-title">📸 Fil du voyage</div>
+    <p class="sec-note">Photos, réactions et commentaires de toute la famille.</p>
+    <div id="fil-container"><div style="text-align:center;padding:30px;color:var(--brown-mid);font-size:13px">Chargement…</div></div>
+  </div>
+
   <div class="prat-sec" id="ps-photos">
     <div class="sec-title">📸 Photos du voyage</div>
 
@@ -1996,20 +2027,26 @@ function showMapDay(k,b){
 
 // ═══ ACTIVITIES + NOTES ══════════════════════
 // ═══ GOOGLE SHEETS SYNC ══════════════════════
-const GS_URL='https://script.google.com/macros/s/AKfycbxFcGaftnTCphrBPy_NFTcWoMn83CSbPaCJh3ddAnZVa4yOyJDLGZlWWOdxfRY3iTk/exec';
+const GS_URL='https://script.google.com/macros/s/AKfycbw3M2bE9oPL-io0YbiXp08fQ4ArSCZ-ZbVa053vmcKByIUC-U-jwG1upUtmqJE8_zFE/exec';
 const DEVICE=navigator.userAgent.includes('iPhone')?'iPhone':navigator.userAgent.includes('Android')?'Android':'Desktop';
 
 async function gsSave(type, key, value) {
   try {
-    // Utiliser un proxy pour éviter les problèmes no-cors
-    const r = await fetch(GS_URL, {
+    // Passer par le Worker Cloudflare pour éviter les problèmes CORS sur iOS
+    const PROXY = 'https://claude-proxy-thailande.s-desferet.workers.dev/gs';
+    const r = await fetch(PROXY, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type, key, value:String(value), device:DEVICE, gsUrl:GS_URL})
+    });
+    if(r.ok) return true;
+    // Fallback direct si Worker indisponible
+    await fetch(GS_URL, {
       method:'POST',
       mode:'no-cors',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({type, key, value:String(value), device:DEVICE})
     });
-    // no-cors = opaque response, on ne peut pas lire le résultat
-    // On considère comme succès si pas d'exception
     return true;
   } catch(e) {
     console.warn('GS save error:', e);
@@ -2762,6 +2799,95 @@ async function makeRecap(){
 }
 
 
+// ═══ FIL DU VOYAGE ════════════════════════════
+const FIL_REACTIONS=['❤️','😍','😂','🤩','👏'];
+
+async function loadFil(){
+  const container=document.getElementById('fil-container');
+  if(!container)return;
+  container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid);font-size:13px">Chargement…</div>';
+  try{
+    const r=await fetch(GS_URL+'?t='+Date.now());
+    const allRows=await r.json();
+    if(!Array.isArray(allRows)){container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';return;}
+    const photos=[],notesByDay={},reactsByDay={};
+    allRows.forEach(function(row){
+      if(!row||!row.type)return;
+      if(row.type==='photo'){try{const p=typeof row.value==='string'?JSON.parse(row.value):row.value;if(p&&p.url&&p.id)photos.push(p);}catch(e){}}
+      if(row.type==='note'&&row.key){const m=row.key.match(/^note-([a-z]+-[0-9]+)/);if(m){const dk=m[1];if(!notesByDay[dk])notesByDay[dk]=[];try{const ns=typeof row.value==='string'?JSON.parse(row.value):row.value;if(Array.isArray(ns))notesByDay[dk]=notesByDay[dk].concat(ns.filter(n=>n&&n.text));}catch(e){}}}
+      if(row.type==='reaction'&&row.key){const parts=row.key.split('-');const emoji=parts[parts.length-1];const dayKey=parts.slice(0,-1).join('-');if(!reactsByDay[dayKey])reactsByDay[dayKey]={};reactsByDay[dayKey][emoji]=parseInt(row.value)||0;}
+    });
+    const storedReacts=JSON.parse(localStorage.getItem('vg_reacts')||'{}');
+    const storedCmts=JSON.parse(localStorage.getItem('vg_comments')||'{}');
+    const allDaysData=[
+      ...DATA.bangkok.map((d,i)=>({...d,key:'bkk-'+i,dk:'bkk'})),
+      ...DATA.chiangmai.map((d,i)=>({...d,key:'cm-'+i,dk:'cm'})),
+      ...DATA.kohtao.map((d,i)=>({...d,key:'kt-'+i,dk:'kt'})),
+      ...DATA.kohsamui.map((d,i)=>({...d,key:'ks-'+i,dk:'ks'})),
+    ];
+    const activeDays=allDaysData.filter(d=>{
+      return photos.filter(p=>p.dayKey===d.key).length||(notesByDay[d.key]||[]).length||(storedCmts[d.key]||[]).length;
+    });
+    if(!activeDays.length){container.innerHTML='<div style="text-align:center;padding:40px;color:var(--brown-mid);font-size:13px;font-style:italic">📷 Les photos et souvenirs apparaîtront ici au fil du voyage !</div>';return;}
+    const DEST_NAMES={bkk:'Bangkok',cm:'Chiang Mai',kt:'Koh Tao',ks:'Koh Samui'};
+    container.innerHTML='';
+    activeDays.slice().reverse().forEach(day=>{
+      const dp=photos.filter(p=>p.dayKey===day.key);
+      const dn=(notesByDay[day.key]||[]).filter(n=>n&&n.text);
+      const cmts=storedCmts[day.key]||[];
+      const reacts=reactsByDay[day.key]||{};
+      const card=document.createElement('div');
+      card.className='fil-card';
+      let html='<div class="fil-card-header"><div><div class="fil-card-date">'+(day.date||'')+'<span class="fil-badge '+day.dk+'">'+(DEST_NAMES[day.dk]||'')+'</span></div><div class="fil-card-title">'+(day.title||'')+'</div></div></div>';
+      if(dp.length){html+='<div class="fil-photos-grid">';dp.forEach(p=>{html+='<div><div class="fil-photo"><img src="'+p.url+'" loading="lazy" alt="'+(p.caption||'')+'" onerror="this.parentElement.style.background='var(--sand-mid)'"></div>'+(p.caption?'<div class="fil-photo-caption">'+p.caption+'</div>':'')+'</div>';});html+='</div>';}
+      if(dn.length){html+='<div class="fil-notes">';dn.forEach(n=>{html+='<div class="fil-note"><div class="fil-note-author">✍️ '+(n.author||'Moi')+'</div>'+(n.text||'').replace(/
+/g,'<br>')+'</div>';});html+='</div>';}
+      html+='<div class="fil-reactions" id="fil-react-'+day.key+'">';
+      FIL_REACTIONS.forEach(emoji=>{
+        const count=Math.max(reacts[emoji]||0,storedReacts[day.key+'-'+emoji]||0);
+        html+='<button class="fil-react-btn'+(count>0?' active':'')+'" onclick="filAddReaction(''+day.key+'',''+emoji+'',this)">'+emoji+' <span>'+count+'</span></button>';
+      });
+      html+='</div>';
+      html+='<div class="fil-comments" id="fil-cmts-'+day.key+'">';
+      cmts.forEach(c=>{html+='<div class="fil-comment"><div class="fil-comment-author">💬 '+c.author+' · '+(c.time||'')+'</div>'+c.text+'</div>';});
+      html+='<div class="fil-comment-form"><input class="fil-comment-input" id="fil-cmt-'+day.key+'" placeholder="Répondre…" type="text"><button class="fil-comment-send" onclick="filSendComment(''+day.key+'')">Envoyer</button></div></div>';
+      card.innerHTML=html;
+      container.appendChild(card);
+    });
+  }catch(e){container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid)">Erreur de chargement</div>';console.error(e);}
+}
+
+function filAddReaction(dayKey,emoji,btn){
+  const stored=JSON.parse(localStorage.getItem('vg_reacts')||'{}');
+  const rkey=dayKey+'-'+emoji;
+  stored[rkey]=(stored[rkey]||0)+1;
+  localStorage.setItem('vg_reacts',JSON.stringify(stored));
+  btn.classList.add('active');
+  btn.querySelector('span').textContent=stored[rkey];
+  gsSave('reaction',dayKey+'-'+emoji,stored[rkey]);
+  toast(emoji+' Réaction ajoutée !');
+}
+
+function filSendComment(dayKey){
+  const inp=document.getElementById('fil-cmt-'+dayKey);
+  const text=inp.value.trim();
+  if(!text)return;
+  const author=idxUser?idxUser.split(' ')[0]:'Moi';
+  const ts=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  const cmts=JSON.parse(localStorage.getItem('vg_comments')||'{}');
+  if(!cmts[dayKey])cmts[dayKey]=[];
+  cmts[dayKey].push({author,text,time:ts});
+  localStorage.setItem('vg_comments',JSON.stringify(cmts));
+  gsSave('comment','cmt-'+dayKey+'-'+Date.now(),author+': '+text);
+  const container=document.getElementById('fil-cmts-'+dayKey);
+  const div=document.createElement('div');
+  div.className='fil-comment';
+  div.innerHTML='<div class="fil-comment-author">💬 '+author+' · '+ts+'</div>'+text;
+  container.insertBefore(div,container.querySelector('.fil-comment-form'));
+  inp.value='';
+  toast('💬 Commentaire envoyé !');
+}
+
 // ═══ FIREBASE ═════════════════════════════════
 function openFbModal(){document.getElementById('fb-url').value=localStorage.getItem('fb_databaseURL')||'';document.getElementById('fb-key').value=localStorage.getItem('fb_apiKey')||'';document.getElementById('fb-pid').value=localStorage.getItem('fb_projectId')||'';document.getElementById('fb-aid').value=localStorage.getItem('fb_appId')||'';document.getElementById('fb-modal').classList.add('open');}
 function saveFb(){['databaseURL','apiKey','projectId','appId'].forEach((k,i)=>{const v=[document.getElementById('fb-url'),document.getElementById('fb-key'),document.getElementById('fb-pid'),document.getElementById('fb-aid')][i].value.trim();localStorage.setItem('fb_'+k,v);});localStorage.setItem('fb_authDomain',document.getElementById('fb-pid').value.trim()+'.firebaseapp.com');toast('✅ Firebase configuré — rechargement…');setTimeout(()=>location.reload(),1500);}
@@ -3124,6 +3250,7 @@ function goP(key,btn){
   const sec=document.getElementById('ps-'+key);
   if(sec)sec.classList.add('active');
   if(btn)btn.classList.add('active');
+  if(key==='fil')loadFil();
   try{
     if(key==='pratique'){
       renderPhrases();
