@@ -2073,11 +2073,13 @@ async function gsLoad() {
     const r = await fetch(GS_URL+'?t='+Date.now());
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d = await r.json();
-    if (!d.data) return false;
+    // Apps Script retourne {rows:[...]} ou array direct
+    const rows = d.rows || d.data || (Array.isArray(d) ? d : null);
+    if (!rows || !rows.length) return false;
 
     // Dédupliquer — garder la DERNIÈRE valeur par (type+key)
     const latest={};
-    d.data.forEach(row=>{
+    rows.forEach(row=>{
       const type=row.type||row.B;
       const key=row.key||row.C;
       const value=row.value||row.D;
@@ -2332,7 +2334,7 @@ function renderDays(days,cid,dk){
           <span class="info-row-ico">📍</span>
           <span class="info-row-txt">${addr}${duration?` · <b>${duration}</b>`:''}</span>
           ${addr?`<a class="info-row-maps" href="${mapsUrl}" target="_blank">🗺 Maps</a>`:''}
-        </div>${addr&&getAddrTh(addr)?`<div class="tl-addr-th">🚕 ${getAddrTh(addr)}</div>`:''}`:''}
+        </div>${addr?(it.addr||getAddrTh(addr))?`<div class="tl-addr-th">🚕 ${it.addr||getAddrTh(addr)}</div>`:'':''}`:''}
         ${it.al?`<div class="tip ${it.al.startsWith('✅')?'tip-green':'tip-red'}" style="margin-top:6px"><span style="font-size:13px">${it.al.startsWith('✅')?'✅':it.al.startsWith('📌')?'📌':'⚠️'}</span><div><div class="tip-text">${it.al.replace(/^✅\s*/,'').replace(/^📌\s*/,'')}</div></div></div>`:''}
         ${it.r?it.r.map(r=>`<span class="resto">🍽 ${r}</span>`).join(''):''}
       </div>`;
