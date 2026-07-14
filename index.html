@@ -2091,13 +2091,11 @@ async function gsLoad() {
     const acts={}, notes={};
     Object.values(latest).forEach(({type,key,value})=>{
       if(type==='activity') acts[key]=value==='true';
-      if(type==='note') notes[key]=value;
+      // Notes privées : non syncées depuis Sheets (gestion locale uniquement)
     });
     const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
-    const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');
     // Sheets prioritaire : les coches Sheets écrasent le local (partage entre téléphones)
     localStorage.setItem('activities',JSON.stringify({...localActs,...acts}));
-    localStorage.setItem('daynotes',JSON.stringify({...localNotes,...notes}));
 
     // Sync photos — lire la dernière liste complète depuis photos_voyage
     const photosVoyageEntry=Object.values(latest).find(e=>e.type==='photos_voyage'&&e.key==='all_photos');
@@ -2831,9 +2829,11 @@ async function loadFil(){
   container.innerHTML='<div style="text-align:center;padding:30px;color:var(--brown-mid);font-size:13px">Chargement…</div>';
   try{
     const r=await fetch(GS_URL+'?t='+Date.now());
-    const allRows=await r.json();
+    const d=await r.json();
+    // Apps Script retourne {rows:[...]} ou array direct
+    const allRows = d.rows || d.data || (Array.isArray(d) ? d : []);
     // Si Sheets vide ou aucune ligne utile : vider le cache local
-    const hasContent = Array.isArray(allRows) && allRows.some(function(r){
+    const hasContent = allRows.some(function(r){
       return r && (r.type==='photo' || r.type==='comment' || r.type==='reaction');
     });
     if(!hasContent){
