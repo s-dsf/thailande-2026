@@ -1183,7 +1183,7 @@ const DATA = {
      items:[
        {t:"Matin",n:"🎢 Option A — Siam Amazing Park",d:"Parc aquatique · Glissades géantes.",a:"203 Suan Sayam Rd, Khan Na Yao, Bangkok 10230 · Taxi 1h"},
        {t:"Matin",n:"🛍 Option B — ICONSIAM",d:"Marché flottant intérieur · Shopping · Climatisé.",a:"299 Charoen Nakhon Rd, Khlong San, Bangkok 10600 · Taxi 30 min"},
-       {t:"Matin",n:"🚤 Option C — Marché flottant Damnoen Saduak",d:"Le plus emblématique · Balades en bateau à longue queue · Ouvert 7h–17h · Taxi 90 min.",a:"Damnoen Saduak, Damnoen Saduak District, Ratchaburi 70130 · Taxi 90 min",addr:"ดำเนินสะดวก อ.ดำเนินสะดวก จ.ราชบุรี 70130",maps:"https://www.google.com/maps/place//data=!4m2!3m1!1s0x30e2d7b8c9fd1f51:0x584ed0368907e1db"},
+       {t:"Matin",n:"🚤 Option C — Marché flottant Damnoen Saduak",d:"Le plus emblématique · Balades en bateau à longue queue · Ouvert 7h–17h",a:"Damnoen Saduak, Damnoen Saduak District, Ratchaburi 70130",addr:"ดำเนินสะดวก อ.ดำเนินสะดวก จ.ราชบุรี 70130",maps:"https://www.google.com/maps/place//data=!4m2!3m1!1s0x30e2d7b8c9fd1f51:0x584ed0368907e1db"},
        {t:"Après-midi",n:"🏊 Piscine + sieste",d:"Moment clé pour maintenir un bon rythme.",a:"Soi Palakun, Khet Bang Phlat, Bangkok 10700"},
        {t:"17h30",n:"🌃 Train Night Market Srinakarin",d:"Ambiance locale · Street-food · Vintage cars & néons · BBQ thaï · Riz frit ananas.",
         a:"Train Night Market Srinakarin, Bangkok · Taxi 40 min"},
@@ -2093,8 +2093,9 @@ async function gsLoad() {
     });
     const localActs=JSON.parse(localStorage.getItem('activities')||'{}');
     const localNotes=JSON.parse(localStorage.getItem('daynotes')||'{}');
-    localStorage.setItem('activities',JSON.stringify({...acts,...localActs}));
-    localStorage.setItem('daynotes',JSON.stringify({...notes,...localNotes}));
+    // Sheets prioritaire : les coches Sheets écrasent le local (partage entre téléphones)
+    localStorage.setItem('activities',JSON.stringify({...localActs,...acts}));
+    localStorage.setItem('daynotes',JSON.stringify({...localNotes,...notes}));
 
     // Sync photos — lire la dernière liste complète depuis photos_voyage
     const photosVoyageEntry=Object.values(latest).find(e=>e.type==='photos_voyage'&&e.key==='all_photos');
@@ -2803,12 +2804,18 @@ async function makeRecap(){
   });
 
   // toBase64String fonctionne dans tous les navigateurs
+  // Utiliser Blob pour compatibilité iOS Safari
   const b64=await Packer.toBase64String(doc);
+  const binary=atob(b64);
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  const blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+  const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href='data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,'+b64;
+  a.href=url;
   a.download='Thailande2026_souvenir.docx';
   document.body.appendChild(a);a.click();
-  setTimeout(()=>document.body.removeChild(a),100);
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},200);
   toast('✅ Journal Word téléchargé !');
 }
 
