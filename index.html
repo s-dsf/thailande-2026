@@ -3663,9 +3663,21 @@ function initApp(){
     migrateOldNotes();
     initNotesLists();
     renderJournal();
-    renderPhotoSection(); // Re-rendre les photos après sync depuis le Sheet
+    renderPhotoSection();
     if(ok) console.log('✅ Données synchronisées');
   });
+
+  // Sync périodique toutes les 2 minutes pour partage entre téléphones
+  setInterval(async ()=>{
+    const ok = await gsLoad();
+    if(ok){
+      renderDays(DATA.bangkok,'days-bkk','bkk');
+      renderDays(DATA.chiangmai,'days-cm','cm');
+      renderDays(DATA.kohtao,'days-kt','kt');
+      renderDays(DATA.kohsamui,'days-ks','ks');
+      renderJournal();
+    }
+  }, 2*60*1000);
   schedNotifs();
 
   // Service Worker avec détection de mise à jour
