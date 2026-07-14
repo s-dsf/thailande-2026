@@ -413,6 +413,17 @@ function showConnected() {
     av.textContent = currentUser.name[0];
   }
   document.getElementById('user-name-el').textContent = currentUser.name.split(' ')[0];
+  // Enregistrer la connexion dans Sheets
+  var now = new Date().toLocaleString('fr-FR', {timeZone:'Europe/Paris'});
+  fetch(GS_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'connexion',
+      key: 'connexion-' + Date.now(),
+      value: currentUser.email + ' · ' + currentUser.name + ' · ' + now,
+      device: 'voyage'
+    })
+  });
   loadFeed();
 }
 
