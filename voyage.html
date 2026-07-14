@@ -451,9 +451,16 @@ async function loadFeed() {
   var container = document.getElementById('feed-container');
   container.innerHTML = '<div class="loader">Chargement…</div>';
   try {
-    var r = await fetch(GS_URL + '?t=' + Date.now());
-    var allRows = await r.json();
-    if(!Array.isArray(allRows)) allRows = [];
+    // Passer par le Worker pour éviter CORS iOS
+    var dvoy;
+    try {
+      var rv = await fetch('https://claude-proxy-thailande.s-desferet.workers.dev/gs-get?gsUrl='+encodeURIComponent(GS_URL)+'&t='+Date.now());
+      dvoy = await rv.json();
+    } catch(e) {
+      var rv2 = await fetch(GS_URL + '?t=' + Date.now());
+      dvoy = await rv2.json();
+    }
+    var allRows = dvoy.rows || dvoy.data || (Array.isArray(dvoy) ? dvoy : []);
 
     var photos = [], commentsByDay = {};
 
